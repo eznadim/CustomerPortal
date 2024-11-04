@@ -1,0 +1,13 @@
+FROM mcr.microsoft.com/dotnet/aspnet:8.0  AS base
+COPY bin/Release/net8.0/publish/ app/
+WORKDIR /app
+
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+RUN dotnet dev-certs https -v -ep openiddict.pfx -p 60a24ff5-2ae8-45c5-942a-773f54f36b76
+
+FROM base AS final
+WORKDIR /app
+COPY --from=build /src .
+
+ENTRYPOINT ["dotnet", "CustomerPortal.HttpApi.Host.dll"]
