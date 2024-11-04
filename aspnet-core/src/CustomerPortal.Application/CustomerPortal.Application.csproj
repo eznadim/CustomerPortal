@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\common.props" />
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <RootNamespace>CustomerPortal</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CustomerPortal.Domain\CustomerPortal.Domain.csproj" />
+    <ProjectReference Include="..\CustomerPortal.Application.Contracts\CustomerPortal.Application.Contracts.csproj" />
+  	<PackageReference Include="Volo.Abp.LeptonTheme.Management.Application" Version="8.2.0" />
+</ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Volo.Abp.PermissionManagement.Application" Version="8.2.0" />
+    <PackageReference Include="Volo.Abp.FeatureManagement.Application" Version="8.2.0" />
+    <PackageReference Include="Volo.Abp.SettingManagement.Application" Version="8.2.0" />
+    <PackageReference Include="Volo.Saas.Host.Application" Version="8.2.0" />
+    <PackageReference Include="Volo.Abp.AuditLogging.Application" Version="8.2.0" />
+    <PackageReference Include="Volo.Abp.Identity.Pro.Application" Version="8.2.0" />
+    <PackageReference Include="Volo.Abp.OpenIddict.Pro.Application" Version="8.2.0" />
+    <PackageReference Include="Volo.Abp.Account.Pro.Public.Application" Version="8.2.0" />
+    <PackageReference Include="Volo.Abp.Account.Pro.Admin.Application" Version="8.2.0" />
+    <PackageReference Include="Volo.Abp.LanguageManagement.Application" Version="8.2.0" />
+    <PackageReference Include="Volo.Abp.TextTemplateManagement.Application" Version="8.2.0" />
+    <PackageReference Include="Volo.Abp.Gdpr.Application" Version="8.2.0" />
+  </ItemGroup>
+
+</Project>
