@@ -6,9 +6,9 @@ const oAuthConfig = {
   issuer: 'https://localhost:44338/',
   redirectUri: baseUrl,
   clientId: 'CustomerPortal_App',
-  responseType: 'code',
   scope: 'offline_access CustomerPortal',
   requireHttps: true,
+  postLogoutRedirectUri: 'http://localhost:4200/account/login'
 };
 
 export const environment = {
