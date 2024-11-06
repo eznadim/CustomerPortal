@@ -1,0 +1,106 @@
+<div class="account-header fixed-top p-3"></div>
+<div class="d-flex align-items-center main login-layout-height">
+  <div class="container">
+    <div class="row">
+      <div class="col mx-auto">
+        <div class="d-flex justify-content-center">
+          <div class="card login-card">
+            <div class="card-header ml-card d-flex my-auto border-bottom">
+              <div class="col-2 p-1">
+              <img src="assets/images/logo/CustomerPortalLogo.png" width="180%"/>
+              </div>
+              <div class="col-8 jkdm-text my-auto">
+                <h6 class="m-0">
+                  CUSTOMER PORTAL
+                </h6>
+                <span class="m-0 font-smaller">Where customers can order our items conveniently</span>
+              </div>
+            </div>
+
+            <h3 class="card-title text-center mt-2">
+              <div class="mb-2">
+              <!-- <a (click)="redirectPortal()">
+                <img src="assets/images/logo/logo-dark.png" width="125" height="60" />
+              </a> -->
+              </div>
+              {{'::Login' | abpLocalization | uppercase }}
+            </h3>
+            <ng-container>
+              <ng-container>
+                <div class="card-header bg-custom">
+                  <div class="tenant-switch-box">
+                    <div class="row">
+                      <div class="col ps-1 pt-1">
+                          {{ '::Admin/Customer' | abpLocalization }}
+                      </div>
+                      <div class="col ps-1 pt-1">
+                        <a id="abp-tenant-switch-link" class="btn btn-sm btn-outline-secondary float-end pointer"
+                          href="javascript:void(0)"><i
+                            class="flaticon2-refresh me-1"></i><b>{{ '::Switch' | abpLocalization
+                            }}</b></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <abp-modal>
+                  <ng-template #abpHeader>
+                    <h3>{{ '::LicenseInformation' | abpLocalization }}</h3>
+                  </ng-template>
+                  <ng-template #abpBody>
+                    <form (ngSubmit)="tenantBoxService.save()">
+                      <div class="mt-2">
+                        <div class="mb-3">
+                          <label for="ttxNo" class="form-label">{{
+                            '::LicenseNumber' | abpLocalization
+                            }}</label>
+                          <input [(ngModel)]="tenantBoxService.name" type="text" id="name" name="tenant"
+                            class="form-control" placeholder="STN-YYYY-1XXXXXXX" mask="000-0000-00000000" [dropSpecialCharacters]="false" onlyNumbers autofocus />
+                        </div>
+                        <p>{{ '::LicenseInfoHint' | abpLocalization }}</p>
+                      </div>
+                    </form>
+                  </ng-template>
+                  <ng-template #abpFooter>
+                    <button abpClose type="button" class="btn btn-light">
+                      <i class="fa fa-times me-1"></i>
+                      {{ '::Cancel' | abpLocalization }}
+                    </button>
+                    <abp-button type="abp-button" iconClass="fa fa-save" (click)="tenantBoxService.save()"
+                      [disabled]="currentTenant?.name === tenantBoxService.name">
+                      {{ '::Save' | abpLocalization }}
+                    </abp-button>
+                  </ng-template>
+                </abp-modal>
+              </ng-container>
+            </ng-container>
+            <div class="card-body" *ngIf="authWrapperService.enableLocalLogin$ | async; else disableLocalLoginTemplate">
+              <router-outlet></router-outlet>
+              <nav class="navbar navbar-expand p-0">
+                <ul class="navbar-nav my-auto float-start">
+                  <div class="text-start col">
+                    <span (click)="redirectPortal()" class="font-smaller pointer">
+                      <i class="fa fa-arrow-left me-1"></i>
+                      {{'::Back' | abpLocalization}}</span>
+                  </div>
+                </ul>
+                <ul class="navbar-nav ms-auto float-end ml-auto">
+                <abp-languages class="font-smaller"></abp-languages>
+                </ul>
+              </nav>
+            </div>
+          </div>
+          <div class="card login-img-size" id="content-desktop">
+            <img class="card-img-top" src="assets/images/bg-design.png" alt="Card image"/>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <ng-template #disableLocalLoginTemplate>
+      <div class="alert alert-warning">
+        <strong>{{ '::InvalidLoginRequest' | abpLocalization }}</strong>
+        {{ '::ThereAreNoLoginSchemesConfiguredForThisClient' | abpLocalization }}
+      </div>
+    </ng-template>
+  </div>
+</div>

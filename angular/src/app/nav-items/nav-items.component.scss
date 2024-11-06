@@ -1,0 +1,50 @@
+/* Basic styles for the navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #333;
+    color: white;
+  }
+  
+  /* Logo and app name */
+  .navbar-logo a {
+    color: white;
+    font-size: 24px;
+    text-decoration: none;
+  }
+  
+  /* Navigation items list */
+  .navbar-items ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+  }
+  
+  .navbar-items li {
+    margin-right: 20px;
+  }
+  
+  .navbar-items a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+  }
+  
+  /* Logout button */
+  .navbar-logout .logout-button {
+    background-color: #ff4c4c;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .navbar-logout .logout-button:hover {
+    background-color: #e03d3d;
+  }
+  

@@ -14,7 +14,7 @@ import { LanguageManagementConfigModule } from '@volo/abp.ng.language-management
 import { registerLocale } from '@volo/abp.ng.language-management/locale';
 import { SaasConfigModule } from '@volo/abp.ng.saas/config';
 import { TextTemplateManagementConfigModule } from '@volo/abp.ng.text-template-management/config';
-
+import { CommonModule } from '@angular/common';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -23,9 +23,23 @@ import { OpeniddictproConfigModule } from '@volo/abp.ng.openiddictpro/config';
 import { FeatureManagementModule } from '@abp/ng.feature-management';
 import { AbpOAuthModule } from '@abp/ng.oauth';
 import { ThemeLeptonModule } from '@volo/abp.ng.theme.lepton';
+import { LoginComponent } from './login/login.component';
+import { AccountLayoutComponent } from './login/account-layout/account-layout.component';
+import { ForgotPasswordComponent } from './login/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './login/reset-password/reset-password.component';
+import { RefreshPasswordComponent } from './login/refresh-password/refresh-password.component';
+import { NavItemsComponent } from './nav-items/nav-items.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [
+    AppComponent,
+    LoginComponent,
+    AccountLayoutComponent,
+    ForgotPasswordComponent,
+    ResetPasswordComponent,
+    RefreshPasswordComponent,
+    NavItemsComponent,
+  ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -52,7 +66,8 @@ ThemeSharedModule.forRoot(),
       cookiePolicyUrl: 'gdpr-cookie-consent/cookie',
     }),
     InternetConnectionStatusComponent,
-    ThemeLeptonModule.forRoot()
+    ThemeLeptonModule.forRoot(),
+    CommonModule
   ],
   providers: [APP_ROUTE_PROVIDER],
   bootstrap: [AppComponent],
