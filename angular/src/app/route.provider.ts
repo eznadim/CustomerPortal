@@ -10,19 +10,25 @@ function configureRoutes(routes: RoutesService) {
     routes.add([
       {
         path: '/',
-        name: '::Menu:Home',
+        name: '::Menu:Dashboard',
         iconClass: 'fas fa-home',
         order: 1,
         layout: eLayoutType.application,
       },
       {
-        path: '/dashboard',
-        name: '::Menu:Dashboard',
-        iconClass: 'fas fa-chart-line',
+        path: '/customer',
+        name: 'Customer',
+        iconClass: 'fas fa-file',
         order: 2,
         layout: eLayoutType.application,
-        requiredPolicy: 'CustomerPortal.Dashboard.Host  || CustomerPortal.Dashboard.Tenant',
       },
+      {
+        path: '/order',
+        name: 'Order',
+        iconClass: 'fas fa-file',
+        order: 3,
+        layout: eLayoutType.application,
+      }
     ]);
   };
 }

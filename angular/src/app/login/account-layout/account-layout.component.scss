@@ -1,0 +1,80 @@
+.main {
+  background-image:url('/assets/images/background/bg.png');
+  height: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin-top: -64px;
+}
+
+.bg-custom {
+  background-color: #f1f0ff;
+  border-radius: 2px;
+}
+
+.login-card {
+  margin-top: 25px;
+  width: 35em;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+
+.ml-card{
+  padding: unset;
+}
+
+
+#content-desktop {
+  display: block;
+}
+#content-mobile {
+  display: none;
+}
+
+@media screen and (max-width: 768px) {
+  #content-desktop {
+    display: none;
+  }
+  #content-mobile {
+    display: block;
+  }
+
+  .login-card {
+    margin-top: unset;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  .ml-card{
+    padding: 10px 0px !important;
+  }
+
+}
+
+.card.custom-header {
+  padding: 14.4px 24px 5px 14.4px;
+}
+
+.jkdm-text {
+  white-space: nowrap;
+  margin-top: -10px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+.card-img-top {
+  border-top-left-radius: 1px;
+  border-top-right-radius: 1px;
+  width: 100%;
+  height: 100%;
+}
+
+.login-img-size {
+  width: 35em;
+  margin-top: 25px
+}
+
+.login-layout-height {
+  min-height: 100vh
+}
