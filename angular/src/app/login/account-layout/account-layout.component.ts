@@ -17,6 +17,7 @@ import {
     SHOULD_CHANGE_PASSWORD_ON_NEXT_LOGIN,
   } from '@volo/abp.ng.account/public';
   import { ActivatedRoute, Params, Router } from '@angular/router';
+  
 
 const { maxLength, required } = Validators;
 @Component({
@@ -33,6 +34,8 @@ export class AccountLayoutComponent {
   redirectUrl = '';
   linkUser: LinkUserInput;
   fieldTextType: boolean;
+  isCustomer: boolean = false;
+
 
   protected fb: UntypedFormBuilder;
   protected recaptchaService: RecaptchaService;
@@ -55,6 +58,10 @@ export class AccountLayoutComponent {
       password: ['', [required, maxLength(128)]],
       rememberMe: [false],
     });
+  }
+
+  onRoleChange() {
+    console.log('Role changed:', this.isCustomer ? 'Customer' : 'Admin');
   }
 
   onSubmit() {
