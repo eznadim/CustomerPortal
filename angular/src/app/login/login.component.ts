@@ -1,6 +1,6 @@
 import { AuthService, ConfigStateService } from '@abp/ng.core';
 import { ConfirmationService, ToasterService } from '@abp/ng.theme.shared';
-import { AfterViewInit, Component, ElementRef, Injector, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Injector, Input, OnInit, ViewChild } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import {
@@ -29,6 +29,8 @@ const { maxLength, required } = Validators;
 export class LoginComponent implements OnInit, AfterViewInit {
   @ViewChild('recaptcha', { static: false })
   recaptchaRef: ElementRef<HTMLDivElement>;
+  
+  @Input() isCustomer: boolean = false;
 
   form: UntypedFormGroup;
 
@@ -120,7 +122,6 @@ export class LoginComponent implements OnInit, AfterViewInit {
     const { username, password, rememberMe } = this.form.value;
     const redirectUrl = this.redirectUrl || (this.linkUser ? null : '/');
     const loginParams = { username, password, rememberMe, redirectUrl };
-
     this.authService
     .login(loginParams)
     .pipe(
