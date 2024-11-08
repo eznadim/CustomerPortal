@@ -29,6 +29,11 @@ import { ForgotPasswordComponent } from './login/forgot-password/forgot-password
 import { ResetPasswordComponent } from './login/reset-password/reset-password.component';
 import { RefreshPasswordComponent } from './login/refresh-password/refresh-password.component';
 import { NavItemsComponent } from './nav-items/nav-items.component';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import {MatCardModule} from '@angular/material/card';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 
 @NgModule({
   declarations: [
@@ -67,9 +72,14 @@ ThemeSharedModule.forRoot(),
     }),
     InternetConnectionStatusComponent,
     ThemeLeptonModule.forRoot(),
-    CommonModule
+    CommonModule,
+    MatCardModule,
+    MatSlideToggleModule,
+    FormsModule,
+    ReactiveFormsModule
+    
   ],
-  providers: [APP_ROUTE_PROVIDER],
+  providers: [APP_ROUTE_PROVIDER, provideAnimationsAsync()],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -17,60 +17,26 @@
               </div>
             </div>
 
-            <h3 class="card-title text-center mt-2">
-              <div class="mb-2">
-              <!-- <a (click)="redirectPortal()">
-                <img src="assets/images/logo/logo-dark.png" width="125" height="60" />
-              </a> -->
-              </div>
-              {{'::Login' | abpLocalization | uppercase }}
+            <h3 class="card-title text-center mt-2" *ngIf="!isCustomer">
+              {{'::AdminLogin' | abpLocalization | uppercase }}
+            </h3>
+            <h3 class="card-title text-center mt-2" *ngIf="isCustomer">
+              {{'::CustomerLogin' | abpLocalization | uppercase }}
             </h3>
             <ng-container>
               <ng-container>
                 <div class="card-header bg-custom">
                   <div class="tenant-switch-box">
-                    <div class="row">
-                      <div class="col ps-1 pt-1">
-                          {{ '::Admin/Customer' | abpLocalization }}
-                      </div>
-                      <div class="col ps-1 pt-1">
-                        <a id="abp-tenant-switch-link" class="btn btn-sm btn-outline-secondary float-end pointer"
-                          href="javascript:void(0)"><i
-                            class="flaticon2-refresh me-1"></i><b>{{ '::Switch' | abpLocalization
-                            }}</b></a>
-                      </div>
+                    <div class="col ps-1 pt-1">
+                      <label class="form-label">Select Role:</label>
+                      <mat-slide-toggle 
+                      [(ngModel)]="isCustomer" 
+                      (change)="onRoleChange()">
+                      Role: {{isCustomer}}
+                    </mat-slide-toggle>
                     </div>
                   </div>
                 </div>
-                <abp-modal>
-                  <ng-template #abpHeader>
-                    <h3>{{ '::LicenseInformation' | abpLocalization }}</h3>
-                  </ng-template>
-                  <ng-template #abpBody>
-                    <form (ngSubmit)="tenantBoxService.save()">
-                      <div class="mt-2">
-                        <div class="mb-3">
-                          <label for="ttxNo" class="form-label">{{
-                            '::LicenseNumber' | abpLocalization
-                            }}</label>
-                          <input [(ngModel)]="tenantBoxService.name" type="text" id="name" name="tenant"
-                            class="form-control" placeholder="STN-YYYY-1XXXXXXX" mask="000-0000-00000000" [dropSpecialCharacters]="false" onlyNumbers autofocus />
-                        </div>
-                        <p>{{ '::LicenseInfoHint' | abpLocalization }}</p>
-                      </div>
-                    </form>
-                  </ng-template>
-                  <ng-template #abpFooter>
-                    <button abpClose type="button" class="btn btn-light">
-                      <i class="fa fa-times me-1"></i>
-                      {{ '::Cancel' | abpLocalization }}
-                    </button>
-                    <abp-button type="abp-button" iconClass="fa fa-save" (click)="tenantBoxService.save()"
-                      [disabled]="currentTenant?.name === tenantBoxService.name">
-                      {{ '::Save' | abpLocalization }}
-                    </abp-button>
-                  </ng-template>
-                </abp-modal>
               </ng-container>
             </ng-container>
             <div class="card-body" *ngIf="authWrapperService.enableLocalLogin$ | async; else disableLocalLoginTemplate">
