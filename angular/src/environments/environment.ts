@@ -14,8 +14,9 @@ const oAuthConfig = {
 export const environment = {
   production: false,
   application: {
-    baseUrl,
     name: 'CustomerPortal',
+    baseUrl: 'https://localhost:44338',
+    swaggerUrl: 'https://localhost:44338/swagger/index.html'
   },
   oAuthConfig,
   apis: {

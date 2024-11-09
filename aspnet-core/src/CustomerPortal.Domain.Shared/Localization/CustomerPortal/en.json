@@ -36,6 +36,12 @@
     "Unspecified": "System",
     "SeeAllUsers": "See all Users",
     "TakePhoto": "Take photo",
-    "ChoosePhoto": "Choose pshoto"
+    "ChoosePhoto": "Choose pshoto",
+    "CustomerPortal:UserNotAuthenticated": "User is not authenticated",
+    "CustomerPortal:CustomerNotFound": "Customer not found",
+    "CustomerPortal:EmailAlreadyExists": "Email {Email} is already in use",
+    "CustomerPortal:InvalidCurrentPassword": "Current password is incorrect",
+    "CustomerPortal:PasswordTooShort": "New password must be at least 6 characters long",
+    "CustomerPortal:InvalidEmailFormat": "Invalid email format"
   }
 }

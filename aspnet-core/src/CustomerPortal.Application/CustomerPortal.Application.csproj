@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\..\common.props" />
 
@@ -11,6 +11,8 @@
   <ItemGroup>
     <ProjectReference Include="..\CustomerPortal.Domain\CustomerPortal.Domain.csproj" />
     <ProjectReference Include="..\CustomerPortal.Application.Contracts\CustomerPortal.Application.Contracts.csproj" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.10" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.2.0" />
   	<PackageReference Include="Volo.Abp.LeptonTheme.Management.Application" Version="8.2.0" />
 </ItemGroup>
 

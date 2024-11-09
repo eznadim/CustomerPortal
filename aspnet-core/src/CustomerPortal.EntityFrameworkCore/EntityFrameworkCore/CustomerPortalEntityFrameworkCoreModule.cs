@@ -16,6 +16,7 @@ using Volo.Saas.EntityFrameworkCore;
 using Volo.Abp.BlobStoring.Database.EntityFrameworkCore;
 using Volo.Abp.Gdpr;
 using Volo.Abp.OpenIddict.EntityFrameworkCore;
+using CustomerPortal.Customers;
 
 namespace CustomerPortal.EntityFrameworkCore;
 
@@ -46,15 +47,12 @@ public class CustomerPortalEntityFrameworkCoreModule : AbpModule
     {
         context.Services.AddAbpDbContext<CustomerPortalDbContext>(options =>
         {
-                /* Remove "includeAllEntities: true" to create
-                 * default repositories only for aggregate roots */
             options.AddDefaultRepositories(includeAllEntities: true);
+            options.AddRepository<Customer, CustomerRepository>();
         });
 
         Configure<AbpDbContextOptions>(options =>
         {
-                /* The main point to change your DBMS.
-                 * See also CustomerPortalDbContextFactory for EF Core tooling. */
             options.UseSqlServer();
         });
 

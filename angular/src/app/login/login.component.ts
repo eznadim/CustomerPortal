@@ -1,4 +1,4 @@
-import { AuthService, ConfigStateService } from '@abp/ng.core';
+import { ConfigStateService } from '@abp/ng.core';
 import { ConfirmationService, ToasterService } from '@abp/ng.theme.shared';
 import { AfterViewInit, Component, ElementRef, Injector, Input, OnInit, ViewChild } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
@@ -17,6 +17,7 @@ import {
 import { IdentityLinkUserService, LinkUserInput } from '@volo/abp.ng.account/public/proxy';
 import { from, of, pipe, throwError } from 'rxjs';
 import { catchError, finalize, switchMap, tap } from 'rxjs/operators';
+import { AuthService } from '../shared/services/auth.service';
 
 const { maxLength, required } = Validators;
 
@@ -117,25 +118,19 @@ export class LoginComponent implements OnInit, AfterViewInit {
 
   onSubmit() {
     if (this.form.invalid) return;
-    this.inProgress = true;
-
-    const { username, password, rememberMe } = this.form.value;
-    const redirectUrl = this.redirectUrl || (this.linkUser ? null : '/');
-    const loginParams = { username, password, rememberMe, redirectUrl };
-    this.authService
-    .login(loginParams)
-    .pipe(
-      switchMap(() => {
-        console.log('Login successful, redirecting...');
-        // Navigate to the final redirect URL after successful login
-        return this.router.navigate([redirectUrl], {
-          queryParams: this.route.snapshot.queryParams,});
-      }),
-      this.handleLoginError(loginParams),
-      this.linkUser ? this.switchToLinkUser() : tap(),
-      finalize(() => (this.inProgress = false))
-    )
-    .subscribe();
+    
+    const { username, password } = this.form.value;
+    this.authService.login(username, password, this.isCustomer)
+      .subscribe(
+        user => {
+          // Navigate based on user type
+          const redirectUrl = this.isCustomer ? '/customer/dashboard' : '/admin/dashboard';
+          this.router.navigate([redirectUrl]);
+        },
+        error => {
+          this.toasterService.error(error.error?.message || 'Login failed');
+        }
+      );
   }
 
   private switchToLinkUser() {

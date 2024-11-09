@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CustomerPortal.Application.Contracts\CustomerPortal.Application.Contracts.csproj" />
+    <PackageReference Include="Volo.Abp.AspNetCore.Authentication.JwtBearer" Version="8.3.3" />
   	<PackageReference Include="Volo.Abp.LeptonTheme.Management.HttpApi.Client" Version="8.2.0" />
 </ItemGroup>
 
