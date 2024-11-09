@@ -269,3 +269,6 @@ src/CustomerPortal.Blazor.Server.Tiered/Logs/*
 # IdentityServer temp files
 tempkey.rsa
 tempkey.jwk
+
+# ABP Studio
+**/.abpstudio/

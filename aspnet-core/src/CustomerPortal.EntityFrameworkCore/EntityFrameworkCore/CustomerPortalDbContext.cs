@@ -17,6 +17,7 @@ using Volo.Saas.Editions;
 using Volo.Saas.Tenants;
 using Volo.Abp.Gdpr;
 using Volo.Abp.OpenIddict.EntityFrameworkCore;
+using CustomerPortal.Customers;
 
 namespace CustomerPortal.EntityFrameworkCore;
 
@@ -58,6 +59,8 @@ public class CustomerPortalDbContext :
     public DbSet<Edition> Editions { get; set; }
     public DbSet<TenantConnectionString> TenantConnectionStrings { get; set; }
 
+    public DbSet<Customer> Customers { get; set; }
+
     #endregion
 
     public CustomerPortalDbContext(DbContextOptions<CustomerPortalDbContext> options)
@@ -84,6 +87,8 @@ public class CustomerPortalDbContext :
         builder.ConfigureTextTemplateManagement();
         builder.ConfigureBlobStoring();
         builder.ConfigureGdpr();
+
+        builder.ConfigureCustomerPortal();
 
         /* Configure your own tables/entities inside here */
 
