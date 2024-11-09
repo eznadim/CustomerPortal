@@ -17,7 +17,8 @@ import {
     SHOULD_CHANGE_PASSWORD_ON_NEXT_LOGIN,
   } from '@volo/abp.ng.account/public';
   import { ActivatedRoute, Params, Router } from '@angular/router';
-  
+  import { CustomerService } from '../../proxy/customers/customer.service';
+  import { AuthStateService } from '../../shared/services/auth-state.service';
 
 const { maxLength, required } = Validators;
 @Component({
@@ -45,11 +46,13 @@ export class AccountLayoutComponent {
   protected toasterService: ToasterService;
   protected identityLinkUserService: IdentityLinkUserService;
   protected route: ActivatedRoute;
+  protected customerService: CustomerService;
 
   constructor(
     public authWrapperService: AuthWrapperService,
     public readonly navItems: NavItemsService,
     private _confirmation: ConfirmationService,
+    private authStateService: AuthStateService
   ) { }
 
   protected buildForm() {
@@ -62,30 +65,52 @@ export class AccountLayoutComponent {
 
   onRoleChange() {
     console.log('Role changed:', this.isCustomer ? 'Customer' : 'Admin');
+    this.authStateService.setCustomerMode(this.isCustomer);
+    this.form.reset();
   }
 
   onSubmit() {
     if (this.form.invalid) return;
 
     this.inProgress = true;
-
     const { username, password, rememberMe } = this.form.value;
-    const redirectUrl = this.redirectUrl || (this.linkUser ? null : '/');
-    const loginParams = { username, password, rememberMe, redirectUrl };
 
-    (this.recaptchaService.isEnabled ? this.recaptchaService.validate() : of(true))
-      .pipe(
-        switchMap(isValid =>
-          isValid
-            ? this.authService
-                .login(loginParams)
-                .pipe(this.handleLoginError(loginParams))
-                .pipe(this.linkUser ? this.switchToLinkUser() : tap())
-            : of(null),
-        ),
-        finalize(() => (this.inProgress = false)),
-      )
-      .subscribe();
+    if (this.isCustomer) {
+      this.customerService.login({ email: username, password })
+        .pipe(
+          finalize(() => this.inProgress = false)
+        )
+        .subscribe({
+          next: (response) => {
+            localStorage.setItem('customer_token', response.token);
+            this.router.navigate(['/customer/dashboard']);
+          },
+          error: (error) => {
+            this.toasterService.error(
+              error.error?.message || 
+              'Login failed',
+              'Error'
+            );
+          }
+        });
+    } else {
+      const redirectUrl = this.redirectUrl || (this.linkUser ? null : '/');
+      const loginParams = { username, password, rememberMe, redirectUrl };
+
+      (this.recaptchaService.isEnabled ? this.recaptchaService.validate() : of(true))
+        .pipe(
+          switchMap(isValid =>
+            isValid
+              ? this.authService
+                  .login(loginParams)
+                  .pipe(this.handleLoginError(loginParams))
+                  .pipe(this.linkUser ? this.switchToLinkUser() : tap())
+              : of(null),
+          ),
+          finalize(() => (this.inProgress = false)),
+        )
+        .subscribe();
+    }
   }
 
   private handleLoginError(loginParams?: Omit<SecurityCodeData, 'twoFactorToken' | 'userId'>) {
