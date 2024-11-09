@@ -33,6 +33,9 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import {MatCardModule} from '@angular/material/card';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './shared/interceptors/auth.interceptor';
+import { RegisterCustomerComponent } from './login/register-customer/register-customer.component';
 
 
 @NgModule({
@@ -44,6 +47,7 @@ import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
     ResetPasswordComponent,
     RefreshPasswordComponent,
     NavItemsComponent,
+    RegisterCustomerComponent,
   ],
   imports: [
     BrowserModule,
@@ -79,7 +83,13 @@ ThemeSharedModule.forRoot(),
     ReactiveFormsModule
     
   ],
-  providers: [APP_ROUTE_PROVIDER, provideAnimationsAsync()],
+  providers: [APP_ROUTE_PROVIDER, provideAnimationsAsync(),
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

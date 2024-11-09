@@ -15,9 +15,11 @@ import {
   SHOULD_CHANGE_PASSWORD_ON_NEXT_LOGIN,
 } from '@volo/abp.ng.account/public';
 import { IdentityLinkUserService, LinkUserInput } from '@volo/abp.ng.account/public/proxy';
-import { from, of, pipe, throwError } from 'rxjs';
+import { from, Observable, of, pipe, throwError } from 'rxjs';
 import { catchError, finalize, switchMap, tap } from 'rxjs/operators';
 import { AuthService } from '../shared/services/auth.service';
+import { CustomerService } from '../proxy/customers/customer.service';
+import { AuthStateService } from '../shared/services/auth-state.service';
 
 const { maxLength, required } = Validators;
 
@@ -28,10 +30,10 @@ const { maxLength, required } = Validators;
   providers: [RecaptchaService],
 })
 export class LoginComponent implements OnInit, AfterViewInit {
+  @Input() isCustomer: boolean = false;
   @ViewChild('recaptcha', { static: false })
   recaptchaRef: ElementRef<HTMLDivElement>;
   
-  @Input() isCustomer: boolean = false;
 
   form: UntypedFormGroup;
 
@@ -56,10 +58,12 @@ export class LoginComponent implements OnInit, AfterViewInit {
   protected identityLinkUserService: IdentityLinkUserService;
   protected recaptchaService: RecaptchaService;
   protected securityCodeService: SecurityCodeService;
+  protected customerService: CustomerService;
 
   constructor(
     protected injector: Injector,
-    private _confirmation: ConfirmationService) {
+    private _confirmation: ConfirmationService,
+    private authStateService: AuthStateService) {
     this.fb = injector.get(UntypedFormBuilder);
     this.toasterService = injector.get(ToasterService);
     this.authService = injector.get(AuthService);
@@ -69,6 +73,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
     this.identityLinkUserService = injector.get(IdentityLinkUserService);
     this.recaptchaService = injector.get(RecaptchaService);
     this.securityCodeService = injector.get(SecurityCodeService);
+    this.customerService = injector.get(CustomerService);
   }
 
   ngOnInit() {
@@ -77,6 +82,10 @@ export class LoginComponent implements OnInit, AfterViewInit {
     this.setLinkUserParams();
     this.redirectUrl = this.route.snapshot.queryParamMap.get('redirectUrl');
     this.timeout = this.route.snapshot.queryParamMap.get('timeout');
+
+    this.authStateService.isCustomer$.subscribe(isCustomer => {
+      this.isCustomer = isCustomer;
+    });
   }
 
   ngAfterViewInit() {
@@ -119,18 +128,59 @@ export class LoginComponent implements OnInit, AfterViewInit {
   onSubmit() {
     if (this.form.invalid) return;
     
+    this.inProgress = true;
     const { username, password } = this.form.value;
-    this.authService.login(username, password, this.isCustomer)
-      .subscribe(
-        user => {
-          // Navigate based on user type
-          const redirectUrl = this.isCustomer ? '/customer/dashboard' : '/admin/dashboard';
-          this.router.navigate([redirectUrl]);
-        },
-        error => {
-          this.toasterService.error(error.error?.message || 'Login failed');
-        }
-      );
+
+    if (this.isCustomer) {
+      // Customer login
+      this.customerService.login({ email: username, password })
+        .pipe(
+          finalize(() => {
+            this.inProgress = false;
+          })
+        )
+        .subscribe({
+          next: (response) => {
+            localStorage.setItem('customer_token', response.token);
+            this.router.navigate(['/dashboard/customer']).then(() => {
+              // Optional: Add success message
+              this.toasterService.success('Login successful', 'Success');
+            });
+          },
+          error: (error) => {
+            this.toasterService.error(
+              error.error?.message || 
+              'Login failed',
+              'Error'
+            );
+          }
+        });
+    } else {
+      // Admin login (existing OAuth flow)
+      const redirectUrl = this.redirectUrl || (this.linkUser ? null : '/dashboard/admin');
+      const loginParams = { username, password, rememberMe: false, redirectUrl };
+
+      (this.recaptchaService.isEnabled ? this.recaptchaService.validate() : of(true))
+        .pipe(
+          switchMap(isValid =>
+            isValid
+              ? from(this.authService.login(username, password, this.isCustomer)).pipe(
+                  tap(() => {
+                    // Add explicit navigation after successful login
+                    this.router.navigate(['/dashboard/admin']).then(() => {
+                      // Optional: Add success message
+                      this.toasterService.success('Login successful', 'Success');
+                    });
+                  }),
+                  this.handleLoginError(loginParams),
+                  this.linkUser ? this.switchToLinkUser() : tap()
+                )
+              : of(null),
+          ),
+          finalize(() => (this.inProgress = false)),
+        )
+        .subscribe();
+    }
   }
 
   private switchToLinkUser() {

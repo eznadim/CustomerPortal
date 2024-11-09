@@ -60,7 +60,7 @@ export class AppComponent implements OnInit {
     if(!this.hasLoggedIn){
       const newHomeRouteConfig: Partial<ABP.Route> = {
         layout: eLayoutType.empty,
-        path: '/',
+        path: '/account/login',
       };
 
       this.routes.patch('::Menu:Dashboard', newHomeRouteConfig);
@@ -69,7 +69,7 @@ export class AppComponent implements OnInit {
     {
       const newHomeRouteConfig: Partial<ABP.Route> = {
         layout: eLayoutType.application,
-        path: '/',
+        path: '/dashboard/admin',
       };
 
       this.routes.patch('::Menu:Dashboard', newHomeRouteConfig);

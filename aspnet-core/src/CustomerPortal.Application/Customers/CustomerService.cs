@@ -13,26 +13,28 @@ using Microsoft.AspNetCore.Identity;
 using Volo.Abp.Application.Dtos;
 using System.Linq;
 using System.Linq.Dynamic.Core;
+using Microsoft.Extensions.Localization;
+using CustomerPortal.Localization;
 
 namespace CustomerPortal.Customers
 {
     public class CustomerService : CustomerPortalAppService, ICustomerService
     {
         private readonly IConfiguration _configuration;
-        private readonly IRepository<Customer, Guid> _customerRepository;
         private readonly IPasswordHasher<Customer> _passwordHasher;
         private readonly ICustomerRepository _customersRepository;
+        private readonly IStringLocalizer<CustomerPortalResource> _localizer;
 
         public CustomerService(
             IConfiguration configuration,
-            IRepository<Customer, Guid> customerRepository,
             IPasswordHasher<Customer> passwordHasher,
-            ICustomerRepository customersRepository)
+            ICustomerRepository customersRepository,
+            IStringLocalizer<CustomerPortalResource> localizer)
         {
             _configuration = configuration;
-            _customerRepository = customerRepository;
             _passwordHasher = passwordHasher;
             _customersRepository = customersRepository;
+            _localizer = localizer;
         }
 
         public async Task<CustomerTokenDto> LoginAsync(CustomerLoginDto input)
@@ -44,7 +46,7 @@ namespace CustomerPortal.Customers
             }
 
             // Find customer
-            var customer = await _customerRepository.FirstOrDefaultAsync(x => x.Email == input.Email);
+            var customer = await _customersRepository.FirstOrDefaultAsync(x => x.Email == input.Email);
             if (customer == null)
             {
                 throw new BusinessException("Invalid credentials");
@@ -69,10 +71,10 @@ namespace CustomerPortal.Customers
         public async Task<CustomerTokenDto> RegisterAsync(CreateCustomerDto input)
         {
             // Check if email already exists
-            var existingCustomer = await _customerRepository.FirstOrDefaultAsync(x => x.Email == input.Email);
+            var existingCustomer = await _customersRepository.FirstOrDefaultAsync(x => x.Email == input.Email);
             if (existingCustomer != null)
             {
-                throw new BusinessException("Email already registered");
+                throw new UserFriendlyException(_localizer["ExistingData"], "", _localizer["Email " + "'" + input.Email + "'" + " already taken."]);
             }
 
             // Create new customer
@@ -85,7 +87,7 @@ namespace CustomerPortal.Customers
 
             );
 
-            await _customerRepository.InsertAsync(customer);
+            await _customersRepository.InsertAsync(customer);
             await CurrentUnitOfWork.SaveChangesAsync();
 
             return await GenerateTokenDtoAsync(customer);
@@ -101,7 +103,7 @@ namespace CustomerPortal.Customers
             }
 
             // Get the customer
-            var customer = await _customerRepository.GetAsync(currentUserId.Value);
+            var customer = await _customersRepository.GetAsync(currentUserId.Value);
             if (customer == null)
             {
                 throw new BusinessException("CustomerPortal:CustomerNotFound");
@@ -110,7 +112,7 @@ namespace CustomerPortal.Customers
             // Check if email is being changed and if it's already in use
             if (customer.Email != input.Email)
             {
-                var emailExists = await _customerRepository.AnyAsync(x => 
+                var emailExists = await _customersRepository.AnyAsync(x => 
                     x.Id != customer.Id && 
                     x.Email == input.Email
                 );
@@ -152,7 +154,7 @@ namespace CustomerPortal.Customers
             }
 
             // Save changes
-            await _customerRepository.UpdateAsync(customer);
+            await _customersRepository.UpdateAsync(customer);
 
             // You might want to add audit logging here
             await CurrentUnitOfWork.SaveChangesAsync();
@@ -166,7 +168,7 @@ namespace CustomerPortal.Customers
                 throw new BusinessException("User not authenticated");
             }
 
-            var customer = await _customerRepository.GetAsync(customerId.Value);
+            var customer = await _customersRepository.GetAsync(customerId.Value);
             return await GenerateTokenDtoAsync(customer);
         }
 
@@ -256,7 +258,7 @@ namespace CustomerPortal.Customers
             }
 
             customer.IsActive = true;
-            await _customerRepository.UpdateAsync(customer);
+            await _customersRepository.UpdateAsync(customer);
         }
 
         public async Task DeactivateCustomerAsync(Guid customerId)
@@ -269,7 +271,7 @@ namespace CustomerPortal.Customers
             }
 
             customer.IsActive = false;
-            await _customerRepository.UpdateAsync(customer);
+            await _customersRepository.UpdateAsync(customer);
         }
 
         public async Task DeleteCustomerAsync(Guid customerId)
@@ -281,7 +283,7 @@ namespace CustomerPortal.Customers
                     .WithData("CustomerId", customerId);
             }
 
-            await _customerRepository.DeleteAsync(customer);
+            await _customersRepository.DeleteAsync(customer);
         }
     }
 } 

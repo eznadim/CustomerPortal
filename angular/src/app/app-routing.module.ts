@@ -1,13 +1,16 @@
-import { authGuard, permissionGuard } from '@abp/ng.core';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { RegisterCustomerComponent } from './login/register-customer/register-customer.component';
 
 const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
+    redirectTo: 'account/login'
+  },
+  {
+    path: 'dashboard',
     loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule),
-    canActivate: [authGuard],
   },
   {
     path: 'account',
@@ -60,6 +63,10 @@ const routes: Routes = [
         m => m.GdprCookieConsentModule
       ),
   },
+  {
+    path: 'account/register-customer',
+    component: RegisterCustomerComponent
+  }
 ];
 
 @NgModule({

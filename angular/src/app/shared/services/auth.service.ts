@@ -1,43 +1,33 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { CustomerService } from '../../proxy/customers/customer.service';
+import { OAuthService } from 'angular-oauth2-oidc';
+import { CustomerLoginDto } from '../../proxy/customers/dtos/models';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private currentUserSubject: BehaviorSubject<any>;
-  public currentUser: Observable<any>;
-
-  constructor(private http: HttpClient) {
-    this.currentUserSubject = new BehaviorSubject<any>(
-      JSON.parse(localStorage.getItem('currentUser'))
-    );
-    this.currentUser = this.currentUserSubject.asObservable();
-  }
-
-  public get currentUserValue() {
-    return this.currentUserSubject.value;
-  }
+  constructor(
+    private customerService: CustomerService,
+    private oAuthService: OAuthService // For admin login
+  ) {}
 
   login(username: string, password: string, isCustomer: boolean) {
-    return this.http.post<any>('/api/auth/login', { username, password, isCustomer })
-      .pipe(map(response => {
-        // store user details and jwt token in local storage
-        const user = {
-          username,
-          token: response.token,
-          isCustomer
-        };
-        localStorage.setItem('currentUser', JSON.stringify(user));
-        this.currentUserSubject.next(user);
-        return user;
-      }));
+    if (isCustomer) {
+      // Customer login
+      const customerLoginDto: CustomerLoginDto = {
+        email: username,
+        password: password
+      };
+      return this.customerService.login(customerLoginDto);
+    } else {
+      // Admin login using ABP's built-in authentication
+      return this.oAuthService.fetchTokenUsingPasswordFlow(username, password);
+    }
   }
 
   logout() {
-    localStorage.removeItem('currentUser');
-    this.currentUserSubject.next(null);
+    // Handle both customer and admin logout
+    this.oAuthService.logOut();
   }
 }
