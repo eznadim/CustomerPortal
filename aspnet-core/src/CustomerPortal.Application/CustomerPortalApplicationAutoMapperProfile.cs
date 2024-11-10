@@ -1,4 +1,5 @@
 using AutoMapper;
+using CustomerPortal.Customers;
 using CustomerPortal.Customers.Dtos;
 
 namespace CustomerPortal;

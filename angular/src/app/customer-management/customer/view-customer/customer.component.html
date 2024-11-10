@@ -1,0 +1,126 @@
+<abp-page [title]="'My Profile' | abpLocalization">
+  <div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h5 class="card-title mb-0">Personal Information</h5>
+      <button class="btn btn-primary" (click)="editProfile()">
+        <i class="fas fa-edit"></i> Edit Profile
+      </button>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <!-- Customer Details -->
+        <div class="col-md-6">
+          <div class="mb-4">
+            <h6 class="text-muted mb-2">Basic Information</h6>
+            <div class="row mb-3">
+              <div class="col-4">
+                <strong>Name:</strong>
+              </div>
+              <div class="col-8">
+                {{ customer?.name }}
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-4">
+                <strong>Email:</strong>
+              </div>
+              <div class="col-8">
+                {{ customer?.email }}
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-4">
+                <strong>Phone:</strong>
+              </div>
+              <div class="col-8">
+                {{ customer?.phoneNumber }}
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <h6 class="text-muted mb-2">Account Information</h6>
+            <div class="row mb-3">
+              <div class="col-4">
+                <strong>Member Since:</strong>
+              </div>
+              <div class="col-8">
+                {{ customer?.creationTime | date }}
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-4">
+                <strong>Status:</strong>
+              </div>
+              <div class="col-8">
+                <span class="badge bg-success">Active</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Account Actions -->
+        <div class="col-md-6">
+          <div class="card bg-light">
+            <div class="card-body">
+              <h6 class="card-title mb-3">Account Management</h6>
+              
+              <div class="d-grid gap-2">
+                <button class="btn btn-outline-primary mb-2" (click)="changePassword()">
+                  <i class="fas fa-key"></i> Change Password
+                </button>
+                
+                <button class="btn btn-outline-info mb-2" (click)="updateContactInfo()">
+                  <i class="fas fa-address-card"></i> Update Contact Information
+                </button>
+                
+                <button class="btn btn-outline-warning mb-2" (click)="manageNotifications()">
+                  <i class="fas fa-bell"></i> Manage Notifications
+                </button>
+                
+                <button class="btn btn-outline-danger" (click)="deactivateAccount()">
+                  <i class="fas fa-user-times"></i> Deactivate Account
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</abp-page>
+
+<!-- Edit Profile Modal -->
+<abp-modal [(visible)]="isEditModalVisible" [busy]="isModalBusy">
+  <ng-template #abpHeader>
+    <h3>Edit Profile</h3>
+  </ng-template>
+
+  <ng-template #abpBody>
+    <form [formGroup]="editForm" (ngSubmit)="saveProfile()" *ngIf="editForm">
+      <div class="form-group mb-3">
+        <label for="name">Name</label>
+        <input type="text" id="name" class="form-control" formControlName="name">
+      </div>
+
+      <div class="form-group mb-3">
+        <label for="email">Email</label>
+        <input type="email" id="email" class="form-control" formControlName="email">
+      </div>
+
+      <div class="form-group mb-3">
+        <label for="phone">Phone Number</label>
+        <input type="tel" id="phone" class="form-control" formControlName="phoneNumber">
+      </div>
+    </form>
+  </ng-template>
+
+  <ng-template #abpFooter>
+    <button type="button" class="btn btn-secondary" abpClose>
+      {{ 'Cancel' | abpLocalization }}
+    </button>
+    <button type="submit" class="btn btn-primary" (click)="saveProfile()" [disabled]="editForm?.invalid || isModalBusy">
+      {{ 'Save' | abpLocalization }}
+    </button>
+  </ng-template>
+</abp-modal>

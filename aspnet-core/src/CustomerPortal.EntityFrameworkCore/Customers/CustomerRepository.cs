@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 using CustomerPortal.EntityFrameworkCore;
+using Ardalis.GuardClauses;
+using Volo.Abp;
 
 namespace CustomerPortal.Customers
 {
@@ -19,14 +21,27 @@ namespace CustomerPortal.Customers
 
         public async Task<Customer> FindByEmailAsync(string email)
         {
-            return await (await GetQueryableAsync())
+            var findEmail = await (await GetQueryableAsync())
                 .FirstOrDefaultAsync(x => x.Email.ToLower() == email.ToLower());
+            if (findEmail == null)
+            {
+                throw new UserFriendlyException($"Email {email} not found.");
+            }
+            return findEmail;
         }
 
         public async Task<Customer> FindByCustomerIdAsync(Guid customerId)
         {
-            return await (await GetQueryableAsync())
-                .FirstOrDefaultAsync(x => x.CustomerId == customerId);
+            var customer = await (await GetQueryableAsync())
+            .FirstOrDefaultAsync(x => x.Id == customerId);
+
+            if (customer == null)
+            {
+                throw new UserFriendlyException($"Customer with ID {customerId} not found.");
+            }
+
+            return customer;
+
         }
 
         public async Task<bool> EmailExistsAsync(string email)
@@ -61,7 +76,7 @@ namespace CustomerPortal.Customers
         public async Task<bool> CustomerIdExistsAsync(Guid customerId)
         {
             return await (await GetQueryableAsync())
-                .AnyAsync(x => x.CustomerId == customerId);
+                .AnyAsync(x => x.Id == customerId);
         }
 
         public async Task<Customer> GetByIdWithDetailsAsync(Guid id)
@@ -83,7 +98,7 @@ namespace CustomerPortal.Customers
                 query = query.Where(x =>
                     x.CustomerName.ToLower().Contains(filter) ||
                     x.Email.ToLower().Contains(filter) ||
-                    x.CustomerId.ToString().Contains(filter)
+                    x.Id.ToString().Contains(filter)
                 );
             }
 

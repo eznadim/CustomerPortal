@@ -47,6 +47,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Threading.Tasks;
+using System.Security.Claims;
 
 namespace CustomerPortal;
 
@@ -111,7 +112,7 @@ public class CustomerPortalHttpApiHostModule : AbpModule
             });
         }
 
-        ConfigureAuthentication(context, configuration);
+        ConfigureAuthentication(context);
         ConfigureUrls(configuration);
         ConfigureBundles();
         ConfigureConventionalControllers();
@@ -125,54 +126,41 @@ public class CustomerPortalHttpApiHostModule : AbpModule
     }
 
 
-    private void ConfigureAuthentication(ServiceConfigurationContext context, IConfiguration configuration)
+    private void ConfigureAuthentication(ServiceConfigurationContext context)
     {
-        context.Services.ForwardIdentityAuthenticationForBearer(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme);
-        context.Services.Configure<AbpClaimsPrincipalFactoryOptions>(options =>
-        {
-            options.IsDynamicClaimsEnabled = true;
-        });
+        var configuration = context.Services.GetConfiguration();
+        var key = Encoding.ASCII.GetBytes(configuration["JwtSettings:SecretKey"]);
 
         context.Services.AddAuthentication()
-        .AddJwtBearer("JWT", options =>
-        {
-            options.TokenValidationParameters = new TokenValidationParameters
+            .AddJwtBearer(options =>
             {
-                ValidateIssuer = true,
-                ValidateAudience = true,
-                ValidateLifetime = true,
-                ValidateIssuerSigningKey = true,
-                ValidIssuer = configuration["JwtSettings:Issuer"],
-                ValidAudience = configuration["JwtSettings:Audience"],
-                IssuerSigningKey = new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes(configuration["JwtSettings:SecretKey"])),
-                ClockSkew = TimeSpan.Zero // Optional: reduces the default 5 min clock skew
-            };
+                options.RequireHttpsMetadata = false;
+                options.SaveToken = true;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero,
+                    NameClaimType = ClaimTypes.Name,
+                    RoleClaimType = ClaimTypes.Role
+                };
 
-            options.Events = new JwtBearerEvents
-            {
-                OnMessageReceived = context =>
+                options.Events = new JwtBearerEvents
                 {
-                    if (context.Request.Cookies.ContainsKey("JWT"))
+                    OnMessageReceived = context =>
                     {
-                        context.Token = context.Request.Cookies["JWT"];
+                        var accessToken = context.Request.Headers["Authorization"].ToString();
+                        if (!string.IsNullOrEmpty(accessToken) && accessToken.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
+                        {
+                            context.Token = accessToken.Substring("Bearer ".Length).Trim();
+                        }
+                        return Task.CompletedTask;
                     }
-                    return Task.CompletedTask;
-                },
-                OnAuthenticationFailed = context =>
-                {
-                    if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
-                    {
-                        context.Response.Headers.Add("Token-Expired", "true");
-                    }
-                    return Task.CompletedTask;
-                }
-            };
-        });
-        context.Services.Configure<AbpClaimsPrincipalFactoryOptions>(options =>
-        {
-            options.IsDynamicClaimsEnabled = true;
-        });
+                };
+            });
     }
 
     private void ConfigureHealthChecks(ServiceConfigurationContext context)

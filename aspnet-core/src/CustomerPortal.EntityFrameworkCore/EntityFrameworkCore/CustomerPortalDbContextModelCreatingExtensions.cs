@@ -14,6 +14,7 @@ namespace CustomerPortal.EntityFrameworkCore
 
             // Apply the Customer configuration
             builder.ApplyConfiguration(new CustomerConfiguration());
+            builder.ApplyConfiguration(new OrderConfiguration());
         }
     }
 } 
