@@ -1,0 +1,66 @@
+{
+  "folders": {
+    "items": {
+      "src": {},
+      "test": {}
+    }
+  },
+  "packages": {
+    "CustomerPortal.Domain": {
+      "path": "src/CustomerPortal.Domain/CustomerPortal.Domain.abppkg",
+      "folder": "src"
+    },
+    "CustomerPortal.Application": {
+      "path": "src/CustomerPortal.Application/CustomerPortal.Application.abppkg",
+      "folder": "src"
+    },
+    "CustomerPortal.EntityFrameworkCore": {
+      "path": "src/CustomerPortal.EntityFrameworkCore/CustomerPortal.EntityFrameworkCore.abppkg",
+      "folder": "src"
+    },
+    "CustomerPortal.Application.Tests": {
+      "path": "test/CustomerPortal.Application.Tests/CustomerPortal.Application.Tests.abppkg",
+      "folder": "test"
+    },
+    "CustomerPortal.Domain.Shared": {
+      "path": "src/CustomerPortal.Domain.Shared/CustomerPortal.Domain.Shared.abppkg",
+      "folder": "src"
+    },
+    "CustomerPortal.Application.Contracts": {
+      "path": "src/CustomerPortal.Application.Contracts/CustomerPortal.Application.Contracts.abppkg",
+      "folder": "src"
+    },
+    "CustomerPortal.HttpApi": {
+      "path": "src/CustomerPortal.HttpApi/CustomerPortal.HttpApi.abppkg",
+      "folder": "src"
+    },
+    "CustomerPortal.HttpApi.Client": {
+      "path": "src/CustomerPortal.HttpApi.Client/CustomerPortal.HttpApi.Client.abppkg",
+      "folder": "src"
+    },
+    "CustomerPortal.EntityFrameworkCore.Tests": {
+      "path": "test/CustomerPortal.EntityFrameworkCore.Tests/CustomerPortal.EntityFrameworkCore.Tests.abppkg",
+      "folder": "test"
+    },
+    "CustomerPortal.TestBase": {
+      "path": "test/CustomerPortal.TestBase/CustomerPortal.TestBase.abppkg",
+      "folder": "test"
+    },
+    "CustomerPortal.Domain.Tests": {
+      "path": "test/CustomerPortal.Domain.Tests/CustomerPortal.Domain.Tests.abppkg",
+      "folder": "test"
+    },
+    "CustomerPortal.HttpApi.Client.ConsoleTestApp": {
+      "path": "test/CustomerPortal.HttpApi.Client.ConsoleTestApp/CustomerPortal.HttpApi.Client.ConsoleTestApp.abppkg",
+      "folder": "test"
+    },
+    "CustomerPortal.DbMigrator": {
+      "path": "src/CustomerPortal.DbMigrator/CustomerPortal.DbMigrator.abppkg",
+      "folder": "src"
+    },
+    "CustomerPortal.HttpApi.Host": {
+      "path": "src/CustomerPortal.HttpApi.Host/CustomerPortal.HttpApi.Host.abppkg",
+      "folder": "src"
+    }
+  }
+}

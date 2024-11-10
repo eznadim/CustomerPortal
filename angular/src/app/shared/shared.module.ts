@@ -4,6 +4,8 @@ import { NgModule } from '@angular/core';
 import { CommercialUiModule } from '@volo/abp.commercial.ng.ui';
 import { ThemeSharedModule } from '@abp/ng.theme.shared';
 import { NgxValidateCoreModule } from '@ngx-validate/core';
+import { CommonModule } from '@angular/common';
+import { AuthService } from './services/auth.service';
 
 @NgModule({
   declarations: [],
@@ -12,14 +14,16 @@ import { NgxValidateCoreModule } from '@ngx-validate/core';
     ThemeSharedModule,
     CommercialUiModule,
     NgbDropdownModule,
-    NgxValidateCoreModule
+    NgxValidateCoreModule,
+    CommonModule
   ],
   exports: [
     CoreModule,
     ThemeSharedModule,
     CommercialUiModule,
     NgbDropdownModule,
-    NgxValidateCoreModule
+    NgxValidateCoreModule,
+    CommonModule
   ],
   providers: []
 })

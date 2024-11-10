@@ -11,9 +11,17 @@ import { TenantDashboardComponent } from './tenant-dashboard/tenant-dashboard.co
 import { DateRangePickerModule } from '@volo/abp.commercial.ng.ui';
 import { PermissionDirective } from '@abp/ng.core';
 import { ReactiveFormsModule } from '@angular/forms';
-
+import { AdminDashboardComponent } from './admin-dashboard/admin-dashboard.component';
+import { CustomerDashboardComponent } from './customer-dashboard/customer-dashboard.component';
 @NgModule({
-  declarations: [DashboardComponent, HostDashboardComponent, TenantDashboardComponent],
+  declarations: [
+    DashboardComponent, 
+    HostDashboardComponent, 
+    TenantDashboardComponent, 
+    DashboardComponent,
+    AdminDashboardComponent,
+    CustomerDashboardComponent
+  ],
   imports: [
     SharedModule,
     DashboardRoutingModule,

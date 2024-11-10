@@ -1,0 +1,28 @@
+{
+  "folders": {
+    "items": {
+      "CustomerPortal": {},
+      "Angular": {}
+    }
+  },
+  "applications": {
+    "CustomerPortal.HttpApi.Host": {
+      "type": "dotnet-project",
+      "path": "../../../src/CustomerPortal.HttpApi.Host/CustomerPortal.HttpApi.Host.csproj",
+      "launchUrl": "https://localhost:44338",
+      "folder": "CustomerPortal"
+    },
+    "Angular": {
+      "type": "cli",
+      "startCommand": "./start.ps1",
+      "workingDirectory": "../../../../angular",
+      "launchUrl": "http://localhost:4200"
+    },
+    "Docker-Dependencies": {
+      "type": "cli",
+      "startCommand": "./run-docker.ps1",
+      "stopCommand": "./stop-docker.ps1",
+      "workingDirectory": "../../docker"
+    }
+  }
+}
