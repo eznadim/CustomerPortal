@@ -7,25 +7,54 @@ export const APP_ROUTE_PROVIDER = [
 
 function configureRoutes(routes: RoutesService) {
   return () => {
+    // Admin Routes
     routes.add([
       {
-        path: '/',
-        name: '::Menu:Dashboard',
+        path: '/dashboard/admin',
+        name: 'Admin Dashboard',
+        iconClass: 'fas fa-home',
+        order: 1,
+        layout: eLayoutType.application,
+        requiredPolicy: 'admin'
+      },
+      {
+        path: '/customer',
+        name: 'Customer Management',
+        iconClass: 'fas fa-users',
+        order: 2,
+        layout: eLayoutType.application,
+        requiredPolicy: 'admin'
+      },
+      {
+        path: '/order',
+        name: 'Order Management',
+        iconClass: 'fas fa-shopping-cart',
+        order: 3,
+        layout: eLayoutType.application,
+        requiredPolicy: 'admin'
+      },
+    ]);
+
+    // Customer Routes
+    routes.add([
+      {
+        path: '/dashboard/customer',
+        name: 'Dashboard',
         iconClass: 'fas fa-home',
         order: 1,
         layout: eLayoutType.application,
       },
       {
-        path: '/customer',
-        name: 'Customer',
-        iconClass: 'fas fa-file',
+        path: '/customer/orders',
+        name: 'My Orders',
+        iconClass: 'fas fa-shopping-cart',
         order: 2,
         layout: eLayoutType.application,
       },
       {
-        path: '/order',
-        name: 'Order',
-        iconClass: 'fas fa-file',
+        path: '/customer/profile',
+        name: 'My Profile',
+        iconClass: 'fas fa-user',
         order: 3,
         layout: eLayoutType.application,
       }
