@@ -22,24 +22,21 @@ namespace CustomerPortal.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<CustomerTokenDto>> Login([FromBody] CustomerLoginDto input)
         {
-            var result = await _customerService.LoginAsync(input);
-            return Ok(result);
+            return await _customerService.LoginAsync(input);
         }
 
         [HttpPost("register")]
         [AllowAnonymous]
         public async Task<ActionResult<CustomerTokenDto>> Register([FromBody] CreateCustomerDto input)
         {
-            var result = await _customerService.RegisterAsync(input);
-            return Ok(result);
+            return await _customerService.RegisterAsync(input);
         }
 
-        [HttpGet("profile")]
-        [Authorize(AuthenticationSchemes = "JWT", Roles = "Customer")]
-        public async Task<ActionResult<CustomerTokenDto>> GetProfile()
+        [HttpGet]
+        [Route("current-customer")]
+        public async Task<CustomerDto> GetCurrentCustomerAsync(Guid id)
         {
-            var result = await _customerService.GetCurrentCustomerAsync();
-            return Ok(result);
+            return await _customerService.GetCurrentCustomerAsync(id);
         }
 
         [HttpPut("update-customer")]
@@ -49,32 +46,11 @@ namespace CustomerPortal.Controllers
             await _customerService.UpdateProfileAsync(input);
         }
 
-        [HttpGet("get-customer-list")]
-        [AllowAnonymous]
-        public async Task<PagedResultDto<CustomerDto>> GetCustomersListAsync(GetCustomersInput input)
-        {
-            return await _customerService.GetCustomersListAsync(input);
-        }
-
         [HttpGet("get-customer-by-id")]
         [AllowAnonymous]
         public async Task<CustomerDto> GetCustomerByIdAsync(Guid customerId)
         {
             return await _customerService.GetCustomerByIdAsync(customerId);
-        }
-
-        [HttpPut("active-customer")]
-        [AllowAnonymous]
-        public async Task ActivateCustomerAsync(Guid customerId)
-        {
-           await _customerService.ActivateCustomerAsync(customerId);
-        }
-
-        [HttpPut("deactivate-customer")]
-        [AllowAnonymous]
-        public async Task DeactivateCustomerAsync(Guid customerId)
-        {
-            await _customerService.DeactivateCustomerAsync(customerId);
         }
 
         [HttpPut("delete-customer")]

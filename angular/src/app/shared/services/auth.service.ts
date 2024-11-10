@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CustomerService } from '../../proxy/customers/customer.service';
 import { OAuthService } from 'angular-oauth2-oidc';
-import { CustomerLoginDto } from '../../proxy/customers/dtos/models';
+import { CustomerLoginDto, CustomerTokenDto } from '../../proxy/customers/dtos/models';
 
 @Injectable({
   providedIn: 'root'
@@ -26,8 +26,43 @@ export class AuthService {
     }
   }
 
+  getCustomerToken(): string | null {
+    return localStorage.getItem('customer_token');
+  }
+
+  setCustomerToken(token: string): void {
+    localStorage.setItem('customer_token', token);
+  }
+
+  removeCustomerToken(): void {
+    localStorage.removeItem('customer_token');
+  }
+
   logout() {
     // Handle both customer and admin logout
     this.oAuthService.logOut();
+  }
+
+  setCustomerData(data: Partial<CustomerTokenDto>): void {
+    localStorage.setItem('customer_data', JSON.stringify(data));
+  }
+
+  getCustomerData(): Partial<CustomerTokenDto> | null {
+    const data = localStorage.getItem('customer_data');
+    return data ? JSON.parse(data) : null;
+  }
+
+  removeCustomerData(): void {
+    localStorage.removeItem('customer_token');
+    localStorage.removeItem('customer_data');
+  }
+
+  isCustomerAuthenticated(): boolean {
+    return !!this.getCustomerToken() && !!this.getCustomerData();
+  }
+
+  getCurrentCustomerId(): string | null {
+    const customerData = this.getCustomerData();
+    return customerData?.id || null;
   }
 }

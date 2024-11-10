@@ -66,7 +66,6 @@ export class AccountLayoutComponent {
   onRoleChange() {
     console.log('Role changed:', this.isCustomer ? 'Customer' : 'Admin');
     this.authStateService.setCustomerMode(this.isCustomer);
-    this.form.reset();
   }
 
   onSubmit() {

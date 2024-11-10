@@ -1,6 +1,5 @@
-import type { CreateCustomerDto, CustomerDto, CustomerLoginDto, CustomerTokenDto, GetCustomersInput, UpdateCustomerDto } from './dtos/models';
+import type { CreateCustomerDto, CustomerDto, CustomerLoginDto, CustomerTokenDto, UpdateCustomerDto } from './dtos/models';
 import { RestService, Rest } from '@abp/ng.core';
-import type { PagedResultDto } from '@abp/ng.core';
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -10,51 +9,26 @@ export class CustomerService {
   apiName = 'Default';
   
 
-  activateCustomer = (customerId: string, config?: Partial<Rest.Config>) =>
-    this.restService.request<any, void>({
-      method: 'POST',
-      url: `/api/app/customer/activate-customer/${customerId}`,
-    },
-    { apiName: this.apiName,...config });
-  
-
-  deactivateCustomer = (customerId: string, config?: Partial<Rest.Config>) =>
-    this.restService.request<any, void>({
-      method: 'POST',
-      url: `/api/app/customer/deactivate-customer/${customerId}`,
-    },
-    { apiName: this.apiName,...config });
-  
-
-  deleteCustomer = (customerId: string, config?: Partial<Rest.Config>) =>
+  deleteCustomer = (id: string, config?: Partial<Rest.Config>) =>
     this.restService.request<any, void>({
       method: 'DELETE',
-      url: `/api/app/customer/customer/${customerId}`,
+      url: `/api/app/customer/${id}/customer`,
     },
     { apiName: this.apiName,...config });
   
 
-  getCurrentCustomer = (config?: Partial<Rest.Config>) =>
-    this.restService.request<any, CustomerTokenDto>({
-      method: 'GET',
-      url: '/api/app/customer/current-customer',
-    },
-    { apiName: this.apiName,...config });
-  
-
-  getCustomerById = (customerId: string, config?: Partial<Rest.Config>) =>
+  getCurrentCustomer = (id: string, config?: Partial<Rest.Config>) =>
     this.restService.request<any, CustomerDto>({
       method: 'GET',
-      url: `/api/app/customer/customer-by-id/${customerId}`,
+      url: `/api/app/customer/${id}/current-customer`,
     },
     { apiName: this.apiName,...config });
   
 
-  getCustomersList = (input: GetCustomersInput, config?: Partial<Rest.Config>) =>
-    this.restService.request<any, PagedResultDto<CustomerDto>>({
+  getCustomerById = (id: string, config?: Partial<Rest.Config>) =>
+    this.restService.request<any, CustomerDto>({
       method: 'GET',
-      url: '/api/app/customer/customers-list',
-      params: { filter: input.filter, customerName: input.customerName, customerEmail: input.customerEmail, orderNo: input.orderNo, isActive: input.isActive, sorting: input.sorting, skipCount: input.skipCount, maxResultCount: input.maxResultCount },
+      url: `/api/app/customer/${id}/customer-by-id`,
     },
     { apiName: this.apiName,...config });
   

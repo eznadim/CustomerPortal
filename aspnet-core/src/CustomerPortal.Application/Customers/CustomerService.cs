@@ -79,11 +79,10 @@ namespace CustomerPortal.Customers
 
             // Create new customer
             var customer = new Customer(
-                GuidGenerator.Create(),
                 input.CustomerName,
                 input.Email,
                 _passwordHasher.HashPassword(null, input.Password),
-                DateTime.Now
+                input.Address
 
             );
 
@@ -125,7 +124,7 @@ namespace CustomerPortal.Customers
             }
 
             // Update basic info
-            customer.UpdateCustomerInfo(input.CustomerName, input.Email);
+            customer.UpdateCustomerInfo(input.CustomerName, input.Email, input.Address);
 
             // Handle password update if provided
             if (!string.IsNullOrEmpty(input.CurrentPassword) && !string.IsNullOrEmpty(input.NewPassword))
@@ -160,23 +159,26 @@ namespace CustomerPortal.Customers
             await CurrentUnitOfWork.SaveChangesAsync();
         }
 
-        public async Task<CustomerTokenDto> GetCurrentCustomerAsync()
+        public async Task<CustomerDto> GetCurrentCustomerAsync(Guid id)
         {
-            var customerId = CurrentUser.Id;
-            if (!customerId.HasValue)
+            if (id == CurrentUser.Id)
             {
-                throw new BusinessException("User not authenticated");
+                return ObjectMapper.Map<Customer, CustomerDto>(await _customersRepository.GetAsync(id));
+            }
+            else
+            {
+                throw new UserFriendlyException(_localizer["User ID does not found"]);
             }
 
-            var customer = await _customersRepository.GetAsync(customerId.Value);
-            return await GenerateTokenDtoAsync(customer);
         }
+
 
         private async Task<CustomerTokenDto> GenerateTokenDtoAsync(Customer customer)
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, customer.Id.ToString()),
+                // Use custom claim type for customer ID to differentiate from admin ID
+                new Claim("CustomerId", customer.Id.ToString()),
                 new Claim(ClaimTypes.Name, customer.CustomerName),
                 new Claim(ClaimTypes.Email, customer.Email),
                 new Claim(ClaimTypes.Role, "Customer"),
@@ -200,87 +202,26 @@ namespace CustomerPortal.Customers
             return new CustomerTokenDto
             {
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
-                CustomerId = customer.CustomerId,
+                Id = customer.Id,
                 CustomerName = customer.CustomerName,
-                Email = customer.Email
+                Email = customer.Email,
+                Address = customer.Address
             };
         }
 
-        public async Task<PagedResultDto<CustomerDto>> GetCustomersListAsync(GetCustomersInput input)
+        public async Task<CustomerDto> GetCustomerByIdAsync(Guid id)
         {
-            var query = (await _customersRepository.WithDetailsAsync())
-                .OrderByDescending(e => e.CreationTime)
-                .Select(e => new
-                {
-                    Customer = e,
-                })
-                .WhereIf(!string.IsNullOrWhiteSpace(input.Filter), e => e.Customer.CustomerName.Contains(input.Filter) ||
-                        e.Customer.Email.Contains(input.Filter))
-                .WhereIf(!string.IsNullOrWhiteSpace(input.CustomerName), e => e.Customer.CustomerName.Contains(input.CustomerName))
-                .WhereIf(!string.IsNullOrWhiteSpace(input.CustomerEmail), e => e.Customer.Email.Contains(input.CustomerName))
-                .Select(e => new CustomerDto()
-                {
-                    CustomerId = e.Customer.CustomerId,
-                    CustomerName = e.Customer.CustomerName,
-                    Email = e.Customer.Email,
-                });
-            var totalCount = query.Count();
-            var items = await query.AsQueryable()
-                        .PageBy(input.SkipCount, input.MaxResultCount)
-                        .ToDynamicListAsync<CustomerDto>(); ;
+            return ObjectMapper.Map<Customer, CustomerDto>(await _customersRepository.GetAsync(id));
 
-            return new PagedResultDto<CustomerDto>
-            {
-                TotalCount = totalCount,
-                Items = items
-            };
         }
 
-        public async Task<CustomerDto> GetCustomerByIdAsync(Guid customerId)
+        public async Task DeleteCustomerAsync(Guid id)
         {
-            var customer = await _customersRepository.FindByCustomerIdAsync(customerId);
+            var customer = await _customersRepository.GetAsync(id);
             if (customer == null)
             {
                 throw new BusinessException("CustomerPortal:CustomerNotFound")
-                    .WithData("CustomerId", customerId);
-            }
-
-            return ObjectMapper.Map<Customer, CustomerDto>(customer);
-        }
-
-        public async Task ActivateCustomerAsync(Guid customerId)
-        {
-            var customer = await _customersRepository.FindByCustomerIdAsync(customerId);
-            if (customer == null)
-            {
-                throw new BusinessException("CustomerPortal:CustomerNotFound")
-                    .WithData("CustomerId", customerId);
-            }
-
-            customer.IsActive = true;
-            await _customersRepository.UpdateAsync(customer);
-        }
-
-        public async Task DeactivateCustomerAsync(Guid customerId)
-        {
-            var customer = await _customersRepository.FindByCustomerIdAsync(customerId);
-            if (customer == null)
-            {
-                throw new BusinessException("CustomerPortal:CustomerNotFound")
-                    .WithData("CustomerId", customerId);
-            }
-
-            customer.IsActive = false;
-            await _customersRepository.UpdateAsync(customer);
-        }
-
-        public async Task DeleteCustomerAsync(Guid customerId)
-        {
-            var customer = await _customersRepository.FindByCustomerIdAsync(customerId);
-            if (customer == null)
-            {
-                throw new BusinessException("CustomerPortal:CustomerNotFound")
-                    .WithData("CustomerId", customerId);
+                    .WithData("Id", id);
             }
 
             await _customersRepository.DeleteAsync(customer);

@@ -66,7 +66,11 @@ const routes: Routes = [
   {
     path: 'account/register-customer',
     component: RegisterCustomerComponent
-  }
+  },
+  {
+    path: 'customer-management',
+    loadChildren: () => import('./customer-management/customer/customer.module').then(m => m.CustomerModule),
+  },
 ];
 
 @NgModule({

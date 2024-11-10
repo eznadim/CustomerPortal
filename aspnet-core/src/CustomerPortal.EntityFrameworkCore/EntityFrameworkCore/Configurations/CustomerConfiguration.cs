@@ -10,12 +10,6 @@ namespace CustomerPortal.EntityFrameworkCore.Configurations
         {
             builder.ToTable(CustomerPortalConsts.DbTablePrefix + "Customers", CustomerPortalConsts.DbSchema);
 
-            builder.HasKey(x => x.Id);
-
-            builder.Property(x => x.CustomerId)
-                .IsRequired()
-                .HasMaxLength(CustomerConsts.MaxCustomerIdLength);
-
             builder.Property(x => x.CustomerName)
                 .IsRequired()
                 .HasMaxLength(CustomerConsts.MaxCustomerNameLength);
@@ -28,9 +22,17 @@ namespace CustomerPortal.EntityFrameworkCore.Configurations
                 .IsRequired()
                 .HasMaxLength(CustomerConsts.MaxPasswordHashLength);
 
-            // Add unique index for CustomerId and Email
-            builder.HasIndex(x => x.CustomerId).IsUnique();
-            builder.HasIndex(x => x.Email).IsUnique();
+            builder.Property(x => x.Address)
+                .HasMaxLength(CustomerConsts.MaxAddressLength)
+                .IsRequired(false);
+
+            builder.HasIndex(x => x.Email)
+                .IsUnique();
+
+            builder.HasMany(x => x.Orders)
+                .WithOne(x => x.Customer)
+                .HasForeignKey(x => x.CustomerId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
-} 
+}

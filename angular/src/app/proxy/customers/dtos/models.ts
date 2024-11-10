@@ -1,19 +1,23 @@
 import type { EntityDto, PagedAndSortedResultRequestDto } from '@abp/ng.core';
+import type { OrderStatus } from '../../orders/order-status.enum';
 
 export interface CreateCustomerDto {
-  [x: string]: any;
   customerName: string;
   email: string;
   password: string;
+  address?: string;
 }
 
 export interface CustomerDto extends EntityDto<string> {
-  customerId?: string;
   customerName?: string;
   email?: string;
+  address?: string;
   isActive: boolean;
   creationTime?: string;
   lastModificationTime?: string;
+  orderId?: string;
+  orderNo?: string;
+  orderStatus: OrderStatus;
 }
 
 export interface CustomerLoginDto {
@@ -23,9 +27,10 @@ export interface CustomerLoginDto {
 
 export interface CustomerTokenDto {
   token?: string;
-  customerId?: string;
+  id?: string;
   customerName?: string;
   email?: string;
+  address?: string;
 }
 
 export interface GetCustomersInput extends PagedAndSortedResultRequestDto {
@@ -39,6 +44,7 @@ export interface GetCustomersInput extends PagedAndSortedResultRequestDto {
 export interface UpdateCustomerDto {
   customerName: string;
   email: string;
+  address?: string;
   currentPassword?: string;
   newPassword?: string;
 }
