@@ -9,13 +9,34 @@ public class CustomerPortalPermissionDefinitionProvider : PermissionDefinitionPr
 {
     public override void Define(IPermissionDefinitionContext context)
     {
-        var myGroup = context.AddGroup(CustomerPortalPermissions.GroupName);
+        var customerPortalGroup = context.AddGroup(CustomerPortalPermissions.GroupName);
 
-        myGroup.AddPermission(CustomerPortalPermissions.Dashboard.Host, L("Permission:Dashboard"), MultiTenancySides.Host);
-        myGroup.AddPermission(CustomerPortalPermissions.Dashboard.Tenant, L("Permission:Dashboard"), MultiTenancySides.Tenant);
+        var customersPermission = customerPortalGroup.AddPermission(
+            CustomerPortalPermissions.Customers.Default,
+            L("Permission:Customers")
+        );
+        customersPermission.AddChild(
+            CustomerPortalPermissions.Customers.Create,
+            L("Permission:Customers.Create")
+        );
+        customersPermission.AddChild(
+            CustomerPortalPermissions.Customers.Edit,
+            L("Permission:Customers.Edit")
+        );
+        customersPermission.AddChild(
+            CustomerPortalPermissions.Customers.Delete,
+            L("Permission:Customers.Delete")
+        );
+        customersPermission.AddChild(
+            CustomerPortalPermissions.Customers.ManageCustomers,
+            L("Permission:Customers.Manage")
+        );
 
-        //Define your own permissions here. Example:
-        //myGroup.AddPermission(CustomerPortalPermissions.MyPermission1, L("Permission:MyPermission1"));
+        // Add customer self-access permission
+        customerPortalGroup.AddPermission(
+            CustomerPortalPermissions.CustomerAccess.Self,
+            L("Permission:CustomerAccess.Self")
+        );
     }
 
     private static LocalizableString L(string name)

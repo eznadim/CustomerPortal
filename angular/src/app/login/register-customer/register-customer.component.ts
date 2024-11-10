@@ -49,16 +49,14 @@ export class RegisterCustomerComponent {
   }
 
   onSubmit() {
-    console.log(this.form.value);
     if (this.form.invalid) return;
     this.customerCreate.customerName = this.form.get('customerName').value;
     this.customerCreate.email = this.form.get('customerEmail').value;
     this.customerCreate.password = this.form.get('customerPassword').value;
-    this.customerCreate.confirmPassword = this.form.get('customerConfirmPassword').value;
     this.inProgress = true;
     this.customerService.register(this.customerCreate)
       .subscribe((result)=>{
-        this.customerId = result.customerId;
+        this.customerId = result.id;
         this.createRefund.emit(this.customerCreate);
   
         this.confirmation.success(

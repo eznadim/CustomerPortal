@@ -9,11 +9,11 @@ namespace CustomerPortal.Customers
     {
         Task<Customer> FindByEmailAsync(string email);
         
-        Task<Customer> FindByCustomerIdAsync(Guid customerId);
+        Task<Customer> FindByCustomerIdAsync(Guid id);
         
         Task<bool> EmailExistsAsync(string email);
         
-        Task<bool> CustomerIdExistsAsync(Guid customerId);
+        Task<bool> CustomerIdExistsAsync(Guid id);
         
         Task<Customer> GetByIdWithDetailsAsync(Guid id);
         

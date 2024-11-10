@@ -142,8 +142,14 @@ export class LoginComponent implements OnInit, AfterViewInit {
         .subscribe({
           next: (response) => {
             localStorage.setItem('customer_token', response.token);
+            localStorage.setItem('customer_data', JSON.stringify({
+              id: response.id,
+              customerName: response.customerName,
+              email: response.email,
+              address: response.address
+            }));
+            
             this.router.navigate(['/dashboard/customer']).then(() => {
-              // Optional: Add success message
               this.toasterService.success('Login successful', 'Success');
             });
           },

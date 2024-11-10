@@ -10,12 +10,9 @@ namespace CustomerPortal.Customers
     {
         Task<CustomerTokenDto> LoginAsync(CustomerLoginDto input);
         Task<CustomerTokenDto> RegisterAsync(CreateCustomerDto input);
-        Task<CustomerTokenDto> GetCurrentCustomerAsync();
+        Task<CustomerDto> GetCurrentCustomerAsync(Guid id);
         Task UpdateProfileAsync(UpdateCustomerDto input);
-        Task<PagedResultDto<CustomerDto>> GetCustomersListAsync(GetCustomersInput input);
         Task<CustomerDto> GetCustomerByIdAsync(Guid customerId);
-        Task ActivateCustomerAsync(Guid customerId);
-        Task DeactivateCustomerAsync(Guid customerId);
         Task DeleteCustomerAsync(Guid customerId);
     }
 } 

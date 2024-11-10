@@ -5,15 +5,17 @@ namespace CustomerPortal.Customers.Dtos
     public class UpdateCustomerDto
     {
         [Required]
-        [StringLength(100, MinimumLength = 2)]
+        [StringLength(CustomerConsts.MaxCustomerNameLength)]
         public string CustomerName { get; set; }
 
         [Required]
         [EmailAddress]
-        [StringLength(256)]
+        [StringLength(CustomerConsts.MaxEmailLength)]
         public string Email { get; set; }
 
-        // Optional: Add if you want to allow password updates
+        [StringLength(CustomerConsts.MaxAddressLength)]
+        public string Address { get; set; }
+
         public string CurrentPassword { get; set; }
         public string NewPassword { get; set; }
     }
