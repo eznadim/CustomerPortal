@@ -4,18 +4,10 @@ public static class CustomerPortalPermissions
 {
     public const string GroupName = "CustomerPortal";
 
-    public static class Customers
+    public static class Orders
     {
-        public const string Default = GroupName + ".Customers";
-        public const string Create = Default + ".Create";
-        public const string Edit = Default + ".Edit";
-        public const string Delete = Default + ".Delete";
-        public const string ManageCustomers = Default + ".Manage";
-    }
-
-    public static class CustomerAccess
-    {
-        public const string Self = GroupName + ".CustomerAccess.Self";
+        public const string Default = GroupName + ".Orders";
+        public const string UpdateStatus = Default + ".UpdateStatus";
     }
 
     public static class Admin
@@ -32,12 +24,17 @@ public static class CustomerPortalPermissions
         public const string Tenant = DashboardGroup + ".Tenant";
     }
 
-    public static class Orders
+    public static class CustomerAccess
     {
-        public const string Default = GroupName + ".Orders";
+        public const string Self = GroupName + ".CustomerAccess.Self";
+    }
+
+    public static class Customers
+    {
+        public const string Default = GroupName + ".Customers";
         public const string Create = Default + ".Create";
-        public const string Edit = Default + ".Edit";
         public const string Delete = Default + ".Delete";
+        public const string ManageCustomers = Default + ".Manage";
     }
 
     //Add your own permission names. Example:

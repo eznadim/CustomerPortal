@@ -1,0 +1,222 @@
+<abp-page [title]="'::ListOfOrders' | abpLocalization">
+    <div class="row  justify-content-end"><
+        <div class="col-6 col-sm-auto d-grid">
+          <button type="button" class="btn btn-sm btn-primary" [routerLink]="['/order-management/add-edit-order']">
+            <i class="fa fa-plus me-1"></i>
+            <span>{{ '::AddOrder' | abpLocalization }}</span>
+          </button>
+        </div>
+      </div>
+    <abp-advanced-entity-filters localizationSourceName="" [list]="list">
+    <abp-advanced-entity-filters-form>
+      <form
+        #filterForm
+        (keyup.enter)="list.get()"
+        lass="form theme-form"
+        name="form"
+        #f="ngForm"
+        focusInvalidInput
+        autocomplete="off"
+        (ngSubmit)="f.form.valid && searchFilters()"
+        novalidate
+      >
+        <div class="row">
+
+          <div class="col-lg-4 col-md-6">
+            <div class="mb-3">
+              <label class="form-label" for="CustomerName">
+                {{ '::CustomerName' | abpLocalization }}
+              </label>
+              <input
+                name="CustomerName"
+                class="form-control"
+                placeholder="{{ '::CustomerName' | abpLocalization }}"
+                [(ngModel)]="filters.customerName"
+              />
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6">
+            <div class="mb-3">
+              <div class="form-group">
+                <label class="form-label" for="Status">
+                  {{ '::OrderStatus' | abpLocalization }}
+                </label>
+                <nz-select
+                    class="form-select"
+                    name="orderStatus"
+                    nzPlaceHolder="{{ '::PleaseChoose' | abpLocalization }}"
+                    [(ngModel)]="filters.status"
+                    nzShowSearch
+                    nzAllowClear
+                    >
+                    <nz-option *ngFor="let status of orderStatus" [nzValue]="status.id" nzLabel="{{status.name}}"></nz-option>
+                  </nz-select>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 col-x-8">
+            <label class="form-label" for="OrderDate">
+              {{ '::OrderDate' | abpLocalization }}
+            </label>
+            <div class="row">
+              <div class="col-md-6 col-x-6">
+                <nz-date-picker
+                  class="form-control"
+                  [(ngModel)]="filters.startDate"
+                  name="startDate"
+                  [nzFormat]="'dd/MM/yyyy'"
+                  (ngModelChange)="minStatusDateChange()"
+                ></nz-date-picker>
+              </div>
+              <div class="col-md-6 col-x-6">
+                <nz-date-picker
+                  class="form-control"
+                  [(ngModel)]="filters.endDate"
+                  name="endDate"
+                  [nzFormat]="'dd/MM/yyyy'"
+                  #maxDateStatus="ngModel"
+                  [ngClass]="{
+                    'is-invalid': f?.submitted && (maxDateStatus.invalid || minMaxStatusValidate())
+                  }"
+                  [required]="minStatusDate"
+                >
+                </nz-date-picker>
+                <div
+                  class="invalid-feedback"
+                  *ngIf="f?.submitted && minStatusDate && maxDateStatus.invalid"
+                >
+                  {{ '::EndDateIsRequired' | abpLocalization }}
+                </div>
+                <div
+                  class="invalid-feedback"
+                  *ngIf="f?.submitted && minStatusDate && maxStatusDate && minMaxStatusValidate()"
+                >
+                  {{ '::EndDateMustBeLaterThanStartDate' | abpLocalization }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row justify-content-end mt-4">
+          <div class="col-6 col-sm-auto d-grid">
+            <button type="button" class="btn btn-light" (click)="clearFilters()">
+              <i class="fa fa-undo me-1" aria-hidden="true"></i>
+              <span>{{ 'AbpUi::Clear' | abpLocalization }}</span>
+            </button>
+          </div>
+          <div class="col-6 col-sm-auto d-grid">
+            <button type="submit" class="btn btn-primary">
+              <i class="fa fa-search me-1" aria-hidden="true"></i>
+              <span>{{ 'AbpUi::Search' | abpLocalization }}</span>
+            </button>
+          </div>
+        </div>
+      </form>
+    </abp-advanced-entity-filters-form>
+  </abp-advanced-entity-filters>
+
+  <div class="card">
+    <div class="card-body">
+  <ngx-datatable [rows]="data.items" [count]="data.totalCount" [list]="list" default>
+    <ngx-datatable-column
+      [name]="'AbpUi::Action' | abpLocalization"
+      [maxWidth]="150"
+      [width]="150"
+      [sortable]="false"
+    >
+      <ng-template let-row="row" let-i="rowIndex" ngx-datatable-cell-template>
+        <div ngbDropdown container="body" class="d-inline-block">
+          <button
+            class="btn btn-primary btn-sm dropdown-toggle"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            ngbDropdownToggle
+          >
+            <i class="fa fa-cog me-1" aria-hidden="true"></i>
+            {{ 'AbpUi::Action' | abpLocalization }}
+          </button>
+
+          <div ngbDropdownMenu>
+            <button
+              ngbDropdownItem
+              type="button"
+              [routerLink]="['/refund-public/refund-application']"
+              [queryParams]="{ action: 'create', id: row.id, listTypeId: row.listTypeId }"
+              *ngIf="row.statusId === 1"
+            >
+              <i class="fa fa-plus me-1"></i>
+              {{ 'AbpUi::Create' | abpLocalization }}
+            </button>
+            <button
+              ngbDropdownItem
+              type="button"
+              [routerLink]="['/refund-public/refund-application']"
+              [queryParams]="{ action: 'edit', id: row.id, refundId: row.refundId, listTypeId: row.listTypeId }"
+              *ngIf="row.statusId === 2"
+            >
+              <i class="fa fa-edit me-1"></i>
+              {{ 'AbpUi::Edit' | abpLocalization }}
+            </button>
+            <button
+              ngbDropdownItem
+              type="button"
+              [routerLink]="['/refund-public/refund-application']"
+              [queryParams]="{ action: 'view', id: row.id, refundId: row.refundId, listTypeId: row.listTypeId }"
+              *ngIf="row.statusId === 3"
+            >
+              <i class="fa fa-eye me-1"></i>
+              {{ 'AbpUi::View' | abpLocalization }}
+            </button>
+            <button
+              ngbDropdownItem
+              type="button"
+              [routerLink]="['/refund-public/refund-application']"
+              [queryParams]="{ action: 'amend', id: row.id, refundId: row.refundId, listTypeId: row.listTypeId }"
+              *ngIf="row.statusId === 4"
+            >
+              <i class="fa fa-sliders me-1"></i>
+              {{ 'AbpUi::Amend' | abpLocalization }}
+            </button>
+          </div>
+        </div>
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column name="{{ '::OrderNumber' | abpLocalization }}" prop="orderNumber" [width]="220">
+      <ng-template let-row="row" ngx-datatable-cell-template>
+        {{ row.orderNumber ?? '-' }}
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column name="{{ '::Description' | abpLocalization }}" prop="description" [width]="180">
+      <ng-template let-row="row" ngx-datatable-cell-template>
+        {{ row.description }}
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column name="{{ '::OrderDate' | abpLocalization }}" prop="orderDate" [width]="180">
+      <ng-template let-row="row" ngx-datatable-cell-template>
+        <span *ngIf="row.orderDate">{{ row.orderDate | date: 'dd/MM/yyyy' }}</span>
+        <span *ngIf="!row.orderDate">-</span>
+      </ng-template>
+    </ngx-datatable-column>
+
+    <ngx-datatable-column name="{{ '::Status' | abpLocalization }}" prop="statusString" [width]="200">
+      <ng-template let-row="row" ngx-datatable-cell-template>
+        {{ row.statusString ?? '-' }}
+      </ng-template>
+    </ngx-datatable-column>
+
+    <!-- <ngx-datatable-column name="{{ '::LastModificationDate' | abpLocalization }}" prop="lastModificationDate">
+      <ng-template let-row="row" ngx-datatable-cell-template>
+        <span *ngIf="row.lastModificationDate">{{ row.lastModificationDate | date: 'dd/MM/yyyy' }}</span>
+        <span *ngIf="!row.lastModificationDate">-</span>
+      </ng-template>
+    </ngx-datatable-column> -->
+  </ngx-datatable>
+  </div>
+  </div>
+</abp-page>

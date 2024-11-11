@@ -6,16 +6,18 @@ import { ThemeSharedModule } from '@abp/ng.theme.shared';
 import { NgxValidateCoreModule } from '@ngx-validate/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from './services/auth.service';
+import { OnlyNumbersDirective } from './directives/only-numbers.directive';
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    OnlyNumbersDirective],
   imports: [
     CoreModule,
     ThemeSharedModule,
     CommercialUiModule,
     NgbDropdownModule,
     NgxValidateCoreModule,
-    CommonModule
+    CommonModule,
   ],
   exports: [
     CoreModule,
@@ -23,8 +25,8 @@ import { AuthService } from './services/auth.service';
     CommercialUiModule,
     NgbDropdownModule,
     NgxValidateCoreModule,
-    CommonModule
+    CommonModule,
   ],
-  providers: []
+  providers: [OnlyNumbersDirective]
 })
 export class SharedModule {}
