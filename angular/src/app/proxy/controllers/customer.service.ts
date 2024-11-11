@@ -1,6 +1,6 @@
 import { RestService, Rest } from '@abp/ng.core';
 import { Injectable } from '@angular/core';
-import type { CreateCustomerDto, CustomerDto, CustomerLoginDto, CustomerTokenDto, UpdateCustomerDto } from '../customers/dtos/models';
+import type { CreateCustomerDto, CustomerDto, CustomerLoginDto, CustomerTokenDto, UpdateCustomerDto, UpdatePasswordDto } from '../customers/dtos/models';
 import type { ActionResult } from '../microsoft/asp-net-core/mvc/models';
 
 @Injectable({
@@ -55,11 +55,20 @@ export class CustomerService {
     { apiName: this.apiName,...config });
   
 
+  updateCustomerPasswordByInput = (input: UpdatePasswordDto, config?: Partial<Rest.Config>) =>
+    this.restService.request<any, void>({
+      method: 'PUT',
+      url: '/api/customer/update-customer-password',
+      params: { currentPassword: input.currentPassword, newPassword: input.newPassword },
+    },
+    { apiName: this.apiName,...config });
+  
+
   updateProfile = (input: UpdateCustomerDto, config?: Partial<Rest.Config>) =>
     this.restService.request<any, void>({
       method: 'PUT',
       url: '/api/customer/update-customer',
-      params: { customerName: input.customerName, email: input.email, address: input.address, currentPassword: input.currentPassword, newPassword: input.newPassword },
+      params: { customerName: input.customerName, email: input.email, address: input.address },
     },
     { apiName: this.apiName,...config });
 

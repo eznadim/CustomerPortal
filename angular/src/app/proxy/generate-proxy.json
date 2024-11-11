@@ -4514,6 +4514,55 @@
               "allowAnonymous": null,
               "implementFrom": "CustomerPortal.Controllers.CustomerController"
             },
+            "UpdateCustomerPasswordByInput": {
+              "uniqueName": "UpdateCustomerPasswordByInput",
+              "name": "UpdateCustomerPassword",
+              "httpMethod": "PUT",
+              "url": "api/customer/update-customer-password",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "CustomerPortal.Customers.Dtos.UpdatePasswordDto, CustomerPortal.Application.Contracts",
+                  "type": "CustomerPortal.Customers.Dtos.UpdatePasswordDto",
+                  "typeSimple": "CustomerPortal.Customers.Dtos.UpdatePasswordDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "CurrentPassword",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "NewPassword",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": true,
+              "implementFrom": "CustomerPortal.Controllers.CustomerController"
+            },
             "UpdateProfileAsyncByInput": {
               "uniqueName": "UpdateProfileAsyncByInput",
               "name": "UpdateProfileAsync",
@@ -4558,30 +4607,6 @@
                 {
                   "nameOnMethod": "input",
                   "name": "Address",
-                  "jsonName": null,
-                  "type": "System.String",
-                  "typeSimple": "string",
-                  "isOptional": false,
-                  "defaultValue": null,
-                  "constraintTypes": null,
-                  "bindingSourceId": "ModelBinding",
-                  "descriptorName": "input"
-                },
-                {
-                  "nameOnMethod": "input",
-                  "name": "CurrentPassword",
-                  "jsonName": null,
-                  "type": "System.String",
-                  "typeSimple": "string",
-                  "isOptional": false,
-                  "defaultValue": null,
-                  "constraintTypes": null,
-                  "bindingSourceId": "ModelBinding",
-                  "descriptorName": "input"
-                },
-                {
-                  "nameOnMethod": "input",
-                  "name": "NewPassword",
                   "jsonName": null,
                   "type": "System.String",
                   "typeSimple": "string",
@@ -4888,7 +4913,7 @@
                 "type": "CustomerPortal.Orders.Dtos.OrderDto",
                 "typeSimple": "CustomerPortal.Orders.Dtos.OrderDto"
               },
-              "allowAnonymous": false,
+              "allowAnonymous": null,
               "implementFrom": "CustomerPortal.Controllers.OrderController"
             },
             "UpdateStatusAsyncByIdAndInput": {
@@ -4945,7 +4970,7 @@
                 "type": "CustomerPortal.Orders.Dtos.OrderDto",
                 "typeSimple": "CustomerPortal.Orders.Dtos.OrderDto"
               },
-              "allowAnonymous": false,
+              "allowAnonymous": null,
               "implementFrom": "CustomerPortal.Controllers.OrderController"
             },
             "DeleteAsyncById": {
@@ -4982,7 +5007,7 @@
                 "type": "System.Void",
                 "typeSimple": "System.Void"
               },
-              "allowAnonymous": false,
+              "allowAnonymous": null,
               "implementFrom": "CustomerPortal.Controllers.OrderController"
             }
           }
@@ -5048,6 +5073,23 @@
                   "returnValue": {
                     "type": "CustomerPortal.Customers.Dtos.CustomerDto",
                     "typeSimple": "CustomerPortal.Customers.Dtos.CustomerDto"
+                  }
+                },
+                {
+                  "name": "UpdateCustomerPassword",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "CustomerPortal.Customers.Dtos.UpdatePasswordDto, CustomerPortal.Application.Contracts",
+                      "type": "CustomerPortal.Customers.Dtos.UpdatePasswordDto",
+                      "typeSimple": "CustomerPortal.Customers.Dtos.UpdatePasswordDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
                   }
                 },
                 {
@@ -5175,6 +5217,43 @@
               "returnValue": {
                 "type": "CustomerPortal.Customers.Dtos.CustomerTokenDto",
                 "typeSimple": "CustomerPortal.Customers.Dtos.CustomerTokenDto"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "CustomerPortal.Customers.ICustomerService"
+            },
+            "UpdateCustomerPasswordByInput": {
+              "uniqueName": "UpdateCustomerPasswordByInput",
+              "name": "UpdateCustomerPassword",
+              "httpMethod": "PUT",
+              "url": "api/app/customer/customer-password",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "CustomerPortal.Customers.Dtos.UpdatePasswordDto, CustomerPortal.Application.Contracts",
+                  "type": "CustomerPortal.Customers.Dtos.UpdatePasswordDto",
+                  "typeSimple": "CustomerPortal.Customers.Dtos.UpdatePasswordDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "CustomerPortal.Customers.Dtos.UpdatePasswordDto",
+                  "typeSimple": "CustomerPortal.Customers.Dtos.UpdatePasswordDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
               },
               "allowAnonymous": null,
               "implementFrom": "CustomerPortal.Customers.ICustomerService"
@@ -18126,7 +18205,7 @@
           "jsonName": null,
           "type": "System.String",
           "typeSimple": "string",
-          "isRequired": true,
+          "isRequired": false,
           "minLength": 0,
           "maxLength": 100,
           "minimum": null,
@@ -18138,7 +18217,7 @@
           "jsonName": null,
           "type": "System.String",
           "typeSimple": "string",
-          "isRequired": true,
+          "isRequired": false,
           "minLength": 0,
           "maxLength": 256,
           "minimum": null,
@@ -18156,7 +18235,16 @@
           "minimum": null,
           "maximum": null,
           "regex": null
-        },
+        }
+      ]
+    },
+    "CustomerPortal.Customers.Dtos.UpdatePasswordDto": {
+      "baseType": null,
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": null,
+      "properties": [
         {
           "name": "CurrentPassword",
           "jsonName": null,

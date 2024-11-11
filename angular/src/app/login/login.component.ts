@@ -20,6 +20,7 @@ import { catchError, finalize, switchMap, tap } from 'rxjs/operators';
 import { AuthService } from '../shared/services/auth.service';
 import { CustomerService } from '../proxy/customers/customer.service';
 import { AuthStateService } from '../shared/services/auth-state.service';
+import { CustomerInfoService } from '../shared/services/customerInfo.service';
 
 const { maxLength, required } = Validators;
 
@@ -59,7 +60,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
   protected recaptchaService: RecaptchaService;
   protected securityCodeService: SecurityCodeService;
   protected customerService: CustomerService;
-
+  protected customerInfoService: CustomerInfoService;
   constructor(
     protected injector: Injector,
     private _confirmation: ConfirmationService,
@@ -74,9 +75,12 @@ export class LoginComponent implements OnInit, AfterViewInit {
     this.recaptchaService = injector.get(RecaptchaService);
     this.securityCodeService = injector.get(SecurityCodeService);
     this.customerService = injector.get(CustomerService);
+    this.customerInfoService = injector.get(CustomerInfoService);
   }
 
   ngOnInit() {
+    localStorage.removeItem('customer_token');
+    localStorage.removeItem('customer_data');
     this.init();
     this.buildForm();
     this.setLinkUserParams();
@@ -141,24 +145,36 @@ export class LoginComponent implements OnInit, AfterViewInit {
         )
         .subscribe({
           next: (response) => {
-            localStorage.setItem('customer_token', response.token);
-            localStorage.setItem('customer_data', JSON.stringify({
-              id: response.id,
-              customerName: response.customerName,
-              email: response.email,
-              address: response.address
-            }));
-            
-            this.router.navigate(['/dashboard/customer']).then(() => {
-              this.toasterService.success('Login successful', 'Success');
-            });
+            if (response && response.token) { // Add check for valid response
+              localStorage.setItem('customer_token', response.token);
+              localStorage.setItem('customer_data', JSON.stringify({
+                id: response.id,
+                customerName: response.customerName,
+                email: response.email,
+                address: response.address
+              }));
+              this.customerInfoService.setCustomer(response.id);
+              // Add await/then to ensure navigation completes
+              this.router.navigate(['/dashboard/customer'])
+                .then(() => {
+                  this.toasterService.success('Login successful', 'Success');
+                })
+                .catch(err => {
+                  console.error('Navigation error:', err);
+                  this.toasterService.error('Navigation failed', 'Error');
+                });
+            } else {
+              this.toasterService.error('Invalid login response', 'Error');
+            }
           },
           error: (error) => {
+            console.error('Login error:', error); // Add error logging
             this.toasterService.error(
               error.error?.message || 
               'Login failed',
               'Error'
             );
+            // Don't automatically redirect on error
           }
         });
     } else {

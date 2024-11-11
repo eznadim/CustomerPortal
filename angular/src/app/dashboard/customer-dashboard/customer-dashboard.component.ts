@@ -71,7 +71,7 @@ export class CustomerDashboardComponent implements OnInit {
           // Update stored data
           this.authService.setCustomerData(customer);
           if (this.currentCustomer?.id) {
-            this.getCustomerOrders();
+           // this.getCustomerOrders();
           }
         },
         error: (error) => {
@@ -85,43 +85,43 @@ export class CustomerDashboardComponent implements OnInit {
       });
   }
 
-  getCustomerOrders() {
-    if (!this.currentCustomer?.id) {
-      return;
-    }
+  // getCustomerOrders() {
+  //   if (!this.currentCustomer?.id) {
+  //     return;
+  //   }
 
-    const filters = this.formFilters.get('times')?.value;
+  //   const filters = this.formFilters.get('times')?.value;
     
-    this.loading = true;
-    this.orderService.getOrderListPublic({
-      customerId: this.currentCustomer.id,
-      maxResultCount: 10,
-      skipCount: 0,
-      startDate: filters?.fromDate,
-      endDate: filters?.toDate,
-    })
-    .pipe(
-      finalize(() => {
-        this.loading = false;
-      })
-    )
-    .subscribe({
-      next: (result) => {
-        this.customerOrders = result.items;
-      },
-      error: (error) => {
-        console.error('Error fetching orders:', error);
-        if (error.status === 401 || error.status === 403) {
-          this.authService.removeCustomerToken();
-          this.router.navigate(['/account/login']);
-        }
-        this.error = 'Failed to load orders';
-      }
-    });
-  }
+  //   this.loading = true;
+  //   this.orderService.getOrderListPublic({
+  //     customerId: this.currentCustomer.id,
+  //     maxResultCount: 10,
+  //     skipCount: 0,
+  //     startDate: filters?.fromDate,
+  //     endDate: filters?.toDate,
+  //   })
+  //   .pipe(
+  //     finalize(() => {
+  //       this.loading = false;
+  //     })
+  //   )
+  //   .subscribe({
+  //     next: (result) => {
+  //       this.customerOrders = result.items;
+  //     },
+  //     error: (error) => {
+  //       console.error('Error fetching orders:', error);
+  //       if (error.status === 401 || error.status === 403) {
+  //         this.authService.removeCustomerToken();
+  //         this.router.navigate(['/account/login']);
+  //       }
+  //       this.error = 'Failed to load orders';
+  //     }
+  //   });
+  // }
 
   refresh() {
-    this.getCustomerOrders();
+    //this.getCustomerOrders();
   }
 
   get isAuthenticated(): boolean {

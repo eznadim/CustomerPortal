@@ -15,6 +15,9 @@ using System.Linq;
 using System.Linq.Dynamic.Core;
 using Microsoft.Extensions.Localization;
 using CustomerPortal.Localization;
+using static CustomerPortal.Permissions.CustomerPortalPermissions;
+using Volo.Abp.Users;
+using Volo.Abp.Specifications;
 
 namespace CustomerPortal.Customers
 {
@@ -92,6 +95,43 @@ namespace CustomerPortal.Customers
             return await GenerateTokenDtoAsync(customer);
         }
 
+        public async Task UpdateCustomerPassword(UpdatePasswordDto input)
+        {
+            // Handle password update if provided
+            if (!string.IsNullOrEmpty(input.CurrentPassword) && !string.IsNullOrEmpty(input.NewPassword))
+            {
+                var currentUserId = CurrentUser.FindClaim("CustomerId")?.Value.ToString();
+                Console.WriteLine(currentUserId);
+                if (string.IsNullOrEmpty(currentUserId))
+                {
+                    throw new BusinessException("CustomerPortal:UserNotAuthenticated");
+                }
+
+                var customer = await _customersRepository.GetByIdWithDetailsAsync(input.CustomerId);
+                // Verify current password
+                var verificationResult = _passwordHasher.VerifyHashedPassword(
+                    customer,
+                    customer.PasswordHash,
+                    input.CurrentPassword
+                );
+
+                if (verificationResult == PasswordVerificationResult.Failed)
+                {
+                    throw new BusinessException("CustomerPortal:InvalidCurrentPassword");
+                }
+
+                // Validate new password (you might want to add more validation rules)
+                if (input.NewPassword.Length < 6)
+                {
+                    throw new BusinessException("CustomerPortal:PasswordTooShort");
+                }
+
+                // Hash and set new password
+                var newPasswordHash = _passwordHasher.HashPassword(customer, input.NewPassword);
+                customer.UpdatePassword(newPasswordHash);
+            }
+        }
+
         public async Task UpdateProfileAsync(UpdateCustomerDto input)
         {
             // Get the current user's ID from the session
@@ -126,49 +166,14 @@ namespace CustomerPortal.Customers
             // Update basic info
             customer.UpdateCustomerInfo(input.CustomerName, input.Email, input.Address);
 
-            // Handle password update if provided
-            if (!string.IsNullOrEmpty(input.CurrentPassword) && !string.IsNullOrEmpty(input.NewPassword))
-            {
-                // Verify current password
-                var verificationResult = _passwordHasher.VerifyHashedPassword(
-                    customer, 
-                    customer.PasswordHash, 
-                    input.CurrentPassword
-                );
-
-                if (verificationResult == PasswordVerificationResult.Failed)
-                {
-                    throw new BusinessException("CustomerPortal:InvalidCurrentPassword");
-                }
-
-                // Validate new password (you might want to add more validation rules)
-                if (input.NewPassword.Length < 6)
-                {
-                    throw new BusinessException("CustomerPortal:PasswordTooShort");
-                }
-
-                // Hash and set new password
-                var newPasswordHash = _passwordHasher.HashPassword(customer, input.NewPassword);
-                customer.UpdatePassword(newPasswordHash);
-            }
-
             // Save changes
             await _customersRepository.UpdateAsync(customer);
-
-            // You might want to add audit logging here
             await CurrentUnitOfWork.SaveChangesAsync();
         }
 
         public async Task<CustomerDto> GetCurrentCustomerAsync(Guid id)
         {
-            if (id == CurrentUser.Id)
-            {
-                return ObjectMapper.Map<Customer, CustomerDto>(await _customersRepository.GetAsync(id));
-            }
-            else
-            {
-                throw new UserFriendlyException(_localizer["User ID does not found"]);
-            }
+            return ObjectMapper.Map<Customer, CustomerDto>(await _customersRepository.GetAsync(id));
 
         }
 

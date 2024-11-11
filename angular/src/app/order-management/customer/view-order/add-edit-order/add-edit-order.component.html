@@ -1,0 +1,82 @@
+<abp-page [title]="'::AddEditOrder' | abpLocalization">
+    <form
+      class="form theme-form"
+      name="form"
+      #f="ngForm"
+      focusInvalidInput
+      autocomplete="off"
+      (ngSubmit)="f.form.valid && submit()"
+      novalidate
+    >
+    <div class="card">
+      <div class="card-body">
+        <div class="card-title mb-3">
+          <h4 *ngIf="!id">
+            {{ '::AddOrder' | abpLocalization }}
+          </h4>
+          <h4 *ngIf="id && !isViewMode">
+            {{ '::EditOrder' | abpLocalization }}
+          </h4>
+          <h4 *ngIf="isViewMode">
+            {{ '::ViewOrder' | abpLocalization }}
+          </h4>
+        </div>
+  
+        <div class="container-fluid">
+        <div class="row mt-3">
+          <div class="col-lg-3">
+            <div class="mb-3">
+              <label class="form-label">{{ '::Description' | abpLocalization }}<span class="red-color">*</span></label>
+            </div>
+          </div>
+          <div class="col-lg-5">
+            <div class="mb-3">
+              <input
+                name="Description"
+                class="form-control"
+                placeholder="{{ '::Description' | abpLocalization }}"
+                [(ngModel)]="description"
+                #descriptionModel="ngModel"
+                [readonly]="isViewMode"
+                [ngClass]="{ 'is-invalid': f?.submitted && descriptionModel.invalid }"
+                currencyMask
+                onlyNumbers
+                required
+              />
+              <div
+                  class="invalid-feedback"
+                  *ngIf="descriptionModel.invalid || f?.submitted || descriptionModel.pristine"
+                >
+                  {{ '::DescriptionRequired' | abpLocalization }}
+                </div>
+            </div>
+          </div>
+        </div>
+  
+        <div class="row mt-4 justify-content-end">
+          <div class="col-6 col-sm-auto d-grid">
+            <button type="button" class="btn btn-light" (click)="back()">
+              <i class="fa fa-arrow-left me-1"></i>
+              <span>{{ '::Back' | abpLocalization }}</span>
+            </button>
+          </div>
+          <div class="col-6 col-sm-auto d-grid" *ngIf="id && !isViewMode">
+            <button type="button" class="btn btn-primary"  (click)="update()">
+              <i class="fa fa-refresh me-1"></i>
+              <span>{{ '::Cancel' | abpLocalization }}</span>
+            </button>
+          </div>
+          <div class="col-6 col-sm-auto d-grid" *ngIf="!id">
+          <button type="submit" class="btn btn-primary">
+            <i class="fa fa-save me-1"></i>
+            <span>{{ '::Save' | abpLocalization }}</span>
+          </button>
+      </div>
+  
+        </div>
+      </div>
+     </div>
+    </div>
+    </form>
+  </abp-page>
+  

@@ -39,6 +39,13 @@ namespace CustomerPortal.Controllers
             return await _customerService.GetCurrentCustomerAsync(id);
         }
 
+        [HttpPut("update-customer-password")]
+        [AllowAnonymous]
+        public async Task UpdateCustomerPassword(UpdatePasswordDto input)
+        {
+            await _customerService.UpdateCustomerPassword(input);
+        }
+
         [HttpPut("update-customer")]
         [AllowAnonymous]
         public async Task UpdateProfileAsync(UpdateCustomerDto input)

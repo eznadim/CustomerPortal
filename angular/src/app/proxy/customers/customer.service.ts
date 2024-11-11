@@ -1,4 +1,4 @@
-import type { CreateCustomerDto, CustomerDto, CustomerLoginDto, CustomerTokenDto, UpdateCustomerDto } from './dtos/models';
+import type { CreateCustomerDto, CustomerDto, CustomerLoginDto, CustomerTokenDto, UpdateCustomerDto, UpdatePasswordDto } from './dtos/models';
 import { RestService, Rest } from '@abp/ng.core';
 import { Injectable } from '@angular/core';
 
@@ -46,6 +46,15 @@ export class CustomerService {
     this.restService.request<any, CustomerTokenDto>({
       method: 'POST',
       url: '/api/app/customer/register',
+      body: input,
+    },
+    { apiName: this.apiName,...config });
+  
+
+  updateCustomerPasswordByInput = (input: UpdatePasswordDto, config?: Partial<Rest.Config>) =>
+    this.restService.request<any, void>({
+      method: 'PUT',
+      url: '/api/app/customer/customer-password',
       body: input,
     },
     { apiName: this.apiName,...config });

@@ -42,9 +42,12 @@ export interface GetCustomersInput extends PagedAndSortedResultRequestDto {
 }
 
 export interface UpdateCustomerDto {
-  customerName: string;
-  email: string;
+  customerName?: string;
+  email?: string;
   address?: string;
+}
+
+export interface UpdatePasswordDto {
   currentPassword?: string;
   newPassword?: string;
 }

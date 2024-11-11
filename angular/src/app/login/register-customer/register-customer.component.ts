@@ -37,7 +37,7 @@ export class RegisterCustomerComponent {
       customerPassword: ['', [Validators.required, Validators.minLength(6)]],
       customerConfirmPassword: ['', Validators.required],
       customerName: ['', Validators.required],
-      customerPhoneNumber: ['', Validators.required],
+      customerAddress: ['', Validators.required],
     }, {
       validators: this.passwordMatchValidator
     });
@@ -53,6 +53,7 @@ export class RegisterCustomerComponent {
     this.customerCreate.customerName = this.form.get('customerName').value;
     this.customerCreate.email = this.form.get('customerEmail').value;
     this.customerCreate.password = this.form.get('customerPassword').value;
+    this.customerCreate.address = this.form.get('customerAddress').value;
     this.inProgress = true;
     this.customerService.register(this.customerCreate)
       .subscribe((result)=>{

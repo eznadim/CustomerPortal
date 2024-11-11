@@ -1,4 +1,4 @@
-import { Component, TrackByFunction } from '@angular/core';
+import { Component, OnInit, TrackByFunction } from '@angular/core';
 import { NavItemsService, NavItem, ConfirmationService, ToasterService } from '@abp/ng.theme.shared';
 import { AuthWrapperService } from '@volo/abp.ng.account.core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
@@ -27,7 +27,7 @@ const { maxLength, required } = Validators;
   styleUrls: ['./account-layout.component.scss'],
   providers: [AuthWrapperService],
 })
-export class AccountLayoutComponent {
+export class AccountLayoutComponent implements OnInit{
 
   trackByFn: TrackByFunction<NavItem> = (_, element) => element?.id;
   form: UntypedFormGroup;
@@ -54,6 +54,11 @@ export class AccountLayoutComponent {
     private _confirmation: ConfirmationService,
     private authStateService: AuthStateService
   ) { }
+
+  ngOnInit(): void {
+    this.buildForm();
+    this.isCustomer = false;
+  }
 
   protected buildForm() {
     this.form = this.fb.group({

@@ -35,7 +35,6 @@ namespace CustomerPortal.Controllers
         }
 
         [HttpPost]
-        [Authorize(CustomerPortalPermissions.Orders.Create)]
         public async Task<OrderDto> CreateAsync([FromBody] CreateUpdateOrderDto input)
         {
             return await _orderService.CreateAsync(input);
@@ -43,7 +42,6 @@ namespace CustomerPortal.Controllers
 
         [HttpPut]
         [Route("{id}/status")]
-        [Authorize(CustomerPortalPermissions.Orders.Edit)]
         public async Task<OrderDto> UpdateStatusAsync(Guid id, [FromBody] UpdateOrderStatusDto input)
         {
             return await _orderService.UpdateStatusAsync(id, input);
@@ -51,7 +49,6 @@ namespace CustomerPortal.Controllers
 
         [HttpDelete]
         [Route("{id}")]
-        [Authorize(CustomerPortalPermissions.Orders.Delete)]
         public async Task DeleteAsync(Guid id)
         {
             await _orderService.DeleteAsync(id);
