@@ -19,5 +19,6 @@ namespace CustomerPortal.Customers.Dtos
 
         [StringLength(CustomerConsts.MaxAddressLength)]
         public string Address { get; set; }
+
     }
 } 

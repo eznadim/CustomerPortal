@@ -71,6 +71,10 @@ const routes: Routes = [
     path: 'customer-management',
     loadChildren: () => import('./customer-management/customer/customer.module').then(m => m.CustomerModule),
   },
+  {
+    path: 'order-management',
+    loadChildren: () => import('./order-management/customer/order.module').then(m => m.OrderModule),
+  },
 ];
 
 @NgModule({

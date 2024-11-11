@@ -20,10 +20,6 @@ public class CustomerPortalPermissionDefinitionProvider : PermissionDefinitionPr
             L("Permission:Customers.Create")
         );
         customersPermission.AddChild(
-            CustomerPortalPermissions.Customers.Edit,
-            L("Permission:Customers.Edit")
-        );
-        customersPermission.AddChild(
             CustomerPortalPermissions.Customers.Delete,
             L("Permission:Customers.Delete")
         );
@@ -37,6 +33,9 @@ public class CustomerPortalPermissionDefinitionProvider : PermissionDefinitionPr
             CustomerPortalPermissions.CustomerAccess.Self,
             L("Permission:CustomerAccess.Self")
         );
+
+         var ordersPermission = customerPortalGroup.AddPermission(CustomerPortalPermissions.Orders.Default, L("Permission:Orders"));
+        ordersPermission.AddChild(CustomerPortalPermissions.Orders.UpdateStatus, L("Permission:Orders.UpdateStatus"));
     }
 
     private static LocalizableString L(string name)

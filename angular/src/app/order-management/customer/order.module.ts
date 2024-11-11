@@ -4,24 +4,21 @@ import { PageModule } from '@abp/ng.components/page';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
-import { CustomerRoutingModule } from './customer-routing.module';
-import { CustomerComponent } from './view-customer/customer.component';
-import { EditProfileComponent } from './view-customer/edit-profile/edit-profile.component';
-import { EditPasswordComponent } from './view-customer/edit-password/edit-password.component';
+import { OrderRoutingModule } from './order-routing.module';
+import { AddEditOrderComponent } from './view-order/add-edit-order/add-edit-order.component';
+import { ViewOrderComponent } from './view-order/view-order.component';
 
 @NgModule({
   declarations: [
-    CustomerComponent,
-    EditProfileComponent,
-    EditPasswordComponent
-  ],
+    ViewOrderComponent, 
+    AddEditOrderComponent],
   imports: [
     CommonModule,
-    CustomerRoutingModule,
+    OrderRoutingModule,
     PageModule,
     NzSelectModule,
     SharedModule,
     NzDatePickerModule,
   ]
 })
-export class CustomerModule { }
+export class OrderModule { }
