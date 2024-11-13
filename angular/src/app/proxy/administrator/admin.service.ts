@@ -66,7 +66,7 @@ export class AdminService {
     this.restService.request<any, ActionResult<PagedResultDto<OrderDto>>>({
       method: 'GET',
       url: '/api/app/admin/orders',
-      params: { filter: input.filter, status: input.status, startDate: input.startDate, endDate: input.endDate, customerName: input.customerName, customerId: input.customerId, sorting: input.sorting, skipCount: input.skipCount, maxResultCount: input.maxResultCount },
+      params: { filter: input.filter, status: input.status, statusString: input.statusString, statusNumber: input.statusNumber, startDate: input.startDate, endDate: input.endDate, customerName: input.customerName, description: input.description, customerId: input.customerId, orderNumber: input.orderNumber, customerEmail: input.customerEmail, orderDate: input.orderDate, sorting: input.sorting, skipCount: input.skipCount, maxResultCount: input.maxResultCount },
     },
     { apiName: this.apiName,...config });
   

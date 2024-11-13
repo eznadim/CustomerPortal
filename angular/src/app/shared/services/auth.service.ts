@@ -39,8 +39,14 @@ export class AuthService {
   }
 
   logout() {
-    // Handle both customer and admin logout
-    this.oAuthService.logOut();
+    if (this.isCustomerAuthenticated()) {
+      // Handle customer logout
+      this.removeCustomerToken();
+      this.removeCustomerData();
+    } else {
+      // Handle admin logout using OAuth
+      this.oAuthService.logOut();
+    }
   }
 
   setCustomerData(data: Partial<CustomerTokenDto>): void {

@@ -1,82 +1,78 @@
-<abp-page [title]="'::AddEditOrder' | abpLocalization">
-    <form
-      class="form theme-form"
-      name="form"
-      #f="ngForm"
-      focusInvalidInput
-      autocomplete="off"
-      (ngSubmit)="f.form.valid && submit()"
-      novalidate
-    >
-    <div class="card">
-      <div class="card-body">
-        <div class="card-title mb-3">
-          <h4 *ngIf="!id">
-            {{ '::AddOrder' | abpLocalization }}
-          </h4>
-          <h4 *ngIf="id && !isViewMode">
-            {{ '::EditOrder' | abpLocalization }}
-          </h4>
-          <h4 *ngIf="isViewMode">
-            {{ '::ViewOrder' | abpLocalization }}
-          </h4>
-        </div>
-  
-        <div class="container-fluid">
-        <div class="row mt-3">
-          <div class="col-lg-3">
-            <div class="mb-3">
-              <label class="form-label">{{ '::Description' | abpLocalization }}<span class="red-color">*</span></label>
-            </div>
-          </div>
-          <div class="col-lg-5">
-            <div class="mb-3">
-              <input
-                name="Description"
-                class="form-control"
-                placeholder="{{ '::Description' | abpLocalization }}"
-                [(ngModel)]="description"
-                #descriptionModel="ngModel"
-                [readonly]="isViewMode"
-                [ngClass]="{ 'is-invalid': f?.submitted && descriptionModel.invalid }"
-                currencyMask
-                onlyNumbers
-                required
-              />
-              <div
-                  class="invalid-feedback"
-                  *ngIf="descriptionModel.invalid || f?.submitted || descriptionModel.pristine"
-                >
-                  {{ '::DescriptionRequired' | abpLocalization }}
-                </div>
-            </div>
-          </div>
-        </div>
-  
-        <div class="row mt-4 justify-content-end">
-          <div class="col-6 col-sm-auto d-grid">
-            <button type="button" class="btn btn-light" (click)="back()">
-              <i class="fa fa-arrow-left me-1"></i>
-              <span>{{ '::Back' | abpLocalization }}</span>
-            </button>
-          </div>
-          <div class="col-6 col-sm-auto d-grid" *ngIf="id && !isViewMode">
-            <button type="button" class="btn btn-primary"  (click)="update()">
-              <i class="fa fa-refresh me-1"></i>
-              <span>{{ '::Cancel' | abpLocalization }}</span>
-            </button>
-          </div>
-          <div class="col-6 col-sm-auto d-grid" *ngIf="!id">
-          <button type="submit" class="btn btn-primary">
-            <i class="fa fa-save me-1"></i>
-            <span>{{ '::Save' | abpLocalization }}</span>
-          </button>
+<div class="modal-header">
+  <h5 class="modal-title">{{ modalType === 'create' ? 'Add Order' : 'Cancel Order' }}</h5>
+  <button type="button" class="close" (click)="onCancel()">
+    <span>&times;</span>
+  </button>
+</div>
+
+<!-- Create Order Form -->
+<form *ngIf="modalType === 'create'" [formGroup]="orderForm" (ngSubmit)="submit()">
+  <div class="modal-body">
+    <div class="form-group mb-3">
+      <label for="description">Description</label>
+      <input
+        type="text"
+        class="form-control"
+        id="description"
+        formControlName="description"
+        [class.is-invalid]="f.description.touched && f.description.invalid"
+      />
+      <div class="invalid-feedback" *ngIf="f.description.touched && f.description.errors">
+        <div *ngIf="f.description.errors?.['required']">Description is required</div>
       </div>
-  
-        </div>
-      </div>
-     </div>
     </div>
-    </form>
-  </abp-page>
-  
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancel</button>
+    <button 
+      type="submit" 
+      class="btn btn-primary" 
+      [disabled]="orderForm.invalid || isModalBusy"
+    >
+      <span *ngIf="isModalBusy" class="spinner-border spinner-border-sm mr-1"></span>
+      {{ isModalBusy ? 'Saving...' : 'Add Order' }}
+    </button>
+  </div>
+</form>
+
+<!-- Cancel Order Form -->
+<div *ngIf="modalType === 'cancel'">
+  <div class="modal-body">
+    <div class="order-details" *ngIf="orderDetails">
+      <div class="mb-4">
+        <h6 class="mb-3">Order Details:</h6>
+        <div class="row mb-2">
+          <div class="col-4"><strong>Order Number:</strong></div>
+          <div class="col-8">{{ orderDetails.orderNumber }}</div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-4"><strong>Description:</strong></div>
+          <div class="col-8">{{ orderDetails.description }}</div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-4"><strong>Status:</strong></div>
+          <div class="col-8">{{ orderDetails.statusString }}</div>
+        </div>
+      </div>
+
+      <div class="alert alert-warning">
+        <i class="fas fa-exclamation-triangle me-2"></i>
+        Are you sure you want to cancel this order?
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="onCancel()">No, Keep Order</button>
+    <button 
+      type="button" 
+      class="btn btn-danger" 
+      (click)="confirmCancel()"
+      [disabled]="isModalBusy"
+    >
+      <span *ngIf="isModalBusy" class="spinner-border spinner-border-sm me-1"></span>
+      {{ isModalBusy ? 'Canceling...' : 'Yes, Cancel Order' }}
+    </button>
+  </div>
+</div>

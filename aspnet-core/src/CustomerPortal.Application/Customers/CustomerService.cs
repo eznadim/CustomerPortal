@@ -45,14 +45,14 @@ namespace CustomerPortal.Customers
             // Validate input
             if (string.IsNullOrWhiteSpace(input.Email) || string.IsNullOrWhiteSpace(input.Password))
             {
-                throw new BusinessException("Invalid credentials");
+                throw new UserFriendlyException("Invalid credentials");
             }
 
             // Find customer
             var customer = await _customersRepository.FirstOrDefaultAsync(x => x.Email == input.Email);
             if (customer == null)
             {
-                throw new BusinessException("Invalid credentials");
+                throw new UserFriendlyException("Invalid email");
             }
 
             // Verify password
@@ -64,7 +64,17 @@ namespace CustomerPortal.Customers
 
             if (verificationResult == PasswordVerificationResult.Failed)
             {
-                throw new BusinessException("Invalid credentials");
+                throw new UserFriendlyException("Invalid password");
+            }
+
+            if (customer.IsActive == false)
+            {
+                throw new UserFriendlyException("Customer is Deactivated");
+            }
+
+            if (customer.IsDeleted == true)
+            {
+                throw new UserFriendlyException("Customer is Deleted");
             }
 
             // Generate token
@@ -95,19 +105,14 @@ namespace CustomerPortal.Customers
             return await GenerateTokenDtoAsync(customer);
         }
 
-        public async Task UpdateCustomerPassword(UpdatePasswordDto input)
+        public async Task UpdateCustomerPassword(Guid id,UpdatePasswordDto input)
         {
+            var customerId = (await _customersRepository.WithDetailsAsync()).Where(e => e.Id == id).FirstOrDefault();
             // Handle password update if provided
             if (!string.IsNullOrEmpty(input.CurrentPassword) && !string.IsNullOrEmpty(input.NewPassword))
             {
-                var currentUserId = CurrentUser.FindClaim("CustomerId")?.Value.ToString();
-                Console.WriteLine(currentUserId);
-                if (string.IsNullOrEmpty(currentUserId))
-                {
-                    throw new BusinessException("CustomerPortal:UserNotAuthenticated");
-                }
 
-                var customer = await _customersRepository.GetByIdWithDetailsAsync(input.CustomerId);
+                var customer = await _customersRepository.GetByIdWithDetailsAsync(customerId.Id);
                 // Verify current password
                 var verificationResult = _passwordHasher.VerifyHashedPassword(
                     customer,
@@ -125,6 +130,10 @@ namespace CustomerPortal.Customers
                 {
                     throw new BusinessException("CustomerPortal:PasswordTooShort");
                 }
+                if (input.CurrentPassword == input.NewPassword)
+                {
+                    throw new UserFriendlyException("Current Password and New Password cannot be the same");
+                }
 
                 // Hash and set new password
                 var newPasswordHash = _passwordHasher.HashPassword(customer, input.NewPassword);
@@ -132,43 +141,23 @@ namespace CustomerPortal.Customers
             }
         }
 
-        public async Task UpdateProfileAsync(UpdateCustomerDto input)
+        public async Task<CustomerDto> UpdateProfileAsync(Guid id,UpdateCustomerDto input)
         {
-            // Get the current user's ID from the session
-            var currentUserId = CurrentUser.Id;
-            if (!currentUserId.HasValue)
-            {
-                throw new BusinessException("CustomerPortal:UserNotAuthenticated");
-            }
-
-            // Get the customer
-            var customer = await _customersRepository.GetAsync(currentUserId.Value);
-            if (customer == null)
-            {
-                throw new BusinessException("CustomerPortal:CustomerNotFound");
-            }
+            var customer = (await _customersRepository.WithDetailsAsync()).Where(e => e.Id == id).FirstOrDefault();
+            var allCustomer = (await _customersRepository.WithDetailsAsync()).Where(e => e.Email != customer.Email).Select(e => e.Email).ToList();
 
             // Check if email is being changed and if it's already in use
-            if (customer.Email != input.Email)
+            if (allCustomer.Contains(input.Email))
             {
-                var emailExists = await _customersRepository.AnyAsync(x => 
-                    x.Id != customer.Id && 
-                    x.Email == input.Email
-                );
-
-                if (emailExists)
-                {
-                    throw new BusinessException("CustomerPortal:EmailAlreadyExists")
+                throw new BusinessException("CustomerPortal:EmailAlreadyExists")
                         .WithData("Email", input.Email);
-                }
             }
 
-            // Update basic info
             customer.UpdateCustomerInfo(input.CustomerName, input.Email, input.Address);
 
-            // Save changes
-            await _customersRepository.UpdateAsync(customer);
+            var customerUpdate = await _customersRepository.UpdateAsync(customer);
             await CurrentUnitOfWork.SaveChangesAsync();
+            return ObjectMapper.Map<Customer, CustomerDto>(customerUpdate);
         }
 
         public async Task<CustomerDto> GetCurrentCustomerAsync(Guid id)

@@ -10,9 +10,11 @@ namespace CustomerPortal.Orders
     public interface IOrderService : IApplicationService
     {
         Task<OrderDto> GetAsync(Guid id);
-        Task<PagedResultDto<OrderDto>> GetOrderListPublicAsync(GetOrderListDto input);
+        Task<PagedResultDto<OrderDto>> GetOrderListAdminAsync(GetOrderListDto input);
+        Task<PagedResultDto<OrderDto>> GetOrderListPublicAsync(Guid id,GetOrderListDto input);
         Task<OrderDto> CreateAsync(CreateUpdateOrderDto input);
         Task<OrderDto> UpdateStatusAsync(Guid id, UpdateOrderStatusDto input);
         Task DeleteAsync(Guid id);
+        Task<OrderDto> CancelOrderAsync(Guid id);
     }
 } 
