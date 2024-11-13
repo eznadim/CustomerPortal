@@ -48,7 +48,7 @@ export class EditPasswordComponent {
         newPassword: this.passwordForm.get('newPassword').value
       };
 
-      this.customerService.updateCustomerPasswordByInput(updateDto).subscribe(
+      this.customerService.updateCustomerPasswordByIdAndInput(this.customerId,updateDto).subscribe(
         () => {
           this.isModalBusy = false;
           this.save.emit();

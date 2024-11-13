@@ -3708,6 +3708,30 @@
                 },
                 {
                   "nameOnMethod": "input",
+                  "name": "StatusString",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "StatusNumber",
+                  "jsonName": null,
+                  "type": "System.Int32?",
+                  "typeSimple": "number?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
                   "name": "StartDate",
                   "jsonName": null,
                   "type": "System.DateTime?",
@@ -3744,9 +3768,57 @@
                 },
                 {
                   "nameOnMethod": "input",
+                  "name": "Description",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
                   "name": "CustomerId",
                   "jsonName": null,
                   "type": "System.Guid?",
+                  "typeSimple": "string?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "OrderNumber",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "CustomerEmail",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "OrderDate",
+                  "jsonName": null,
+                  "type": "System.DateTime?",
                   "typeSimple": "string?",
                   "isOptional": false,
                   "defaultValue": null,
@@ -4193,6 +4265,30 @@
                 },
                 {
                   "nameOnMethod": "input",
+                  "name": "StatusString",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Query",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "StatusNumber",
+                  "jsonName": null,
+                  "type": "System.Int32?",
+                  "typeSimple": "number?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Query",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
                   "name": "StartDate",
                   "jsonName": null,
                   "type": "System.DateTime?",
@@ -4229,9 +4325,57 @@
                 },
                 {
                   "nameOnMethod": "input",
+                  "name": "Description",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Query",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
                   "name": "CustomerId",
                   "jsonName": null,
                   "type": "System.Guid?",
+                  "typeSimple": "string?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Query",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "OrderNumber",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Query",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "CustomerEmail",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Query",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "OrderDate",
+                  "jsonName": null,
+                  "type": "System.DateTime?",
                   "typeSimple": "string?",
                   "isOptional": false,
                   "defaultValue": null,
@@ -4514,13 +4658,21 @@
               "allowAnonymous": null,
               "implementFrom": "CustomerPortal.Controllers.CustomerController"
             },
-            "UpdateCustomerPasswordByInput": {
-              "uniqueName": "UpdateCustomerPasswordByInput",
+            "UpdateCustomerPasswordByIdAndInput": {
+              "uniqueName": "UpdateCustomerPasswordByIdAndInput",
               "name": "UpdateCustomerPassword",
               "httpMethod": "PUT",
               "url": "api/customer/update-customer-password",
               "supportedVersions": [],
               "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
                 {
                   "name": "input",
                   "typeAsString": "CustomerPortal.Customers.Dtos.UpdatePasswordDto, CustomerPortal.Application.Contracts",
@@ -4531,6 +4683,30 @@
                 }
               ],
               "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "CustomerId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
                 {
                   "nameOnMethod": "input",
                   "name": "CurrentPassword",
@@ -4563,13 +4739,21 @@
               "allowAnonymous": true,
               "implementFrom": "CustomerPortal.Controllers.CustomerController"
             },
-            "UpdateProfileAsyncByInput": {
-              "uniqueName": "UpdateProfileAsyncByInput",
+            "UpdateProfileAsyncByIdAndInput": {
+              "uniqueName": "UpdateProfileAsyncByIdAndInput",
               "name": "UpdateProfileAsync",
               "httpMethod": "PUT",
               "url": "api/customer/update-customer",
               "supportedVersions": [],
               "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
                 {
                   "name": "input",
                   "typeAsString": "CustomerPortal.Customers.Dtos.UpdateCustomerDto, CustomerPortal.Application.Contracts",
@@ -4580,6 +4764,18 @@
                 }
               ],
               "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                },
                 {
                   "nameOnMethod": "input",
                   "name": "CustomerName",
@@ -4618,8 +4814,8 @@
                 }
               ],
               "returnValue": {
-                "type": "System.Void",
-                "typeSimple": "System.Void"
+                "type": "CustomerPortal.Customers.Dtos.CustomerDto",
+                "typeSimple": "CustomerPortal.Customers.Dtos.CustomerDto"
               },
               "allowAnonymous": true,
               "implementFrom": "CustomerPortal.Controllers.CustomerController"
@@ -4746,11 +4942,11 @@
               "allowAnonymous": null,
               "implementFrom": "CustomerPortal.Controllers.OrderController"
             },
-            "GetOrderListPublicAsyncByInput": {
-              "uniqueName": "GetOrderListPublicAsyncByInput",
-              "name": "GetOrderListPublicAsync",
+            "GetOrderListAdminAsyncByInput": {
+              "uniqueName": "GetOrderListAdminAsyncByInput",
+              "name": "GetOrderListAdminAsync",
               "httpMethod": "GET",
-              "url": "api/orders/get-order-public-list",
+              "url": "api/orders/get-order-admin-list",
               "supportedVersions": [],
               "parametersOnMethod": [
                 {
@@ -4781,6 +4977,30 @@
                   "jsonName": null,
                   "type": "System.String",
                   "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Query",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "StatusString",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Query",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "StatusNumber",
+                  "jsonName": null,
+                  "type": "System.Int32?",
+                  "typeSimple": "number?",
                   "isOptional": false,
                   "defaultValue": null,
                   "constraintTypes": null,
@@ -4825,9 +5045,282 @@
                 },
                 {
                   "nameOnMethod": "input",
+                  "name": "Description",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Query",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
                   "name": "CustomerId",
                   "jsonName": null,
                   "type": "System.Guid?",
+                  "typeSimple": "string?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Query",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "OrderNumber",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Query",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "CustomerEmail",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Query",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "OrderDate",
+                  "jsonName": null,
+                  "type": "System.DateTime?",
+                  "typeSimple": "string?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Query",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Sorting",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Query",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "SkipCount",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Query",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "MaxResultCount",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Query",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.PagedResultDto<CustomerPortal.Orders.Dtos.OrderDto>",
+                "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<CustomerPortal.Orders.Dtos.OrderDto>"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "CustomerPortal.Controllers.OrderController"
+            },
+            "GetOrderListPublicAsyncByIdAndInput": {
+              "uniqueName": "GetOrderListPublicAsyncByIdAndInput",
+              "name": "GetOrderListPublicAsync",
+              "httpMethod": "GET",
+              "url": "api/orders/get-order-public-list",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "input",
+                  "typeAsString": "CustomerPortal.Orders.Dtos.GetOrderListDto, CustomerPortal.Application.Contracts",
+                  "type": "CustomerPortal.Orders.Dtos.GetOrderListDto",
+                  "typeSimple": "CustomerPortal.Orders.Dtos.GetOrderListDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Filter",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Query",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Status",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Query",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "StatusString",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Query",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "StatusNumber",
+                  "jsonName": null,
+                  "type": "System.Int32?",
+                  "typeSimple": "number?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Query",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "StartDate",
+                  "jsonName": null,
+                  "type": "System.DateTime?",
+                  "typeSimple": "string?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Query",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "EndDate",
+                  "jsonName": null,
+                  "type": "System.DateTime?",
+                  "typeSimple": "string?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Query",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "CustomerName",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Query",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Description",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Query",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "CustomerId",
+                  "jsonName": null,
+                  "type": "System.Guid?",
+                  "typeSimple": "string?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Query",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "OrderNumber",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Query",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "CustomerEmail",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Query",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "OrderDate",
+                  "jsonName": null,
+                  "type": "System.DateTime?",
                   "typeSimple": "string?",
                   "isOptional": false,
                   "defaultValue": null,
@@ -5009,6 +5502,43 @@
               },
               "allowAnonymous": null,
               "implementFrom": "CustomerPortal.Controllers.OrderController"
+            },
+            "CancelOrderAsyncById": {
+              "uniqueName": "CancelOrderAsyncById",
+              "name": "CancelOrderAsync",
+              "httpMethod": "PUT",
+              "url": "api/orders/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "CustomerPortal.Controllers.OrderController"
             }
           }
         },
@@ -5079,6 +5609,14 @@
                   "name": "UpdateCustomerPassword",
                   "parametersOnMethod": [
                     {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
+                    {
                       "name": "input",
                       "typeAsString": "CustomerPortal.Customers.Dtos.UpdatePasswordDto, CustomerPortal.Application.Contracts",
                       "type": "CustomerPortal.Customers.Dtos.UpdatePasswordDto",
@@ -5096,6 +5634,14 @@
                   "name": "UpdateProfileAsync",
                   "parametersOnMethod": [
                     {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
+                    {
                       "name": "input",
                       "typeAsString": "CustomerPortal.Customers.Dtos.UpdateCustomerDto, CustomerPortal.Application.Contracts",
                       "type": "CustomerPortal.Customers.Dtos.UpdateCustomerDto",
@@ -5105,8 +5651,8 @@
                     }
                   ],
                   "returnValue": {
-                    "type": "System.Void",
-                    "typeSimple": "System.Void"
+                    "type": "CustomerPortal.Customers.Dtos.CustomerDto",
+                    "typeSimple": "CustomerPortal.Customers.Dtos.CustomerDto"
                   }
                 },
                 {
@@ -5221,13 +5767,21 @@
               "allowAnonymous": null,
               "implementFrom": "CustomerPortal.Customers.ICustomerService"
             },
-            "UpdateCustomerPasswordByInput": {
-              "uniqueName": "UpdateCustomerPasswordByInput",
+            "UpdateCustomerPasswordByIdAndInput": {
+              "uniqueName": "UpdateCustomerPasswordByIdAndInput",
               "name": "UpdateCustomerPassword",
               "httpMethod": "PUT",
-              "url": "api/app/customer/customer-password",
+              "url": "api/app/customer/{id}/customer-password",
               "supportedVersions": [],
               "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
                 {
                   "name": "input",
                   "typeAsString": "CustomerPortal.Customers.Dtos.UpdatePasswordDto, CustomerPortal.Application.Contracts",
@@ -5238,6 +5792,18 @@
                 }
               ],
               "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                },
                 {
                   "nameOnMethod": "input",
                   "name": "input",
@@ -5258,13 +5824,21 @@
               "allowAnonymous": null,
               "implementFrom": "CustomerPortal.Customers.ICustomerService"
             },
-            "UpdateProfileAsyncByInput": {
-              "uniqueName": "UpdateProfileAsyncByInput",
+            "UpdateProfileAsyncByIdAndInput": {
+              "uniqueName": "UpdateProfileAsyncByIdAndInput",
               "name": "UpdateProfileAsync",
               "httpMethod": "PUT",
-              "url": "api/app/customer/profile",
+              "url": "api/app/customer/{id}/profile",
               "supportedVersions": [],
               "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
                 {
                   "name": "input",
                   "typeAsString": "CustomerPortal.Customers.Dtos.UpdateCustomerDto, CustomerPortal.Application.Contracts",
@@ -5275,6 +5849,18 @@
                 }
               ],
               "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                },
                 {
                   "nameOnMethod": "input",
                   "name": "input",
@@ -5289,8 +5875,8 @@
                 }
               ],
               "returnValue": {
-                "type": "System.Void",
-                "typeSimple": "System.Void"
+                "type": "CustomerPortal.Customers.Dtos.CustomerDto",
+                "typeSimple": "CustomerPortal.Customers.Dtos.CustomerDto"
               },
               "allowAnonymous": null,
               "implementFrom": "CustomerPortal.Customers.ICustomerService"
@@ -5438,8 +6024,33 @@
                   }
                 },
                 {
+                  "name": "GetOrderListAdminAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "CustomerPortal.Orders.Dtos.GetOrderListDto, CustomerPortal.Application.Contracts",
+                      "type": "CustomerPortal.Orders.Dtos.GetOrderListDto",
+                      "typeSimple": "CustomerPortal.Orders.Dtos.GetOrderListDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Application.Dtos.PagedResultDto<CustomerPortal.Orders.Dtos.OrderDto>",
+                    "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<CustomerPortal.Orders.Dtos.OrderDto>"
+                  }
+                },
+                {
                   "name": "GetOrderListPublicAsync",
                   "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
                     {
                       "name": "input",
                       "typeAsString": "CustomerPortal.Orders.Dtos.GetOrderListDto, CustomerPortal.Application.Contracts",
@@ -5512,6 +6123,23 @@
                     "type": "System.Void",
                     "typeSimple": "System.Void"
                   }
+                },
+                {
+                  "name": "CancelOrderAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "CustomerPortal.Orders.Dtos.OrderDto",
+                    "typeSimple": "CustomerPortal.Orders.Dtos.OrderDto"
+                  }
                 }
               ]
             }
@@ -5551,14 +6179,14 @@
                 "type": "CustomerPortal.Orders.Dtos.OrderDto",
                 "typeSimple": "CustomerPortal.Orders.Dtos.OrderDto"
               },
-              "allowAnonymous": false,
+              "allowAnonymous": null,
               "implementFrom": "CustomerPortal.Orders.IOrderService"
             },
-            "GetOrderListPublicAsyncByInput": {
-              "uniqueName": "GetOrderListPublicAsyncByInput",
-              "name": "GetOrderListPublicAsync",
+            "GetOrderListAdminAsyncByInput": {
+              "uniqueName": "GetOrderListAdminAsyncByInput",
+              "name": "GetOrderListAdminAsync",
               "httpMethod": "GET",
-              "url": "api/app/order/order-list-public",
+              "url": "api/app/order/order-list-admin",
               "supportedVersions": [],
               "parametersOnMethod": [
                 {
@@ -5589,6 +6217,30 @@
                   "jsonName": null,
                   "type": "System.String",
                   "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "StatusString",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "StatusNumber",
+                  "jsonName": null,
+                  "type": "System.Int32?",
+                  "typeSimple": "number?",
                   "isOptional": false,
                   "defaultValue": null,
                   "constraintTypes": null,
@@ -5633,9 +6285,57 @@
                 },
                 {
                   "nameOnMethod": "input",
+                  "name": "Description",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
                   "name": "CustomerId",
                   "jsonName": null,
                   "type": "System.Guid?",
+                  "typeSimple": "string?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "OrderNumber",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "CustomerEmail",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "OrderDate",
+                  "jsonName": null,
+                  "type": "System.DateTime?",
                   "typeSimple": "string?",
                   "isOptional": false,
                   "defaultValue": null,
@@ -5684,7 +6384,232 @@
                 "type": "Volo.Abp.Application.Dtos.PagedResultDto<CustomerPortal.Orders.Dtos.OrderDto>",
                 "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<CustomerPortal.Orders.Dtos.OrderDto>"
               },
-              "allowAnonymous": false,
+              "allowAnonymous": null,
+              "implementFrom": "CustomerPortal.Orders.IOrderService"
+            },
+            "GetOrderListPublicAsyncByIdAndInput": {
+              "uniqueName": "GetOrderListPublicAsyncByIdAndInput",
+              "name": "GetOrderListPublicAsync",
+              "httpMethod": "GET",
+              "url": "api/app/order/{id}/order-list-public",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "input",
+                  "typeAsString": "CustomerPortal.Orders.Dtos.GetOrderListDto, CustomerPortal.Application.Contracts",
+                  "type": "CustomerPortal.Orders.Dtos.GetOrderListDto",
+                  "typeSimple": "CustomerPortal.Orders.Dtos.GetOrderListDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Filter",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Status",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "StatusString",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "StatusNumber",
+                  "jsonName": null,
+                  "type": "System.Int32?",
+                  "typeSimple": "number?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "StartDate",
+                  "jsonName": null,
+                  "type": "System.DateTime?",
+                  "typeSimple": "string?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "EndDate",
+                  "jsonName": null,
+                  "type": "System.DateTime?",
+                  "typeSimple": "string?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "CustomerName",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Description",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "CustomerId",
+                  "jsonName": null,
+                  "type": "System.Guid?",
+                  "typeSimple": "string?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "OrderNumber",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "CustomerEmail",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "OrderDate",
+                  "jsonName": null,
+                  "type": "System.DateTime?",
+                  "typeSimple": "string?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Sorting",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "SkipCount",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "MaxResultCount",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.PagedResultDto<CustomerPortal.Orders.Dtos.OrderDto>",
+                "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<CustomerPortal.Orders.Dtos.OrderDto>"
+              },
+              "allowAnonymous": null,
               "implementFrom": "CustomerPortal.Orders.IOrderService"
             },
             "CreateAsyncByInput": {
@@ -5721,7 +6646,7 @@
                 "type": "CustomerPortal.Orders.Dtos.OrderDto",
                 "typeSimple": "CustomerPortal.Orders.Dtos.OrderDto"
               },
-              "allowAnonymous": false,
+              "allowAnonymous": null,
               "implementFrom": "CustomerPortal.Orders.IOrderService"
             },
             "UpdateStatusAsyncByIdAndInput": {
@@ -5778,7 +6703,7 @@
                 "type": "CustomerPortal.Orders.Dtos.OrderDto",
                 "typeSimple": "CustomerPortal.Orders.Dtos.OrderDto"
               },
-              "allowAnonymous": false,
+              "allowAnonymous": null,
               "implementFrom": "CustomerPortal.Orders.IOrderService"
             },
             "DeleteAsyncById": {
@@ -5815,7 +6740,44 @@
                 "type": "System.Void",
                 "typeSimple": "System.Void"
               },
-              "allowAnonymous": false,
+              "allowAnonymous": null,
+              "implementFrom": "CustomerPortal.Orders.IOrderService"
+            },
+            "CancelOrderAsyncById": {
+              "uniqueName": "CancelOrderAsyncById",
+              "name": "CancelOrderAsync",
+              "httpMethod": "POST",
+              "url": "api/app/order/{id}/cancel-order",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "CustomerPortal.Orders.Dtos.OrderDto",
+                "typeSimple": "CustomerPortal.Orders.Dtos.OrderDto"
+              },
+              "allowAnonymous": null,
               "implementFrom": "CustomerPortal.Orders.IOrderService"
             }
           }
@@ -18246,6 +19208,18 @@
       "genericArguments": null,
       "properties": [
         {
+          "name": "CustomerId",
+          "jsonName": null,
+          "type": "System.Guid",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
           "name": "CurrentPassword",
           "jsonName": null,
           "type": "System.String",
@@ -18336,6 +19310,30 @@
           "regex": null
         },
         {
+          "name": "StatusString",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "StatusNumber",
+          "jsonName": null,
+          "type": "System.Int32?",
+          "typeSimple": "number?",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
           "name": "StartDate",
           "jsonName": null,
           "type": "System.DateTime?",
@@ -18372,9 +19370,57 @@
           "regex": null
         },
         {
+          "name": "Description",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
           "name": "CustomerId",
           "jsonName": null,
           "type": "System.Guid?",
+          "typeSimple": "string?",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "OrderNumber",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "CustomerEmail",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "OrderDate",
+          "jsonName": null,
+          "type": "System.DateTime?",
           "typeSimple": "string?",
           "isRequired": false,
           "minLength": null,
@@ -18453,31 +19499,7 @@
           "regex": null
         },
         {
-          "name": "TrackingNumber",
-          "jsonName": null,
-          "type": "System.String",
-          "typeSimple": "string",
-          "isRequired": false,
-          "minLength": null,
-          "maxLength": null,
-          "minimum": null,
-          "maximum": null,
-          "regex": null
-        },
-        {
-          "name": "ShippedDate",
-          "jsonName": null,
-          "type": "System.DateTime?",
-          "typeSimple": "string?",
-          "isRequired": false,
-          "minLength": null,
-          "maxLength": null,
-          "minimum": null,
-          "maximum": null,
-          "regex": null
-        },
-        {
-          "name": "DeliveredDate",
+          "name": "LastModificationTime",
           "jsonName": null,
           "type": "System.DateTime?",
           "typeSimple": "string?",
@@ -18511,6 +19533,18 @@
           "minimum": null,
           "maximum": null,
           "regex": null
+        },
+        {
+          "name": "CustomerEmail",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
         }
       ]
     },
@@ -18527,18 +19561,6 @@
           "type": "CustomerPortal.Orders.OrderStatus",
           "typeSimple": "CustomerPortal.Orders.OrderStatus",
           "isRequired": true,
-          "minLength": null,
-          "maxLength": null,
-          "minimum": null,
-          "maximum": null,
-          "regex": null
-        },
-        {
-          "name": "TrackingNumber",
-          "jsonName": null,
-          "type": "System.String",
-          "typeSimple": "string",
-          "isRequired": false,
           "minLength": null,
           "maxLength": null,
           "minimum": null,

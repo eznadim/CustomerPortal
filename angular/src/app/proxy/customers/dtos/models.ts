@@ -48,6 +48,7 @@ export interface UpdateCustomerDto {
 }
 
 export interface UpdatePasswordDto {
+  customerId?: string;
   currentPassword?: string;
   newPassword?: string;
 }

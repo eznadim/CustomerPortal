@@ -72,16 +72,4 @@ export class CustomerComponent implements OnInit {
   onPasswordChangeCancel() {
     this.isPasswordModalVisible = false;
   }
-
-  updateContactInfo() {
-    // Implement contact info update logic
-  }
-
-  manageNotifications() {
-    // Implement notifications management logic
-  }
-
-  deactivateAccount() {
-    // Implement account deactivation logic with confirmation
-  }
 }

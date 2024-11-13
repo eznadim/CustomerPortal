@@ -1,50 +1,19 @@
-/* Basic styles for the navbar */
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    background-color: #333;
-    color: white;
-  }
+.navbar-custom {
+  background-color: #ff4444;
+  box-shadow: 0 2px 4px rgba(0,0,0,.1);
   
-  /* Logo and app name */
-  .navbar-logo a {
-    color: white;
-    font-size: 24px;
-    text-decoration: none;
+  .navbar {
+    padding: 0.5rem 1rem;
   }
-  
-  /* Navigation items list */
-  .navbar-items ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
+}
+
+.navbar-nav {
+  gap: 1rem;
+}
+
+.btn-outline-light {
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
   }
-  
-  .navbar-items li {
-    margin-right: 20px;
-  }
-  
-  .navbar-items a {
-    color: white;
-    text-decoration: none;
-    font-size: 16px;
-  }
-  
-  /* Logout button */
-  .navbar-logout .logout-button {
-    background-color: #ff4c4c;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 5px;
-  }
-  
-  .navbar-logout .logout-button:hover {
-    background-color: #e03d3d;
-  }
+}
   

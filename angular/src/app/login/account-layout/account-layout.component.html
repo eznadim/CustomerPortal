@@ -23,31 +23,24 @@
             <h3 class="card-title text-center mt-2" *ngIf="isCustomer">
               {{'::CustomerLogin' | abpLocalization | uppercase }}
             </h3>
-            <ng-container>
-              <ng-container>
-                <div class="card-header bg-custom">
-                  <div class="tenant-switch-box">
-                    <div class="col ps-1 pt-1">
-                      <label class="form-label">Select Role:</label>
-                      <mat-slide-toggle 
+            <ng-container *ngIf="showToggle">
+              <div class="card-header bg-custom">
+                <div class="tenant-switch-box">
+                  <div class="col ps-1 pt-1">
+                    <label class="form-label">Select Role:</label>
+                    <mat-slide-toggle 
                       [(ngModel)]="isCustomer" 
                       (change)="onRoleChange()">
                       Role: {{isCustomer}}
                     </mat-slide-toggle>
-                    </div>
                   </div>
                 </div>
-              </ng-container>
+              </div>
             </ng-container>
             <div class="card-body" *ngIf="authWrapperService.enableLocalLogin$ | async; else disableLocalLoginTemplate">
               <router-outlet></router-outlet>
               <nav class="navbar navbar-expand p-0">
                 <ul class="navbar-nav my-auto float-start">
-                  <div class="text-start col">
-                    <span (click)="redirectPortal()" class="font-smaller pointer">
-                      <i class="fa fa-arrow-left me-1"></i>
-                      {{'::Back' | abpLocalization}}</span>
-                  </div>
                 </ul>
                 <ul class="navbar-nav ms-auto float-end ml-auto">
                 <abp-languages class="font-smaller"></abp-languages>

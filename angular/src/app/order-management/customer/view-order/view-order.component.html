@@ -1,7 +1,7 @@
 <abp-page [title]="'::ListOfOrders' | abpLocalization">
-    <div class="row  justify-content-end"><
+    <div class="row  justify-content-end">
         <div class="col-6 col-sm-auto d-grid">
-          <button type="button" class="btn btn-sm btn-primary" [routerLink]="['/order-management/add-edit-order']">
+          <button type="button" class="btn btn-sm btn-primary" (click)="addOrder()">
             <i class="fa fa-plus me-1"></i>
             <span>{{ '::AddOrder' | abpLocalization }}</span>
           </button>
@@ -24,14 +24,15 @@
 
           <div class="col-lg-4 col-md-6">
             <div class="mb-3">
-              <label class="form-label" for="CustomerName">
-                {{ '::CustomerName' | abpLocalization }}
+              <label class="form-label" for="orderNumber">
+                {{ '::OrderNumber' | abpLocalization }}
               </label>
               <input
-                name="CustomerName"
+                name="orderNumber"
                 class="form-control"
-                placeholder="{{ '::CustomerName' | abpLocalization }}"
-                [(ngModel)]="filters.customerName"
+                placeholder="{{ '::Order' | abpLocalization }}"
+                [(ngModel)]="filters.orderNumber"
+                
               />
             </div>
           </div>
@@ -143,42 +144,19 @@
             <button
               ngbDropdownItem
               type="button"
-              [routerLink]="['/refund-public/refund-application']"
-              [queryParams]="{ action: 'create', id: row.id, listTypeId: row.listTypeId }"
-              *ngIf="row.statusId === 1"
-            >
-              <i class="fa fa-plus me-1"></i>
-              {{ 'AbpUi::Create' | abpLocalization }}
-            </button>
-            <button
-              ngbDropdownItem
-              type="button"
-              [routerLink]="['/refund-public/refund-application']"
-              [queryParams]="{ action: 'edit', id: row.id, refundId: row.refundId, listTypeId: row.listTypeId }"
-              *ngIf="row.statusId === 2"
+              [queryParams]="{ action: 'track', id: row.id }"
             >
               <i class="fa fa-edit me-1"></i>
-              {{ 'AbpUi::Edit' | abpLocalization }}
+              {{ 'AbpUi::Track' | abpLocalization }}
             </button>
             <button
               ngbDropdownItem
               type="button"
-              [routerLink]="['/refund-public/refund-application']"
-              [queryParams]="{ action: 'view', id: row.id, refundId: row.refundId, listTypeId: row.listTypeId }"
-              *ngIf="row.statusId === 3"
+              (click)="cancelOrder(row.id)"
+              *ngIf="row.statusString === 'Pending' || row.statusString === 'Confirmed' || row.statusString === 'Processing'"
             >
               <i class="fa fa-eye me-1"></i>
-              {{ 'AbpUi::View' | abpLocalization }}
-            </button>
-            <button
-              ngbDropdownItem
-              type="button"
-              [routerLink]="['/refund-public/refund-application']"
-              [queryParams]="{ action: 'amend', id: row.id, refundId: row.refundId, listTypeId: row.listTypeId }"
-              *ngIf="row.statusId === 4"
-            >
-              <i class="fa fa-sliders me-1"></i>
-              {{ 'AbpUi::Amend' | abpLocalization }}
+              {{ 'AbpUi::Cancel' | abpLocalization }}
             </button>
           </div>
         </div>
@@ -220,3 +198,29 @@
   </div>
   </div>
 </abp-page>
+
+<!-- Create Order Modal -->
+<abp-modal [(visible)]="isOrderModalVisible">
+  <ng-template #abpBody>
+    <app-add-edit-order
+      *ngIf="isOrderModalVisible"
+      [customerId]="customerData?.id"
+      modalType="create"
+      (save)="onOrderChanged()"
+      (cancel)="onOrderChangeCancel()">
+    </app-add-edit-order>
+  </ng-template>
+</abp-modal>
+
+<!-- Cancel Order Modal -->
+<abp-modal [(visible)]="isCancelModalVisible">
+  <ng-template #abpBody>
+    <app-add-edit-order
+      *ngIf="isCancelModalVisible"
+      [orderId]="selectedOrderId"
+      modalType="cancel"
+      (save)="onOrderCancelChanged()"
+      (cancel)="onOrderCancelChangeCancel()">
+    </app-add-edit-order>
+  </ng-template>
+</abp-modal>

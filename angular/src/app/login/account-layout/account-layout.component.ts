@@ -42,7 +42,6 @@ export class AccountLayoutComponent implements OnInit{
   protected recaptchaService: RecaptchaService;
   protected authService: AuthService;
   protected securityCodeService: SecurityCodeService;
-  protected router: Router;
   protected toasterService: ToasterService;
   protected identityLinkUserService: IdentityLinkUserService;
   protected route: ActivatedRoute;
@@ -52,7 +51,8 @@ export class AccountLayoutComponent implements OnInit{
     public authWrapperService: AuthWrapperService,
     public readonly navItems: NavItemsService,
     private _confirmation: ConfirmationService,
-    private authStateService: AuthStateService
+    private authStateService: AuthStateService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -183,6 +183,9 @@ export class AccountLayoutComponent implements OnInit{
     this.fieldTextType = !this.fieldTextType;
 }
 
+get showToggle(): boolean {
+  return this.router.url !== '/account/register-customer';
+}
 
 }
 

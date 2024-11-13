@@ -1,8 +1,8 @@
 import { PagedResultDto, ListService, ABP } from '@abp/ng.core';
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { GetOrderListDto, OrderDto } from '@proxy/orders/dtos';
 import { OrderService } from '@proxy/orders/order.service';
+import { ToasterService } from '@abp/ng.theme.shared';
 
 @Component({
   selector: 'app-view-order',
@@ -12,6 +12,9 @@ import { OrderService } from '@proxy/orders/order.service';
 })
 export class ViewOrderComponent {
 
+  isOrderModalVisible = false;
+  isCancelModalVisible = false;
+  customerData: any;
   filters = {} as GetOrderListDto;
   minStatusDate: Date;
   maxStatusDate: Date;
@@ -24,24 +27,32 @@ export class ViewOrderComponent {
     items: [],
     totalCount: 0,
   };
+  selectedOrderId: string;
 
   
   constructor(
     public readonly list: ListService,
     private _orderService: OrderService,
-    private _activatedRoute: ActivatedRoute,
+    private toasterService: ToasterService,
   ) { }
 
   ngOnInit() {
+    const customerDataStr = localStorage.getItem('customer_data');
+    if (customerDataStr) {
+      this.customerData = JSON.parse(customerDataStr);
+    } else {
+      this.toasterService.error('Customer data not found');
+    }
     this.getOrderList();
   }
 
   getOrderList() {
     const getData = (query: ABP.PageQueryParams) =>
-      this._orderService.getOrderListPublic({
+      this._orderService.getOrderListPublic(this.customerData.id, {
         ...query,
         ...this.filters,
         filter: query.filter,
+        customerId: this.customerData.id
       });
   
     const setData = (list: PagedResultDto<OrderDto>) => (this.data = list);
@@ -49,8 +60,11 @@ export class ViewOrderComponent {
   }
 
   clearFilters(){
-    this.filters = {} as GetOrderListDto;
-    this.getOrderList();
+    //not working for some reason
+    // this.filters = {} as GetOrderListDto;
+    // this.minStatusDate = null;
+    // this.maxStatusDate = null;
+    window.location.reload();
   }
 
   searchFilters(){
@@ -97,5 +111,34 @@ export class ViewOrderComponent {
       minMaxValidate = false;
     }
     return minMaxValidate;
+  }
+
+  addOrder() {
+    this.isOrderModalVisible = true;
+  }
+
+  onOrderChanged() {
+    this.isOrderModalVisible = false;
+    this.list.get();
+    this.toasterService.success('Order updated successfully');
+  }
+
+  onOrderChangeCancel() {
+    this.isOrderModalVisible = false;
+  }
+
+  cancelOrder(orderId: string) {
+    this.selectedOrderId = orderId;
+    this.isCancelModalVisible = true;
+  }
+
+  onOrderCancelChanged() {
+    this.isCancelModalVisible = false;
+    this.list.get();
+    this.toasterService.success('Order cancelled successfully');
+  }
+
+  onOrderCancelChangeCancel() {
+    this.isCancelModalVisible = false;
   }
 }

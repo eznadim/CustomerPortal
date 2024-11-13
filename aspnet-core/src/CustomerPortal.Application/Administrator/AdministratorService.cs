@@ -161,10 +161,6 @@ namespace CustomerPortal.Administrator
             }
 
             order.UpdateStatus(input.Status);
-            if (!string.IsNullOrWhiteSpace(input.TrackingNumber))
-            {
-                order.UpdateTrackingNumber(input.TrackingNumber);
-            }
 
             await _orderRepository.UpdateAsync(order);
 

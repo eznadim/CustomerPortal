@@ -7,11 +7,10 @@ export interface OrderDto extends AuditedEntityDto<string> {
   orderDate?: string;
   status: OrderStatus;
   statusString?: string;
-  trackingNumber?: string;
-  shippedDate?: string;
-  deliveredDate?: string;
+  lastModificationTime?: string;
   customerId?: string;
   customerName?: string;
+  customerEmail?: string;
 }
 
 export interface CreateUpdateOrderDto {
@@ -22,13 +21,18 @@ export interface CreateUpdateOrderDto {
 export interface GetOrderListDto extends PagedAndSortedResultRequestDto {
   filter?: string;
   status?: OrderStatus;
+  statusString?: string;
+  statusNumber?: number;
   startDate?: string;
   endDate?: string;
   customerName?: string;
+  description?: string;
   customerId?: string;
+  orderNumber?: string;
+  customerEmail?: string;
+  orderDate?: string;
 }
 
 export interface UpdateOrderStatusDto {
   status: OrderStatus;
-  trackingNumber?: string;
 }

@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { CustomerService } from '@proxy/customers';
 import { OrderService, OrderStatus } from '@proxy/orders';
-import { CustomerDto, CustomerTokenDto } from '@proxy/customers/dtos/models';
-import { OrderDto } from '@proxy/orders/dtos/models';
+import { CustomerTokenDto } from '@proxy/customers/dtos/models';
+import { OrderDto, GetOrderListDto } from '@proxy/orders/dtos/models';
 import { finalize } from 'rxjs/operators';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { Router } from '@angular/router';
@@ -14,38 +14,29 @@ import { Router } from '@angular/router';
   styleUrls: ['./customer-dashboard.component.scss']
 })
 export class CustomerDashboardComponent implements OnInit {
-  formFilters: FormGroup;
   currentCustomer: CustomerTokenDto;
   customerOrders: OrderDto[] = [];
   loading = false;
   error: string = null;
+  OrderStatus = OrderStatus; // Make enum available in template
 
   constructor(
-    private fb: FormBuilder,
     private customerService: CustomerService,
     private orderService: OrderService,
     private authService: AuthService,
     private router: Router
-  ) {
-    this.formFilters = this.fb.group({
-      times: null
-    });
-  }
+  ) {}
 
   ngOnInit(): void {
-    // Check if customer data exists
-    console.log(this.authService.getCustomerToken());
     const customerData = this.authService.getCustomerData();
-    // if (!customerData?.id) {
-    //   this.router.navigate(['/account/login']);
-    //   return;
-    // }
+    if (!customerData?.id) {
+      this.router.navigate(['/account/login']);
+      return;
+    }
     
-    // Initialize with stored data
     this.currentCustomer = customerData;
-    
-    // Then fetch latest data
     this.getCurrentCustomer();
+    this.getCustomerOrders();
   }
 
   getCurrentCustomer() {
@@ -60,19 +51,11 @@ export class CustomerDashboardComponent implements OnInit {
     }
 
     this.customerService.getCurrentCustomer(customerId)
-      .pipe(
-        finalize(() => {
-          this.loading = false;
-        })
-      )
+      .pipe(finalize(() => this.loading = false))
       .subscribe({
         next: (customer) => {
           this.currentCustomer = customer;
-          // Update stored data
           this.authService.setCustomerData(customer);
-          if (this.currentCustomer?.id) {
-           // this.getCustomerOrders();
-          }
         },
         error: (error) => {
           console.error('Error fetching customer:', error);
@@ -85,43 +68,38 @@ export class CustomerDashboardComponent implements OnInit {
       });
   }
 
-  // getCustomerOrders() {
-  //   if (!this.currentCustomer?.id) {
-  //     return;
-  //   }
+  getCustomerOrders() {
+    const customerId = this.authService.getCurrentCustomerId();
+    if (!customerId) return;
 
-  //   const filters = this.formFilters.get('times')?.value;
-    
-  //   this.loading = true;
-  //   this.orderService.getOrderListPublic({
-  //     customerId: this.currentCustomer.id,
-  //     maxResultCount: 10,
-  //     skipCount: 0,
-  //     startDate: filters?.fromDate,
-  //     endDate: filters?.toDate,
-  //   })
-  //   .pipe(
-  //     finalize(() => {
-  //       this.loading = false;
-  //     })
-  //   )
-  //   .subscribe({
-  //     next: (result) => {
-  //       this.customerOrders = result.items;
-  //     },
-  //     error: (error) => {
-  //       console.error('Error fetching orders:', error);
-  //       if (error.status === 401 || error.status === 403) {
-  //         this.authService.removeCustomerToken();
-  //         this.router.navigate(['/account/login']);
-  //       }
-  //       this.error = 'Failed to load orders';
-  //     }
-  //   });
-  // }
+    this.loading = true;
+
+    const filters: GetOrderListDto = {
+      customerId: customerId,
+      maxResultCount: 5, // Show only 5 recent orders in dashboard
+      skipCount: 0,
+      // Add any other filter parameters you need
+    };
+
+    this.orderService.getOrderListPublic(customerId, filters)
+      .pipe(finalize(() => this.loading = false))
+      .subscribe({
+        next: (result) => {
+          this.customerOrders = result.items;
+        },
+        error: (error) => {
+          console.error('Error fetching orders:', error);
+          if (error.status === 401 || error.status === 403) {
+            this.authService.removeCustomerData();
+            this.router.navigate(['/account/login']);
+          }
+          this.error = 'Failed to load orders';
+        }
+      });
+  }
 
   refresh() {
-    //this.getCustomerOrders();
+    this.getCustomerOrders();
   }
 
   get isAuthenticated(): boolean {
@@ -137,10 +115,34 @@ export class CustomerDashboardComponent implements OnInit {
   }
 
   get pendingOrders(): number {
-    return this.customerOrders?.filter(o => o.status === OrderStatus.Pending).length || 0;
+    return this.customerOrders?.filter(o => 
+      o.status === OrderStatus.Pending || 
+      o.status === OrderStatus.Processing
+    ).length || 0;
   }
 
   get completedOrders(): number {
-    return this.customerOrders?.filter(o => o.status === OrderStatus.Delivered).length || 0;
+    return this.customerOrders?.filter(o => 
+      o.status === OrderStatus.Delivered
+    ).length || 0;
+  }
+
+  getStatusBadgeClass(status: OrderStatus): string {
+    const statusMap = {
+      [OrderStatus.Pending]: 'badge bg-warning',
+      [OrderStatus.Processing]: 'badge bg-info',
+      [OrderStatus.Shipped]: 'badge bg-primary',
+      [OrderStatus.Delivered]: 'badge bg-success',
+      [OrderStatus.Cancelled]: 'badge bg-danger'
+    };
+    return statusMap[status] || 'badge bg-secondary';
+  }
+
+  getStatusLabel(status: OrderStatus): string {
+    return OrderStatus[status];
+  }
+  
+  viewAllOrders(): void {
+    this.router.navigate(['/order-management/view-order']);
   }
 }

@@ -1,11 +1,7 @@
-import { ListService, PermissionService } from '@abp/ng.core';
-import { ConfirmationService } from '@abp/ng.theme.shared';
-import { Component } from '@angular/core';
-import { Location } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { OrderService } from '@proxy/orders/order.service';
-import { CreateUpdateOrderDto } from '@proxy/orders/dtos/models';
-import { CustomerInfoService } from 'src/app/shared/services/customerInfo.service';
+import { CreateUpdateOrderDto, OrderDto } from '@proxy/orders/dtos/models';
 
 @Component({
   selector: 'app-add-edit-order',
@@ -13,76 +9,78 @@ import { CustomerInfoService } from 'src/app/shared/services/customerInfo.servic
   styleUrl: './add-edit-order.component.scss'
 })
 export class AddEditOrderComponent {
-
-  id: any;
-  isViewMode: boolean;
-  orderNo: string;
-  description: string;
-  ;
-  createUpdateOrder = {} as CreateUpdateOrderDto;
-  constructor(
-    private _activatedRoute: ActivatedRoute,
-    private location: Location,
-    private confirmation: ConfirmationService,
-    private router: Router,
-    private _orderService: OrderService,
-    private customerInfoService: CustomerInfoService
-  ) { }
-
-  ngOnInit(): void {
-    this.id = this._activatedRoute.snapshot.queryParams['id'];
-
-    if(this.id){
-      this.getViewDetail();
-     
-
-      if(this._activatedRoute.snapshot.queryParams['action'] == 'view'){
-        this.isViewMode = true;
-        
-      } else {
-        this.isViewMode = false;
-      }
-      
-    }
-  }
-
-  getCustomerId(){
-    return this.customerInfoService.getCurrentCustomerValue();
-  }
-
-  getViewDetail(){
-    if(this.id){
-      this._orderService.get(this.id).subscribe(result => {
-        this.orderNo = result.orderNumber;
-        this.description = result.description;
-      })
-    }
-  }
-
-  submit(){
-    this.confirmation.warn('::AddOrderAreYouSure', '::AddOrder').subscribe((result) => {
-      if (result == "confirm") {
-        this.createUpdateOrder.description = this.description;
-        this.createUpdateOrder.customerId = this.getCustomerId();
-        this._orderService.create(this.createUpdateOrder).subscribe(() => {
-          this.confirmation.success("::SuccessfullySaved", "::AddOrder", {
-            hideCancelBtn: true,
-            yesText: 'OK'
-          });
-
-          this.router.navigate(['/order-management/customer/view-order'])
-        })
-      }
-    })
-    
-   
-  }
-
-  update(){
-    //should cancel
-  }
+  @Input() customerId: string;
+  @Input() orderId: string;
+  @Input() modalType: 'create' | 'cancel' = 'create';
+  @Output() save = new EventEmitter<void>();
+  @Output() cancel = new EventEmitter<void>();
   
-  back(){
-    this.location.back();
+  orderForm: FormGroup;
+  isModalBusy = false;
+  orderDetails: OrderDto;
+
+  constructor(
+    private _orderService: OrderService,
+    private fb: FormBuilder,
+  ) {
+    this.initForms();
+  }
+
+  private initForms() {
+    this.orderForm = this.fb.group({
+      description: ['', [Validators.required]],
+    });
+  }
+
+  ngOnInit() {
+    if (this.modalType === 'cancel' && this.orderId) {
+      this._orderService.get(this.orderId).subscribe(order => {
+        this.orderDetails = order;
+      });
+    }
+  }
+
+  submit() {
+    if (this.modalType === 'create' && this.orderForm.valid) {
+      this.isModalBusy = true;
+      const createOrderDto: CreateUpdateOrderDto = {
+        description: this.orderForm.get('description').value,
+        customerId: this.customerId,
+      };
+
+      this._orderService.create(createOrderDto).subscribe(
+        () => {
+          this.isModalBusy = false;
+          this.save.emit();
+        },
+        error => {
+          console.error('Error creating order:', error);
+          this.isModalBusy = false;
+        }
+      );
+    }
+  }
+
+  confirmCancel() {
+    this.isModalBusy = true;
+    this._orderService.cancelOrder(this.orderId).subscribe(
+      () => {
+        this.isModalBusy = false;
+        this.save.emit();
+      },
+      error => {
+        console.error('Error canceling order:', error);
+        this.isModalBusy = false;
+      }
+    );
+  }
+
+  onCancel() {
+    this.cancel.emit();
+  }
+
+  // Getters for form controls
+  get f() {
+    return this.orderForm.controls;
   }
 }

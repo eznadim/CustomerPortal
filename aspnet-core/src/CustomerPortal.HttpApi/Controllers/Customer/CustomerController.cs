@@ -41,16 +41,16 @@ namespace CustomerPortal.Controllers
 
         [HttpPut("update-customer-password")]
         [AllowAnonymous]
-        public async Task UpdateCustomerPassword(UpdatePasswordDto input)
+        public async Task UpdateCustomerPassword(Guid id, UpdatePasswordDto input)
         {
-            await _customerService.UpdateCustomerPassword(input);
+            await _customerService.UpdateCustomerPassword(id,input);
         }
 
         [HttpPut("update-customer")]
         [AllowAnonymous]
-        public async Task UpdateProfileAsync(UpdateCustomerDto input)
+        public async Task<CustomerDto> UpdateProfileAsync(Guid id, UpdateCustomerDto input)
         {
-            await _customerService.UpdateProfileAsync(input);
+            return await _customerService.UpdateProfileAsync(id,input);
         }
 
         [HttpGet("get-customer-by-id")]
