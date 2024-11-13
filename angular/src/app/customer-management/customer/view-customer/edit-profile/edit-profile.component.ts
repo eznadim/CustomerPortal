@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { CustomerService } from '@proxy/customers'; // Adjust import path as needed
-import { UpdateCustomerDto } from '@proxy/customers/dtos'; // Adjust import path as needed
+import { UpdateCustomerDto, CustomerDto } from '@proxy/customers/dtos'; // Adjust import path as needed
 
 @Component({
   selector: 'app-edit-profile',
@@ -15,6 +15,7 @@ export class EditProfileComponent implements OnInit {
 
   editForm: FormGroup;
   isModalBusy = false;
+  customerDto = {} as CustomerDto;
 
   constructor(
     private fb: FormBuilder,
@@ -57,7 +58,7 @@ export class EditProfileComponent implements OnInit {
         address: this.editForm.get('address').value,
       };
 
-      this.customerService.updateProfile(updateDto).subscribe(
+      this.customerService.updateProfile(this.customerId,updateDto).subscribe(
         () => {
           this.isModalBusy = false;
           this.save.emit();

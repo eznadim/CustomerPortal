@@ -6,7 +6,5 @@ namespace CustomerPortal.Orders.Dtos
     {
         [Required]
         public OrderStatus Status { get; set; }
-        
-        public string? TrackingNumber { get; set; }
     }
 } 

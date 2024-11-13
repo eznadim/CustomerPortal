@@ -28,10 +28,16 @@ namespace CustomerPortal.Controllers
             return await _orderService.GetAsync(id);
         }
 
-        [HttpGet("get-order-public-list")]
-        public async Task<PagedResultDto<OrderDto>> GetOrderListPublicAsync([FromQuery] GetOrderListDto input)
+        [HttpGet("get-order-admin-list")]
+        public async Task<PagedResultDto<OrderDto>> GetOrderListAdminAsync([FromQuery] GetOrderListDto input)
         {
-            return await _orderService.GetOrderListPublicAsync(input);
+            return await _orderService.GetOrderListAdminAsync(input);
+        }
+
+        [HttpGet("get-order-public-list")]
+        public async Task<PagedResultDto<OrderDto>> GetOrderListPublicAsync(Guid id,[FromQuery] GetOrderListDto input)
+        {
+            return await _orderService.GetOrderListPublicAsync(id,input);
         }
 
         [HttpPost]
@@ -52,6 +58,13 @@ namespace CustomerPortal.Controllers
         public async Task DeleteAsync(Guid id)
         {
             await _orderService.DeleteAsync(id);
+        }
+
+        [HttpPut]
+        [Route("{id}")]
+        public async Task CancelOrderAsync(Guid id)
+        {
+            await _orderService.CancelOrderAsync(id);
         }
     }
 }

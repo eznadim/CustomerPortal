@@ -21,13 +21,6 @@ namespace CustomerPortal.Orders
         [Required]
         public OrderStatus Status { get; protected set; }
 
-        [StringLength(OrderConsts.MaxTrackingNumberLength)]
-        public string? TrackingNumber { get; protected set; }
-
-        public DateTime? ShippedDate { get; protected set; }
-        
-        public DateTime? DeliveredDate { get; protected set; }
-
         [Required]
         public Guid CustomerId { get; protected set; }
 
@@ -62,26 +55,6 @@ namespace CustomerPortal.Orders
             }
 
             Status = newStatus;
-            
-            switch (newStatus)
-            {
-                case OrderStatus.Shipped:
-                    ShippedDate = DateTime.Now;
-                    break;
-                case OrderStatus.Delivered:
-                    DeliveredDate = DateTime.Now;
-                    break;
-            }
-        }
-
-        public void UpdateTrackingNumber(string trackingNumber)
-        {
-            if (Status == OrderStatus.Cancelled)
-            {
-                throw new InvalidOperationException("Cannot update tracking number of cancelled order");
-            }
-
-            TrackingNumber = trackingNumber;
         }
     }
 } 

@@ -55,20 +55,20 @@ export class CustomerService {
     { apiName: this.apiName,...config });
   
 
-  updateCustomerPasswordByInput = (input: UpdatePasswordDto, config?: Partial<Rest.Config>) =>
+  updateCustomerPasswordByIdAndInput = (id: string, input: UpdatePasswordDto, config?: Partial<Rest.Config>) =>
     this.restService.request<any, void>({
       method: 'PUT',
       url: '/api/customer/update-customer-password',
-      params: { currentPassword: input.currentPassword, newPassword: input.newPassword },
+      params: { id, customerId: input.customerId, currentPassword: input.currentPassword, newPassword: input.newPassword },
     },
     { apiName: this.apiName,...config });
   
 
-  updateProfile = (input: UpdateCustomerDto, config?: Partial<Rest.Config>) =>
-    this.restService.request<any, void>({
+  updateProfile = (id: string, input: UpdateCustomerDto, config?: Partial<Rest.Config>) =>
+    this.restService.request<any, CustomerDto>({
       method: 'PUT',
       url: '/api/customer/update-customer',
-      params: { customerName: input.customerName, email: input.email, address: input.address },
+      params: { id, customerName: input.customerName, email: input.email, address: input.address },
     },
     { apiName: this.apiName,...config });
 

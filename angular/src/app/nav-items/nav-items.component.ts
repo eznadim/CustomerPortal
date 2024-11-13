@@ -1,21 +1,35 @@
-import { NavItemsService, NavItem } from '@abp/ng.theme.shared';
-import { Component, TrackByFunction } from '@angular/core';
-import { eThemeLeptonComponents } from '@volo/abp.ng.theme.lepton/lib/enums/components';
-import { AuthService } from '@abp/ng.core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from '../shared/services/auth.service';
 
 @Component({
   selector: 'app-nav-items',
-  templateUrl: './nav-items.component.html'
+  templateUrl: './nav-items.component.html',
+  styleUrls: ['./nav-items.component.scss']
 })
-export class NavItemsComponent {
-  constructor(private authService: AuthService, private router: Router) {}
+export class NavItemsComponent implements OnInit {
+  isAdmin: boolean = false;
+  currentUser: any = null;
 
-  onLogout(): void {
-    this.authService.logout().subscribe(() => { this.navigateToLogin(); });
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) {}
+
+  ngOnInit() {
+    if(this.authService.getCustomerData() != null){
+      console.log(this.currentUser)
+      this.currentUser = this.authService.getCustomerData();
+    }
   }
 
-  navigateToLogin() {
-    this.authService.navigateToLogin();
+  onLogout(): void {
+    this.authService.logout();
+    this.authService.removeCustomerData();
+    this.router.navigate(['/account/login']);
+  }
+
+  get userName(): string {
+    return this.currentUser?.name || 'User';
   }
 }

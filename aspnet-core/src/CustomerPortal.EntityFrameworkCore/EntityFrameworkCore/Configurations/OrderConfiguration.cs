@@ -24,16 +24,6 @@ namespace CustomerPortal.EntityFrameworkCore.Configurations
             builder.Property(x => x.Status)
                 .IsRequired();
 
-            builder.Property(x => x.TrackingNumber)
-                .HasMaxLength(OrderConsts.MaxTrackingNumberLength)
-                .IsRequired(false);
-
-            builder.Property(x => x.ShippedDate)
-                .IsRequired(false);
-
-            builder.Property(x => x.DeliveredDate)
-                .IsRequired(false);
-
             builder.HasIndex(x => x.OrderNumber)
                 .IsUnique();
 

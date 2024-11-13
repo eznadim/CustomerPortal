@@ -3,3 +3,23 @@
     transform: scaleX(-1);
   }
   
+.input-icon {
+  position: relative;
+  
+  &__icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    
+    i {
+      color: #6c757d;  // Adjust color as needed
+    }
+  }
+}
+
+.form-control {
+  padding-right: 35px;  // Make room for the icon
+}
+  

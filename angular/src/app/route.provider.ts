@@ -46,7 +46,7 @@ function configureRoutes(routes: RoutesService) {
       },
       {
         path: '/customer-management/view-customer',
-        name: 'View Customer',
+        name: 'View Profile',
         iconClass: 'fas fa-shopping-cart',
         order: 2,
         layout: eLayoutType.application,
