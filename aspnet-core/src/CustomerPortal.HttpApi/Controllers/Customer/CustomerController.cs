@@ -66,5 +66,18 @@ namespace CustomerPortal.Controllers
         {
             await _customerService.DeleteCustomerAsync(customerId);
         }
+
+        [HttpGet("get-customer-admin-list")]
+        public async Task<PagedResultDto<CustomerDto>> GetCustomerListAdminAsync([FromQuery] GetCustomerListDto input)
+        {
+            return await _customerService.GetCustomerListAdminAsync(input);
+        }
+
+        [HttpPut("activate-deactive-customer")]
+        [AllowAnonymous]
+        public async Task ActivateDeactivateCustomerAsync(Guid customerId)
+        {
+            await _customerService.ActivateDeactivateCustomerAsync(customerId);
+        }
     }
 } 

@@ -18,6 +18,7 @@ using CustomerPortal.Localization;
 using static CustomerPortal.Permissions.CustomerPortalPermissions;
 using Volo.Abp.Users;
 using Volo.Abp.Specifications;
+using Volo.Abp.Data;
 
 namespace CustomerPortal.Customers
 {
@@ -27,17 +28,20 @@ namespace CustomerPortal.Customers
         private readonly IPasswordHasher<Customer> _passwordHasher;
         private readonly ICustomerRepository _customersRepository;
         private readonly IStringLocalizer<CustomerPortalResource> _localizer;
+        private readonly IDataFilter _dataFilter;
 
         public CustomerService(
             IConfiguration configuration,
             IPasswordHasher<Customer> passwordHasher,
             ICustomerRepository customersRepository,
-            IStringLocalizer<CustomerPortalResource> localizer)
+            IStringLocalizer<CustomerPortalResource> localizer,
+            IDataFilter dataFilter)
         {
             _configuration = configuration;
             _passwordHasher = passwordHasher;
             _customersRepository = customersRepository;
             _localizer = localizer;
+            _dataFilter = dataFilter;
         }
 
         public async Task<CustomerTokenDto> LoginAsync(CustomerLoginDto input)
@@ -83,26 +87,29 @@ namespace CustomerPortal.Customers
 
         public async Task<CustomerTokenDto> RegisterAsync(CreateCustomerDto input)
         {
-            // Check if email already exists
-            var existingCustomer = await _customersRepository.FirstOrDefaultAsync(x => x.Email == input.Email);
-            if (existingCustomer != null)
+            using (_dataFilter.Disable<ISoftDelete>())
             {
-                throw new UserFriendlyException(_localizer["ExistingData"], "", _localizer["Email " + "'" + input.Email + "'" + " already taken."]);
+                // Check if email already exists
+                var existingCustomer = await _customersRepository.FirstOrDefaultAsync(x => x.Email == input.Email);
+                if (existingCustomer != null)
+                {
+                    throw new UserFriendlyException(_localizer["ExistingData"], "", _localizer["Email " + "'" + input.Email + "'" + " already taken."]);
+                }
+
+                // Create new customer
+                var customer = new Customer(
+                    input.CustomerName,
+                    input.Email,
+                    _passwordHasher.HashPassword(null, input.Password),
+                    input.Address
+
+                );
+
+                await _customersRepository.InsertAsync(customer);
+                await CurrentUnitOfWork.SaveChangesAsync();
+
+                return await GenerateTokenDtoAsync(customer);
             }
-
-            // Create new customer
-            var customer = new Customer(
-                input.CustomerName,
-                input.Email,
-                _passwordHasher.HashPassword(null, input.Password),
-                input.Address
-
-            );
-
-            await _customersRepository.InsertAsync(customer);
-            await CurrentUnitOfWork.SaveChangesAsync();
-
-            return await GenerateTokenDtoAsync(customer);
         }
 
         public async Task UpdateCustomerPassword(Guid id,UpdatePasswordDto input)
@@ -138,6 +145,9 @@ namespace CustomerPortal.Customers
                 // Hash and set new password
                 var newPasswordHash = _passwordHasher.HashPassword(customer, input.NewPassword);
                 customer.UpdatePassword(newPasswordHash);
+                customer.LastModificationTime = DateTime.UtcNow;
+                await _customersRepository.UpdateAsync(customer);
+                await CurrentUnitOfWork.SaveChangesAsync();
             }
         }
 
@@ -219,6 +229,78 @@ namespace CustomerPortal.Customers
             }
 
             await _customersRepository.DeleteAsync(customer);
+        }
+
+        public async Task<PagedResultDto<CustomerDto>> GetCustomerListAdminAsync(GetCustomerListDto input)
+        {
+            using (_dataFilter.Disable<ISoftDelete>())
+            {
+                var query = (await _customersRepository.WithDetailsAsync()).OrderByDescending(e => e.CreationTime)
+                .Select(e => new
+                {
+                    Customer = e,
+                })
+                .WhereIf(!string.IsNullOrWhiteSpace(input.Filter), e => e.Customer.CustomerName.Contains(input.Filter) ||
+                    e.Customer.Email.Contains(input.Filter) || e.Customer.Address.Contains(input.Filter))
+                 .WhereIf(!string.IsNullOrWhiteSpace(input.Email), e => e.Customer.Email.Contains(input.Email))
+                 .WhereIf(!string.IsNullOrWhiteSpace(input.CustomerName), e => e.Customer.CustomerName.Contains(input.CustomerName))
+                 .WhereIf(!string.IsNullOrWhiteSpace(input.Address), e => e.Customer.Address.Contains(input.Address))
+                 .WhereIf(input.IsActive.HasValue, e => e.Customer.IsActive == input.IsActive)
+                 .WhereIf(input.IsDeleted.HasValue, e => e.Customer.IsDeleted == input.IsDeleted)
+                 .WhereIf(input.EndDate.HasValue, e => e.Customer.CreationTime <= input.EndDate)
+                 .WhereIf(input.StartDate.HasValue, e => e.Customer.CreationTime >= input.StartDate)
+                .Select(e => new CustomerDto()
+                {
+                    Id = e.Customer.Id,
+                    Email = e.Customer.Email,
+                    CustomerName = e.Customer.CustomerName,
+                    Address = e.Customer.Address,
+                    IsActive = e.Customer.IsActive,
+                    IsDeleted = e.Customer.IsDeleted,
+                    LastModificationTime = e.Customer.LastModificationTime,
+
+                });
+
+                var totalCount = query.Count();
+                var items = await query.AsQueryable()
+                            .PageBy(input.SkipCount, input.MaxResultCount)
+                            .ToDynamicListAsync<CustomerDto>();
+
+                return new PagedResultDto<CustomerDto>
+                {
+                    TotalCount = totalCount,
+                    Items = items
+                };
+            }
+        }
+
+        public async Task ActivateDeactivateCustomerAsync(Guid id)
+        {
+            var customer = await _customersRepository.GetAsync(id);
+            if (customer == null)
+            {
+                throw new BusinessException("CustomerPortal:CustomerNotFound")
+                    .WithData("Id", id);
+            }
+
+            if (customer.IsDeleted)
+            {
+                throw new UserFriendlyException("Cannot activate/deactivate a deleted customer");
+            }
+
+            if (customer.IsActive)
+            {
+                customer.IsActive = false;
+                await _customersRepository.UpdateAsync(customer);
+                await CurrentUnitOfWork.SaveChangesAsync();
+            }
+            else
+            {
+                customer.IsActive = true;
+                await _customersRepository.UpdateAsync(customer);
+                await CurrentUnitOfWork.SaveChangesAsync();
+            }
+
         }
     }
 } 

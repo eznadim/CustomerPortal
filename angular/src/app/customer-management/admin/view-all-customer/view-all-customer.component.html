@@ -1,0 +1,206 @@
+<abp-page [title]="'::ListOfCustomers' | abpLocalization">
+
+    <abp-advanced-entity-filters localizationSourceName="" [list]="list">
+    <abp-advanced-entity-filters-form>
+      <form #filterForm
+        (keyup.enter)="list.get()"
+        class="form theme-form"
+        name="form"
+        #f="ngForm"
+        focusInvalidInput
+        autocomplete="off"
+        (ngSubmit)="f.form.valid && searchFilters()"
+        novalidate>
+        <div class="row">
+          <div class="col-lg-4 col-md-6">
+            <div class="mb-3">
+              <label class="form-label" for="customerName">
+                {{ '::CustomerName' | abpLocalization }}
+              </label>
+              <input
+                name="customerName"
+                class="form-control"
+                placeholder="{{ '::CustomerName' | abpLocalization }}"
+                [(ngModel)]="filters.customerName"
+              />
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6">
+            <div class="mb-3">
+              <label class="form-label" for="email">
+                {{ '::Email' | abpLocalization }}
+              </label>
+              <input
+                name="email"
+                class="form-control"
+                placeholder="{{ '::Email' | abpLocalization }}"
+                [(ngModel)]="filters.email"
+              />
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6">
+            <div class="mb-3">
+              <label class="form-label" for="address">
+                {{ '::Address' | abpLocalization }}
+              </label>
+              <input
+                name="address"
+                class="form-control"
+                placeholder="{{ '::Address' | abpLocalization }}"
+                [(ngModel)]="filters.address"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="row">
+        <div class="col-lg-4">
+            <div class="mb-3">
+              <label class="form-label" for="status">
+                {{ '::Status' | abpLocalization }}
+              </label>
+              <div class="form-group">
+                <nz-select class="form-select" name="'departmentStatusFilter'"
+                  nzPlaceHolder="{{ '::PleaseChoose' | abpLocalization }}" [(ngModel)]="filters.isActive"
+                  nzAllowClear nzShowSearch>
+                  <nz-option *ngFor="let status of customerStatus" [nzValue]="status.boolean"
+                    nzLabel="{{status.name}}"></nz-option>
+                </nz-select>
+                </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row justify-content-end mt-4">
+          <div class="col-6 col-sm-auto d-grid">
+            <button type="button" class="btn btn-light" (click)="clearFilters()">
+              <i class="fa fa-undo me-1" aria-hidden="true"></i>
+              <span>{{ 'AbpUi::Clear' | abpLocalization }}</span>
+            </button>
+          </div>
+          <div class="col-6 col-sm-auto d-grid">
+            <button type="submit" class="btn btn-primary">
+              <i class="fa fa-search me-1" aria-hidden="true"></i>
+              <span>{{ 'AbpUi::Search' | abpLocalization }}</span>
+            </button>
+          </div>
+        </div>
+      </form>
+    </abp-advanced-entity-filters-form>
+  </abp-advanced-entity-filters>
+
+  <div class="card">
+    <div class="card-body">
+      <ngx-datatable [rows]="data.items" [count]="data.totalCount" [list]="list" default>
+        <ngx-datatable-column
+          [name]="'AbpUi::Action' | abpLocalization"
+          [maxWidth]="150"
+          [width]="150"
+          [sortable]="false"
+        >
+          <ng-template let-row="row" let-i="rowIndex" ngx-datatable-cell-template>
+            <div ngbDropdown container="body" class="d-inline-block">
+              <button
+                class="btn btn-primary btn-sm dropdown-toggle"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                ngbDropdownToggle
+              >
+                <i class="fa fa-cog me-1" aria-hidden="true"></i>
+                {{ 'AbpUi::Action' | abpLocalization }}
+              </button>
+
+              <div ngbDropdownMenu>
+                <button
+                  ngbDropdownItem
+                  type="button"
+                  (click)="activateDeactivate(row.id)"
+                >
+                  <i class="fa fa-edit me-1"></i>
+                  {{ 'AbpUi::Active/Deactivate' | abpLocalization }}
+                </button>
+                <button
+                  ngbDropdownItem
+                  type="button"
+                  (click)="deleteCustomer(row.id)"
+                >
+                  <i class="fa fa-trash me-1"></i>
+                  {{ 'AbpUi::Delete' | abpLocalization }}
+                </button>
+              </div>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="{{ '::Active/Inactive' | abpLocalization }}" prop="customerName">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            {{ row.isActive ? 'Active' : 'Inactive' }}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="{{ '::CustomerName' | abpLocalization }}" prop="customerName">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            {{ row.customerName ?? '-' }}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="{{ '::Email' | abpLocalization }}" prop="email">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            {{ row.email ?? '-' }}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="{{ '::Address' | abpLocalization }}" prop="address">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            {{ row.address ?? '-' }}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="{{ '::CreationTime' | abpLocalization }}" prop="creationTime">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            {{ row.creationTime | date:'dd/MM/yyyy' }}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="{{ '::LastModificationTime' | abpLocalization }}" prop="lastModificationTime">
+          <ng-template let-row="row" ngx-datatable-cell-template>
+            {{ row.lastModificationTime | date:'dd/MM/yyyy' }}
+          </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="{{ '::IsDeleted' | abpLocalization }}" prop="isDeleted">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              {{ row.isDeleted ? 'Yes' : 'No' }}
+            </ng-template>
+          </ngx-datatable-column>
+      </ngx-datatable>
+    </div>
+  </div>
+</abp-page>
+
+<!-- Activate/Deactivate Modal -->
+<abp-modal [(visible)]="isActivateDeactivateModalVisible">
+    <ng-template #abpBody>
+    <app-activate-deactivate-customer
+        *ngIf="isActivateDeactivateModalVisible"
+        [customerId]="selectedCustomerId"
+        modalType="active/deactive"
+        (save)="onActivateDeactivateChanged()"
+        (cancel)="onActivateDeactivateChangeCancel()">
+    </app-activate-deactivate-customer>
+    </ng-template>
+  </abp-modal>
+
+<!-- Delete Modal -->
+<abp-modal [(visible)]="isDeletedModalVisible">
+    <ng-template #abpBody>
+        <app-activate-deactivate-customer
+        *ngIf="isDeletedModalVisible"
+        [customerId]="selectedCustomerId"
+        modalType="delete"
+        (save)="onDeletedChanged()"
+        (cancel)="onDeletedChangeCancel()">
+      </app-activate-deactivate-customer>
+    </ng-template>
+  </abp-modal>

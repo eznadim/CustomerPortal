@@ -18,6 +18,7 @@ export class ViewOrderComponent {
   filters = {} as GetOrderListDto;
   minStatusDate: Date;
   maxStatusDate: Date;
+  
   orderStatus = [
     {id: 1, name: 'PENDING' },
     {id: 2, name: 'SHIPPED' },

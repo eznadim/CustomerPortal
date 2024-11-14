@@ -15,5 +15,7 @@ namespace CustomerPortal.Customers
         Task<CustomerDto> UpdateProfileAsync(Guid id, UpdateCustomerDto input);
         Task<CustomerDto> GetCustomerByIdAsync(Guid customerId);
         Task DeleteCustomerAsync(Guid customerId);
+        Task<PagedResultDto<CustomerDto>> GetCustomerListAdminAsync(GetCustomerListDto input);
+        Task ActivateDeactivateCustomerAsync(Guid id);
     }
 } 

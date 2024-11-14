@@ -7,6 +7,7 @@ import { eThemeSharedRouteNames } from '@abp/ng.theme.shared';
 import { eAccountComponents, ForgotPasswordComponent, RefreshPasswordComponent, ResetPasswordComponent } from '@volo/abp.ng.account/public';
 import { eThemeLeptonComponents } from '@volo/abp.ng.theme.lepton';
 import { NavItemsComponent } from './nav-items/nav-items.component';
+import { FooterComponent } from './layout/extensions/footer.component';
 
 @Component({
   selector: 'app-root',
@@ -53,6 +54,10 @@ export class AppComponent implements OnInit {
           component: NavItemsComponent,
           key: eThemeLeptonComponents.NavItems,
         });
+        this.replaceableComponents.add({
+          component: FooterComponent,
+          key: eThemeLeptonComponents.ApplicationLayoutFooter,
+      });
   }
 
   patchHomeRoute() {

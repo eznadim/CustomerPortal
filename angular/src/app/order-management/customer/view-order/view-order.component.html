@@ -47,7 +47,7 @@
                     class="form-select"
                     name="orderStatus"
                     nzPlaceHolder="{{ '::PleaseChoose' | abpLocalization }}"
-                    [(ngModel)]="filters.status"
+                    [(ngModel)]="filters.statusString"
                     nzShowSearch
                     nzAllowClear
                     >
@@ -141,14 +141,6 @@
           </button>
 
           <div ngbDropdownMenu>
-            <button
-              ngbDropdownItem
-              type="button"
-              [queryParams]="{ action: 'track', id: row.id }"
-            >
-              <i class="fa fa-edit me-1"></i>
-              {{ 'AbpUi::Track' | abpLocalization }}
-            </button>
             <button
               ngbDropdownItem
               type="button"

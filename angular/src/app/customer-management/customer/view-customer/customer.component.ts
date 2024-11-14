@@ -66,6 +66,7 @@ export class CustomerComponent implements OnInit {
 
   onPasswordChanged() {
     this.isPasswordModalVisible = false;
+    this.loadCustomerDetails();
     this.toasterService.success('Password updated successfully');
   }
 

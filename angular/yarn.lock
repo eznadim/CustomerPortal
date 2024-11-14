@@ -2,6 +2,15 @@
 # yarn lockfile v1
 
 
+"@abp/ng.account.core@~8.3.3":
+  version "8.3.3"
+  resolved "https://registry.npmjs.org/@abp/ng.account.core/-/ng.account.core-8.3.3.tgz"
+  integrity sha512-6aB9RhFl2qlOlG5TLpQkcrfe4OMomel4IpJcagoTMwW0lqQhNEjSbNQ9j0E3gkm9pVhkOgHJ0krMzUxn75V9sg==
+  dependencies:
+    "@abp/ng.core" "~8.3.3"
+    "@abp/ng.theme.shared" "~8.3.3"
+    tslib "^2.0.0"
+
 "@abp/ng.components@~8.2.0", "@abp/ng.components@~8.2.3":
   version "8.2.3"
   resolved "https://registry.npmjs.org/@abp/ng.components/-/ng.components-8.2.3.tgz"
@@ -20,6 +29,17 @@
     just-clone "^6.0.0"
     just-compare "^2.0.0"
     ts-toolbelt "6.15.4"
+    tslib "^2.0.0"
+
+"@abp/ng.core@~8.3.3":
+  version "8.3.3"
+  resolved "https://registry.npmjs.org/@abp/ng.core/-/ng.core-8.3.3.tgz"
+  integrity sha512-R9Y7NJ84ecW4WrLU28vwxU4Ye9qOzxtXadjRAeHZA5VUK9zT6pdROOY8r7u//KX/KLsB1j51wU+N8mLui9lNNg==
+  dependencies:
+    "@abp/utils" "~8.3.3"
+    just-clone "^6.0.0"
+    just-compare "^2.0.0"
+    ts-toolbelt "^9.0.0"
     tslib "^2.0.0"
 
 "@abp/ng.feature-management@~8.2.3":
@@ -72,6 +92,15 @@
     "@abp/ng.theme.shared" "~8.2.3"
     tslib "^2.0.0"
 
+"@abp/ng.theme.basic@^8.3.3":
+  version "8.3.3"
+  resolved "https://registry.npmjs.org/@abp/ng.theme.basic/-/ng.theme.basic-8.3.3.tgz"
+  integrity sha512-R8Mlhrafhxn/zM/r5wld+0ka1e2o+xG5xqQrsF8+7KcC/G7sPHMsEh2TAZtEjqblgB5k4SksFeQ+3MzmdwxBbw==
+  dependencies:
+    "@abp/ng.account.core" "~8.3.3"
+    "@abp/ng.theme.shared" "~8.3.3"
+    tslib "^2.0.0"
+
 "@abp/ng.theme.shared@>=8.2.3", "@abp/ng.theme.shared@~8.2.0", "@abp/ng.theme.shared@~8.2.3":
   version "8.2.3"
   resolved "https://registry.npmjs.org/@abp/ng.theme.shared/-/ng.theme.shared-8.2.3.tgz"
@@ -86,10 +115,31 @@
     bootstrap "^5.2.0"
     tslib "^2.0.0"
 
+"@abp/ng.theme.shared@~8.3.3":
+  version "8.3.3"
+  resolved "https://registry.npmjs.org/@abp/ng.theme.shared/-/ng.theme.shared-8.3.3.tgz"
+  integrity sha512-euOHmv22FCLI3zOuiZrWBawb+6rLNVUXohTeKliQt9FJ+8Yxo6EokIszDZ6srQdfRaZqwwnyA4vta7AuRTgFaA==
+  dependencies:
+    "@abp/ng.core" "~8.3.3"
+    "@fortawesome/fontawesome-free" "^5.15.4"
+    "@ng-bootstrap/ng-bootstrap" "~16.0.0"
+    "@ngx-validate/core" "^0.2.0"
+    "@popperjs/core" "~2.11.2"
+    "@swimlane/ngx-datatable" "^20.0.0"
+    bootstrap "^5.2.0"
+    tslib "^2.0.0"
+
 "@abp/utils@~8.2.3":
   version "8.2.3"
   resolved "https://registry.npmjs.org/@abp/utils/-/utils-8.2.3.tgz"
   integrity sha512-WMs/okBxGitkGRdsikByyJLFXRSD/DPfBWZdDhU4+TvcQmnTqog9S75kZ8CUpUe/wwDHYsY51ef6N6jOfkGTFQ==
+  dependencies:
+    just-compare "^2.3.0"
+
+"@abp/utils@~8.3.3":
+  version "8.3.3"
+  resolved "https://registry.npmjs.org/@abp/utils/-/utils-8.3.3.tgz"
+  integrity sha512-YgHpU+urpPtgECK42DKUzGNtOzSIxtBuP+bh2iqbt6mndFKlOltd+Q+EeJxlZm0dBl/+Z3VTX/fFhuFusMEwkw==
   dependencies:
     just-compare "^2.3.0"
 
@@ -4390,6 +4440,7 @@ custom-event@~1.0.0:
     "@abp/ng.core" "~8.2.0"
     "@abp/ng.oauth" "~8.2.0"
     "@abp/ng.setting-management" "~8.2.0"
+    "@abp/ng.theme.basic" "^8.3.3"
     "@abp/ng.theme.shared" "~8.2.0"
     "@angular/animations" "~17.3.0"
     "@angular/cdk" "^17.3.10"
@@ -4413,6 +4464,7 @@ custom-event@~1.0.0:
     "@volo/abp.ng.text-template-management" "~8.2.0"
     "@volo/abp.ng.theme.lepton" "~8.2.0"
     CustomerPortal "file:"
+    ng-zorro-antd "^17.4.1"
     rxjs "~7.8.0"
     tslib "^2.0.0"
     zone.js "~0.14.0"
@@ -6920,7 +6972,7 @@ neo-async@^2.6.2:
   resolved "https://registry.npmjs.org/neo-async/-/neo-async-2.6.2.tgz"
   integrity sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==
 
-ng-zorro-antd@^17.0.0:
+ng-zorro-antd@^17.0.0, ng-zorro-antd@^17.4.1:
   version "17.4.1"
   resolved "https://registry.npmjs.org/ng-zorro-antd/-/ng-zorro-antd-17.4.1.tgz"
   integrity sha512-KsMYFlRBFPK5FPPoaYIS/uzQ4400WFMLcA9/1LmYZcSgmeINlCvgfiitNcOVLsRyQYlpdIQyOo9z5Ue2SS9ypg==
@@ -8760,6 +8812,11 @@ ts-api-utils@^1.0.1:
   version "1.4.0"
   resolved "https://registry.npmjs.org/ts-api-utils/-/ts-api-utils-1.4.0.tgz"
   integrity sha512-032cPxaEKwM+GT3vA5JXNzIaizx388rhsSW79vGRNGXfRRAdEAn2mvk36PvK5HnOchyWZ7afLEXqYCvPCrzuzQ==
+
+ts-toolbelt@^9.0.0:
+  version "9.6.0"
+  resolved "https://registry.npmjs.org/ts-toolbelt/-/ts-toolbelt-9.6.0.tgz"
+  integrity sha512-nsZd8ZeNUzukXPlJmTBwUAuABDe/9qtVDelJeT/qW0ow3ZS3BsQJtNkan1802aM9Uf68/Y8ljw86Hu0h5IUW3w==
 
 ts-toolbelt@6.15.4:
   version "6.15.4"
