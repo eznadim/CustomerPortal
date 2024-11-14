@@ -39,12 +39,16 @@ cd aspnet-core
 ```bash
 cd src/CustomerPortal.EntityFrameworkCore
 dotnet ef database update
+cd src/CustomerPortal.DbMigrator
+dotnet run
 ```
 
 4. Run the API project:
    - Set CustomerPortal.HttpApi.Host as startup project
    - Press F5 to run in debug mode
-   - API will be available at `https://localhost:44300`
+   - API will be available at `https://localhost:44338`
+   - This should be the interface 
+     <img width="959" alt="image" src="https://github.com/user-attachments/assets/de7e3e17-ba53-4562-bc5a-572c1efaf816">
 
 ### Frontend Setup
 1. Navigate to the Angular directory:
@@ -129,12 +133,3 @@ dotnet test
 - [Angular Documentation](https://angular.io/docs)
 - [Entity Framework Core Documentation](https://learn.microsoft.com/en-us/ef/core/)
 ```
-
-Key updates made to your README:
-1. Added detailed step-by-step instructions
-2. Included default login credentials
-3. Added common troubleshooting steps
-4. Included development commands
-5. Added project structure
-6. Included version information for frameworks
-7. Added additional resources section
