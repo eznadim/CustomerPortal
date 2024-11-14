@@ -54,6 +54,7 @@ namespace CustomerPortal.Orders
             return orderDto;
         }
 
+        [Authorize]
         public async Task<PagedResultDto<OrderDto>> GetOrderListAdminAsync(GetOrderListDto input)
         {
             var query = (await _orderRepository.WithDetailsAsync()).OrderByDescending(e => e.CreationTime)
@@ -171,6 +172,7 @@ namespace CustomerPortal.Orders
             return orderDto;
         }
 
+        [Authorize]
         public async Task<OrderDto> UpdateStatusAsync(Guid id, UpdateOrderStatusDto input)
         {
             var order = await _orderRepository.GetAsync(id);
@@ -220,6 +222,7 @@ namespace CustomerPortal.Orders
             return orderDto;
         }
 
+        [Authorize(CustomerPortalPermissions.Orders.Admin)]
         public async Task DeleteAsync(Guid id)
         {
             await _orderRepository.DeleteAsync(id);
