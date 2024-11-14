@@ -45,14 +45,6 @@ export interface GetCustomerListDto extends PagedAndSortedResultRequestDto {
   isDeleted?: boolean;
 }
 
-export interface GetCustomersInput extends PagedAndSortedResultRequestDto {
-  filter?: string;
-  customerName?: string;
-  customerEmail?: string;
-  orderNo?: string;
-  isActive?: boolean;
-}
-
 export interface UpdateCustomerDto {
   customerName?: string;
   email?: string;

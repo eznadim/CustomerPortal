@@ -15,10 +15,11 @@ using System.Linq;
 using System.Linq.Dynamic.Core;
 using Microsoft.Extensions.Localization;
 using CustomerPortal.Localization;
-using static CustomerPortal.Permissions.CustomerPortalPermissions;
 using Volo.Abp.Users;
 using Volo.Abp.Specifications;
 using Volo.Abp.Data;
+using Microsoft.AspNetCore.Authorization;
+using CustomerPortal.Permissions;
 
 namespace CustomerPortal.Customers
 {
@@ -231,6 +232,7 @@ namespace CustomerPortal.Customers
             await _customersRepository.DeleteAsync(customer);
         }
 
+        [Authorize]
         public async Task<PagedResultDto<CustomerDto>> GetCustomerListAdminAsync(GetCustomerListDto input)
         {
             using (_dataFilter.Disable<ISoftDelete>())
@@ -274,6 +276,7 @@ namespace CustomerPortal.Customers
             }
         }
 
+        [Authorize]
         public async Task ActivateDeactivateCustomerAsync(Guid id)
         {
             var customer = await _customersRepository.GetAsync(id);
