@@ -15,6 +15,7 @@ public class CustomerPortalPermissionDefinitionProvider : PermissionDefinitionPr
             CustomerPortalPermissions.Customers.Default,
             L("Permission:Customers")
         );
+        
         customersPermission.AddChild(
             CustomerPortalPermissions.Customers.Create,
             L("Permission:Customers.Create")

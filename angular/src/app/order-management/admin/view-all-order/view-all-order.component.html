@@ -1,0 +1,234 @@
+<abp-page [title]="'::ListOfOrders' | abpLocalization">
+    <abp-advanced-entity-filters localizationSourceName="" [list]="list">
+      <abp-advanced-entity-filters-form>
+        <form #filterForm
+          (keyup.enter)="list.get()"
+          class="form theme-form"
+          name="form"
+          #f="ngForm"
+          focusInvalidInput
+          autocomplete="off"
+          (ngSubmit)="f.form.valid && searchFilters()"
+          novalidate>
+          <div class="row">
+            <div class="col-lg-4 col-md-6">
+              <div class="mb-3">
+                <label class="form-label" for="orderNumber">
+                  {{ '::OrderNumber' | abpLocalization }}
+                </label>
+                <input
+                  name="orderNumber"
+                  class="form-control"
+                  placeholder="{{ '::OrderNumber' | abpLocalization }}"
+                  [(ngModel)]="filters.orderNumber"
+                />
+              </div>
+            </div>
+  
+            <div class="col-lg-4 col-md-6">
+              <div class="mb-3">
+                <label class="form-label" for="customerEmail">
+                  {{ '::CustomerEmail' | abpLocalization }}
+                </label>
+                <input
+                  name="customerEmail"
+                  class="form-control"
+                  placeholder="{{ '::CustomerEmail' | abpLocalization }}"
+                  [(ngModel)]="filters.customerEmail"
+                />
+              </div>
+            </div>
+  
+            <div class="col-lg-4 col-md-6">
+              <div class="mb-3">
+                <label class="form-label" for="description">
+                  {{ '::Description' | abpLocalization }}
+                </label>
+                <input
+                  name="description"
+                  class="form-control"
+                  placeholder="{{ '::Description' | abpLocalization }}"
+                  [(ngModel)]="filters.description"
+                />
+              </div>
+            </div>
+  
+            <div class="col-lg-4 col-md-6 col-x-8">
+                <label class="form-label" for="orderDate">
+                  {{ '::OrderDate' | abpLocalization }}
+                </label>
+                <div class="row">
+                  <div class="col-md-6 col-x-6">
+                    <nz-date-picker
+                      class="form-control"
+                      [(ngModel)]="minStatusDate"
+                      name="minStatusDate"
+                      [nzFormat]="'dd/MM/yyyy'"
+                      (ngModelChange)="minStatusDateChange()"
+                    ></nz-date-picker>
+                  </div>
+                  <div class="col-md-6 col-x-6">
+                    <nz-date-picker
+                      class="form-control"
+                      [(ngModel)]="maxStatusDate"
+                      name="maxStatusDate"
+                      [nzFormat]="'dd/MM/yyyy'"
+                      #maxDateStatus="ngModel"
+                      [ngClass]="{
+                        'is-invalid':
+                          f?.submitted && (maxDateStatus.invalid || minMaxStatusValidate())
+                      }"
+                      [required]="minStatusDate"
+                    >
+                    </nz-date-picker>
+                    <div
+                      class="invalid-feedback"
+                      *ngIf="f?.submitted && minStatusDate && maxDateStatus.invalid"
+                    >
+                      {{ '::EndDateIsRequired' | abpLocalization }}
+                    </div>
+                    <div
+                      class="invalid-feedback"
+                      *ngIf="
+                        f?.submitted && minStatusDate && maxStatusDate && minMaxStatusValidate()
+                      "
+                    >
+                      {{ '::EndDateMustBeLaterThanStartDate' | abpLocalization }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="mb-3">
+                  <div class="form-group">
+                    <label class="form-label" for="Status">
+                      {{ '::OrderStatus' | abpLocalization }}
+                    </label>
+                    <nz-select
+                    class="form-select"
+                    name="orderStatus"
+                    nzPlaceHolder="{{ '::PleaseChoose' | abpLocalization }}"
+                    [(ngModel)]="filters.status"
+                    nzShowSearch
+                    nzAllowClear
+                    style="width: 100%; background-color: #f8f9fa;">
+                    <nz-option 
+                        *ngFor="let status of orderStatusToChange" 
+                        [nzValue]="status.id" 
+                        nzLabel="{{status.name}}">
+                    </nz-option>
+                </nz-select>
+                  </div>
+                </div>
+              </div>
+          </div>
+  
+          <div class="row justify-content-end mt-4">
+            <div class="col-6 col-sm-auto d-grid">
+              <button type="button" class="btn btn-light" (click)="clearFilters()">
+                <i class="fa fa-undo me-1"></i>
+                <span>{{ 'AbpUi::Clear' | abpLocalization }}</span>
+              </button>
+            </div>
+            <div class="col-6 col-sm-auto d-grid">
+              <button type="submit" class="btn btn-primary">
+                <i class="fa fa-search me-1"></i>
+                <span>{{ 'AbpUi::Search' | abpLocalization }}</span>
+              </button>
+            </div>
+          </div>
+        </form>
+      </abp-advanced-entity-filters-form>
+    </abp-advanced-entity-filters>
+  
+    <div class="card">
+      <div class="card-body">
+        <ngx-datatable [rows]="data.items" [count]="data.totalCount" [list]="list" default>
+          <ngx-datatable-column
+            [name]="'AbpUi::Action' | abpLocalization"
+            [maxWidth]="150"
+            [sortable]="false"
+          >
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              <div ngbDropdown container="body" class="d-inline-block">
+                <button
+                  class="btn btn-primary btn-sm dropdown-toggle"
+                  data-toggle="dropdown"
+                  ngbDropdownToggle
+                >
+                  <i class="fa fa-cog me-1"></i>
+                  {{ 'AbpUi::Action' | abpLocalization }}
+                </button>
+  
+                <div ngbDropdownMenu>
+                  <button
+                    ngbDropdownItem
+                    (click)="editOrder(row.id)"
+                  >
+                    <i class="fa fa-ban me-1"></i>
+                    {{ '::EditOrder' | abpLocalization }}
+                  </button>
+                </div>
+              </div>
+            </ng-template>
+          </ngx-datatable-column>
+  
+          <ngx-datatable-column name="{{ '::OrderNumber' | abpLocalization }}" prop="orderNumber">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              {{ row.orderNumber }}
+            </ng-template>
+          </ngx-datatable-column>
+  
+          <ngx-datatable-column name="{{ '::CustomerName' | abpLocalization }}" prop="customerName">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              {{ row.customerName }}
+            </ng-template>
+          </ngx-datatable-column>
+
+          <ngx-datatable-column name="{{ '::CustomerEmail' | abpLocalization }}" prop="customerEmail">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              {{ row.customerEmail }}
+            </ng-template>
+          </ngx-datatable-column>
+  
+          <ngx-datatable-column name="{{ '::Description' | abpLocalization }}" prop="description">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              {{ row.description }}
+            </ng-template>
+          </ngx-datatable-column>
+  
+          <ngx-datatable-column name="{{ '::Status' | abpLocalization }}" prop="status">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              {{ row.statusString | abpLocalization }}
+            </ng-template>
+          </ngx-datatable-column>
+  
+          <ngx-datatable-column name="{{ '::OrderDate' | abpLocalization }}" prop="orderDate">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              {{ row.orderDate | date:'dd/MM/yyyy' }}
+            </ng-template>
+          </ngx-datatable-column>
+  
+          <ngx-datatable-column name="{{ '::LastModificationTime' | abpLocalization }}" prop="lastModificationTime">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              {{ row.lastModificationTime | date:'dd/MM/yyyy HH:mm' }}
+            </ng-template>
+          </ngx-datatable-column>
+        </ngx-datatable>
+      </div>
+    </div>
+  </abp-page>
+
+  <!-- Edit Order Modal -->
+<abp-modal [(visible)]="isEditModalVisible">
+    <ng-template #abpBody>
+      <app-update-status-order
+        *ngIf="isEditModalVisible"
+        [orderId]="selectedOrderId"
+        modalType="edit"
+        (save)="onOrderEditChanged()"
+        (cancel)="onOrderEditChangeCancel()">
+      </app-update-status-order>
+    </ng-template>
+  </abp-modal>

@@ -14,7 +14,7 @@ import { LanguageManagementConfigModule } from '@volo/abp.ng.language-management
 import { registerLocale } from '@volo/abp.ng.language-management/locale';
 import { SaasConfigModule } from '@volo/abp.ng.saas/config';
 import { TextTemplateManagementConfigModule } from '@volo/abp.ng.text-template-management/config';
-import { CommonModule } from '@angular/common';
+import { CommonModule, registerLocaleData } from '@angular/common';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -33,9 +33,15 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import {MatCardModule} from '@angular/material/card';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient } from '@angular/common/http';
 import { AuthInterceptor } from './shared/interceptors/auth.interceptor';
 import { RegisterCustomerComponent } from './login/register-customer/register-customer.component';
+import { FooterComponent } from './layout/extensions/footer.component';
+import { NZ_I18N } from 'ng-zorro-antd/i18n';
+import { en_US } from 'ng-zorro-antd/i18n';
+import en from '@angular/common/locales/en';
+
+registerLocaleData(en);
 
 
 @NgModule({
@@ -48,6 +54,7 @@ import { RegisterCustomerComponent } from './login/register-customer/register-cu
     RefreshPasswordComponent,
     NavItemsComponent,
     RegisterCustomerComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,
@@ -80,15 +87,16 @@ ThemeSharedModule.forRoot(),
     MatCardModule,
     MatSlideToggleModule,
     FormsModule,
-    ReactiveFormsModule
-    
+    ReactiveFormsModule,
   ],
   providers: [APP_ROUTE_PROVIDER, provideAnimationsAsync(),
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true
-    }
+    },
+    { provide: NZ_I18N, useValue: en_US },
+    provideHttpClient()
   ],
   bootstrap: [AppComponent],
 })

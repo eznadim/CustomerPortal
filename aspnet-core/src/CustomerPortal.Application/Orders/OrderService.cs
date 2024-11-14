@@ -5,9 +5,11 @@ using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
 using CustomerPortal.Customers;
 using CustomerPortal.Customers.Dtos;
+using CustomerPortal.Domain.Emails;
 using CustomerPortal.Orders.Dtos;
 using CustomerPortal.Permissions;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Logging;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Repositories;
@@ -20,18 +22,22 @@ namespace CustomerPortal.Orders
     {
         private readonly IOrderRepository _orderRepository;
         private readonly ICustomerRepository _customersRepository;
+        private readonly IEmailService _emailService;
 
         public OrderService(
             ICustomerRepository customersRepository,
-            IOrderRepository orderRepository)
+            IOrderRepository orderRepository,
+            IEmailService emailService)
         {
             _customersRepository = customersRepository;
             _orderRepository = orderRepository;
+            _emailService = emailService;
         }
 
         public async Task<OrderDto> GetAsync(Guid id)
         {
             var order = (await _orderRepository.WithDetailsAsync()).Where(e =>  e.Id == id).FirstOrDefault();
+            var customer = (await _customersRepository.WithDetailsAsync()).Where(e => e.Id == order.CustomerId).FirstOrDefault();
 
             var orderDto = new OrderDto
             {
@@ -40,7 +46,9 @@ namespace CustomerPortal.Orders
                 Description = order.Description,
                 OrderDate = order.OrderDate,
                 Status = order.Status,
-                CustomerId = order.CustomerId
+                CustomerId = order.CustomerId,
+                CustomerName = customer.CustomerName,
+                CustomerEmail = customer.Email
             };
 
             return orderDto;
@@ -92,7 +100,7 @@ namespace CustomerPortal.Orders
         public async Task<PagedResultDto<OrderDto>> GetOrderListPublicAsync(Guid id,GetOrderListDto input)
         {
 
-            var query = (await _orderRepository.WithDetailsAsync()).Where(e => id == input.CustomerId)
+            var query = (await _orderRepository.WithDetailsAsync()).Where(e => id == e.CustomerId)
               .OrderByDescending(e => e.CreationTime)
               .Select(e => new
               {
@@ -166,14 +174,47 @@ namespace CustomerPortal.Orders
         public async Task<OrderDto> UpdateStatusAsync(Guid id, UpdateOrderStatusDto input)
         {
             var order = await _orderRepository.GetAsync(id);
+            if (input.Status == order.Status)
+            {
+                throw new UserFriendlyException("Unable to Update Status due to Similar Status");
+            }
             
             order.UpdateStatus(input.Status);
 
             await _orderRepository.UpdateAsync(order);
-            
+
             var customer = await _customersRepository.GetAsync(order.CustomerId);
-            var orderDto = ObjectMapper.Map<OrderEntity, OrderDto>(order);
-            orderDto.CustomerName = customer.CustomerName;
+            var orderDto = new OrderDto
+            {
+                Id = order.Id,
+                OrderNumber = order.OrderNumber,
+                Description = order.Description,
+                OrderDate = order.OrderDate,
+                Status = order.Status,
+                CustomerId = order.CustomerId,
+                CustomerName = customer?.CustomerName,
+                CustomerEmail = customer?.Email,
+                LastModificationTime = order.LastModificationTime
+            };
+            await CurrentUnitOfWork.SaveChangesAsync();
+
+            if (input.Status == OrderStatus.Shipped || input.Status == OrderStatus.Delivered)
+            {
+                try
+                {
+                    await _emailService.SendOrderStatusUpdateEmailAsync(
+                        customer.Email,
+                        customer.CustomerName,
+                        order.OrderNumber,
+                        input.Status
+                    );
+                }
+                catch (Exception ex)
+                {
+                    // Log the error but don't stop the status update
+                    Logger.LogError($"Failed to send status update email: {ex.Message}");
+                }
+            }
             await CurrentUnitOfWork.SaveChangesAsync();
 
             return orderDto;

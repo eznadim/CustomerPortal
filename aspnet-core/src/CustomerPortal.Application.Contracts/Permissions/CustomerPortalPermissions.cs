@@ -32,6 +32,7 @@ public static class CustomerPortalPermissions
     public static class Customers
     {
         public const string Default = GroupName + ".Customers";
+        public const string Customer = Default + ".Customer";
         public const string Create = Default + ".Create";
         public const string Delete = Default + ".Delete";
         public const string ManageCustomers = Default + ".Manage";

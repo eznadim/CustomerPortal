@@ -10,6 +10,7 @@ namespace CustomerPortal.Customers.Dtos
         public string Email { get; set; }
         public string Address { get; set; }
         public bool IsActive { get; set; }
+        public bool? IsDeleted { get; set; }
         public DateTime CreationTime { get; set; }
         public DateTime? LastModificationTime { get; set; }
         public Guid? OrderId { get; set; }

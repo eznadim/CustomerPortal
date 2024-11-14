@@ -13,6 +13,7 @@ export interface CustomerDto extends EntityDto<string> {
   email?: string;
   address?: string;
   isActive: boolean;
+  isDeleted?: boolean;
   creationTime?: string;
   lastModificationTime?: string;
   orderId?: string;
@@ -31,6 +32,17 @@ export interface CustomerTokenDto {
   customerName?: string;
   email?: string;
   address?: string;
+}
+
+export interface GetCustomerListDto extends PagedAndSortedResultRequestDto {
+  filter?: string;
+  startDate?: string;
+  endDate?: string;
+  customerName?: string;
+  email?: string;
+  address?: string;
+  isActive?: boolean;
+  isDeleted?: boolean;
 }
 
 export interface GetCustomersInput extends PagedAndSortedResultRequestDto {
