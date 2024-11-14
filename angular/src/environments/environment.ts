@@ -6,16 +6,17 @@ const oAuthConfig = {
   issuer: 'https://localhost:44338/',
   redirectUri: baseUrl,
   clientId: 'CustomerPortal_App',
-  responseType: 'code',
   scope: 'offline_access CustomerPortal',
   requireHttps: true,
+  postLogoutRedirectUri: 'http://localhost:4200/account/login'
 };
 
 export const environment = {
   production: false,
   application: {
-    baseUrl,
     name: 'CustomerPortal',
+    baseUrl: 'https://localhost:44338',
+    swaggerUrl: 'https://localhost:44338/swagger/index.html'
   },
   oAuthConfig,
   apis: {

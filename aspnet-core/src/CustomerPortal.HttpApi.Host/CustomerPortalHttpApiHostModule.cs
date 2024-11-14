@@ -43,6 +43,11 @@ using Volo.Abp.OpenIddict;
 using Volo.Abp.Swashbuckle;
 using Volo.Saas.Host;
 using Volo.Abp.Security.Claims;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using System.Threading.Tasks;
+using System.Security.Claims;
 
 namespace CustomerPortal;
 
@@ -117,16 +122,45 @@ public class CustomerPortalHttpApiHostModule : AbpModule
         ConfigureCors(context, configuration);
         ConfigureExternalProviders(context);
         ConfigureHealthChecks(context);
+        ConfigureAuthorization(context);
     }
 
 
     private void ConfigureAuthentication(ServiceConfigurationContext context)
     {
-        context.Services.ForwardIdentityAuthenticationForBearer(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme);
-        context.Services.Configure<AbpClaimsPrincipalFactoryOptions>(options =>
-        {
-            options.IsDynamicClaimsEnabled = true;
-        });
+        var configuration = context.Services.GetConfiguration();
+        var key = Encoding.ASCII.GetBytes(configuration["JwtSettings:SecretKey"]);
+
+        context.Services.AddAuthentication()
+            .AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = false;
+                options.SaveToken = true;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero,
+                    NameClaimType = ClaimTypes.Name,
+                    RoleClaimType = ClaimTypes.Role
+                };
+
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        var accessToken = context.Request.Headers["Authorization"].ToString();
+                        if (!string.IsNullOrEmpty(accessToken) && accessToken.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
+                        {
+                            context.Token = accessToken.Substring("Bearer ".Length).Trim();
+                        }
+                        return Task.CompletedTask;
+                    }
+                };
+            });
     }
 
     private void ConfigureHealthChecks(ServiceConfigurationContext context)
@@ -197,6 +231,30 @@ public class CustomerPortalHttpApiHostModule : AbpModule
                 options.SwaggerDoc("v1", new OpenApiInfo { Title = "CustomerPortal API", Version = "v1" });
                 options.DocInclusionPredicate((docName, description) => true);
                 options.CustomSchemaIds(type => type.FullName);
+
+                options.AddSecurityDefinition("JWT", new OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
+
+                options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "JWT"
+                            }
+                        },
+                        Array.Empty<string>()
+                    }
+                });
             });
     }
 
@@ -279,6 +337,25 @@ public class CustomerPortalHttpApiHostModule : AbpModule
         });
     }
 
+    private void ConfigureAuthorization(ServiceConfigurationContext context)
+    {
+        context.Services.AddAuthorization(options =>
+        {
+            options.AddPolicy("CustomerPolicy", policy =>
+            {
+                policy.RequireAuthenticatedUser();
+                policy.RequireRole("Customer");
+                policy.AuthenticationSchemes = new[] { "JWT" };
+            });
+
+            options.AddPolicy("AdminPolicy", policy =>
+            {
+                policy.RequireAuthenticatedUser();
+                policy.RequireRole("Admin");
+            });
+        });
+    }
+
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
     {
         var app = context.GetApplicationBuilder();
@@ -316,9 +393,6 @@ public class CustomerPortalHttpApiHostModule : AbpModule
         app.UseAbpSwaggerUI(options =>
         {
             options.SwaggerEndpoint("/swagger/v1/swagger.json", "CustomerPortal API");
-
-            var configuration = context.ServiceProvider.GetRequiredService<IConfiguration>();
-            options.OAuthClientId(configuration["AuthServer:SwaggerClientId"]);
         });
         app.UseAuditing();
         app.UseAbpSerilogEnrichers();

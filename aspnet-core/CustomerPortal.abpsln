@@ -1,0 +1,14 @@
+{
+  "id": "55bf1149-78c9-43dc-a30a-0a5ddec2af01",
+  "template": "empty",
+  "modules": {
+    "CustomerPortal": {
+      "path": "CustomerPortal.abpmdl"
+    }
+  },
+  "runProfiles": {
+    "Default": {
+      "path": "etc/abp-studio/run-profiles/Default.abprun.json"
+    }
+  }
+}

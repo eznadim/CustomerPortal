@@ -12,6 +12,9 @@ using Volo.Abp.SettingManagement;
 using Volo.Abp.TextTemplateManagement;
 using Volo.Saas.Host;
 using Volo.Abp.LeptonTheme.Management;
+using CustomerPortal.Customers;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CustomerPortal;
 
@@ -40,5 +43,7 @@ public class CustomerPortalApplicationModule : AbpModule
         {
             options.AddMaps<CustomerPortalApplicationModule>();
         });
+
+        context.Services.AddScoped<IPasswordHasher<Customer>, PasswordHasher<Customer>>();
     }
 }

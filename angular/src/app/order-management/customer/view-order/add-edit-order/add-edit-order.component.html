@@ -1,0 +1,78 @@
+<div class="modal-header">
+  <h5 class="modal-title">{{ modalType === 'create' ? 'Add Order' : 'Cancel Order' }}</h5>
+  <button type="button" class="close" (click)="onCancel()">
+    <span>&times;</span>
+  </button>
+</div>
+
+<!-- Create Order Form -->
+<form *ngIf="modalType === 'create'" [formGroup]="orderForm" (ngSubmit)="submit()">
+  <div class="modal-body">
+    <div class="form-group mb-3">
+      <label for="description">Description</label>
+      <input
+        type="text"
+        class="form-control"
+        id="description"
+        formControlName="description"
+        [class.is-invalid]="f.description.touched && f.description.invalid"
+      />
+      <div class="invalid-feedback" *ngIf="f.description.touched && f.description.errors">
+        <div *ngIf="f.description.errors?.['required']">Description is required</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancel</button>
+    <button 
+      type="submit" 
+      class="btn btn-primary" 
+      [disabled]="orderForm.invalid || isModalBusy"
+    >
+      <span *ngIf="isModalBusy" class="spinner-border spinner-border-sm mr-1"></span>
+      {{ isModalBusy ? 'Saving...' : 'Add Order' }}
+    </button>
+  </div>
+</form>
+
+<!-- Cancel Order Form -->
+<div *ngIf="modalType === 'cancel'">
+  <div class="modal-body">
+    <div class="order-details" *ngIf="orderDetails">
+      <div class="mb-4">
+        <h6 class="mb-3">Order Details:</h6>
+        <div class="row mb-2">
+          <div class="col-4"><strong>Order Number:</strong></div>
+          <div class="col-8">{{ orderDetails.orderNumber }}</div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-4"><strong>Description:</strong></div>
+          <div class="col-8">{{ orderDetails.description }}</div>
+        </div>
+        <div class="row mb-2">
+          <div class="col-4"><strong>Status:</strong></div>
+          <div class="col-8">{{ orderDetails.statusString }}</div>
+        </div>
+      </div>
+
+      <div class="alert alert-warning">
+        <i class="fas fa-exclamation-triangle me-2"></i>
+        Are you sure you want to cancel this order?
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="onCancel()">No, Keep Order</button>
+    <button 
+      type="button" 
+      class="btn btn-danger" 
+      (click)="confirmCancel()"
+      [disabled]="isModalBusy"
+    >
+      <span *ngIf="isModalBusy" class="spinner-border spinner-border-sm me-1"></span>
+      {{ isModalBusy ? 'Canceling...' : 'Yes, Cancel Order' }}
+    </button>
+  </div>
+</div>

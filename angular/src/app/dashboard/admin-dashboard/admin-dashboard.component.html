@@ -1,0 +1,113 @@
+<abp-page [title]="'Admin Dashboard' | abpLocalization">
+
+    <div class="row mb-4">
+      <!-- Total Customers Card -->
+      <div class="col-xl-3 col-md-6">
+        <div class="card border-left-primary h-100 py-2">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Customers</div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ stats?.totalCustomers || 0 }}</div>
+              </div>
+              <div class="col-auto">
+                <i class="fas fa-users fa-2x text-gray-300"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Total Orders Card -->
+      <div class="col-xl-3 col-md-6">
+        <div class="card border-left-success h-100 py-2">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Total Orders</div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ stats?.totalOrders || 0 }}</div>
+              </div>
+              <div class="col-auto">
+                <i class="fas fa-shopping-cart fa-2x text-gray-300"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <!-- Orders by Status -->
+      <div class="col-xl-6 col-lg-6">
+        <div class="card shadow mb-4">
+          <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Orders by Status</h6>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table">
+                <tbody>
+                  <tr>
+                    <td>Pending</td>
+                    <td>{{ stats?.ordersByStatus?.pending || 0 }}</td>
+                  </tr>
+                  <tr>
+                    <td>Confirmed</td>
+                    <td>{{ stats?.ordersByStatus?.confirmed || 0 }}</td>
+                  </tr>
+                  <tr>
+                    <td>Processing</td>
+                    <td>{{ stats?.ordersByStatus?.processing || 0 }}</td>
+                  </tr>
+                  <tr>
+                    <td>Shipped</td>
+                    <td>{{ stats?.ordersByStatus?.shipped || 0 }}</td>
+                  </tr>
+                  <tr>
+                    <td>Delivered</td>
+                    <td>{{ stats?.ordersByStatus?.delivered || 0 }}</td>
+                  </tr>
+                  <tr>
+                    <td>Cancelled</td>
+                    <td>{{ stats?.ordersByStatus?.cancelled || 0 }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Orders -->
+      <div class="col-xl-6 col-lg-6">
+        <div class="card shadow mb-4">
+          <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Recent Orders</h6>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Order #</th>
+                    <th>Customer</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let order of stats?.recentOrders">
+                    <td>{{ order.orderNumber }}</td>
+                    <td>{{ order.customerName }}</td>
+                    <td>{{ order.statusString }}</td>
+                    <td>{{ order.orderDate | date:'short' }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</abp-page>
+  
