@@ -22,6 +22,7 @@ using Volo.Abp.Gdpr;
 using Volo.Abp.OpenIddict;
 using Volo.Abp.PermissionManagement.OpenIddict;
 using Volo.Abp.LeptonTheme.Management;
+using CustomerPortal.Domain.Emails;
 
 namespace CustomerPortal;
 
@@ -79,5 +80,7 @@ public class CustomerPortalDomainModule : AbpModule
 #if DEBUG
         context.Services.Replace(ServiceDescriptor.Singleton<IEmailSender, NullEmailSender>());
 #endif
+
+        context.Services.AddTransient<IEmailService, EmailService>();
     }
 }

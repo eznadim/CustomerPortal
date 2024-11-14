@@ -15,7 +15,9 @@ export class EditPasswordComponent {
 
   passwordForm: FormGroup;
   isModalBusy = false;
-
+  fieldTextTypeCurrentPassword: boolean;
+  fieldTextTypeNewPassword: boolean;
+  fieldTextTypeConfirmPassword: boolean;
   constructor(
     private fb: FormBuilder,
     private customerService: CustomerService
@@ -67,5 +69,17 @@ export class EditPasswordComponent {
 
   get f() {
     return this.passwordForm.controls;
+  }
+
+  toggleFieldTextTypeCurrentPassword() {
+    this.fieldTextTypeCurrentPassword = !this.fieldTextTypeCurrentPassword;
+  }
+
+  toggleFieldTextTypeNewPassword() {
+    this.fieldTextTypeNewPassword = !this.fieldTextTypeNewPassword;
+  }
+
+  toggleFieldTextTypeConfirmPassword() {
+    this.fieldTextTypeConfirmPassword = !this.fieldTextTypeConfirmPassword;
   }
 }

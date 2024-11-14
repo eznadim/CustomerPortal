@@ -1,6 +1,7 @@
 import { RestService, Rest } from '@abp/ng.core';
+import type { PagedResultDto } from '@abp/ng.core';
 import { Injectable } from '@angular/core';
-import type { CreateCustomerDto, CustomerDto, CustomerLoginDto, CustomerTokenDto, UpdateCustomerDto, UpdatePasswordDto } from '../customers/dtos/models';
+import type { CreateCustomerDto, CustomerDto, CustomerLoginDto, CustomerTokenDto, GetCustomerListDto, UpdateCustomerDto, UpdatePasswordDto } from '../customers/dtos/models';
 import type { ActionResult } from '../microsoft/asp-net-core/mvc/models';
 
 @Injectable({
@@ -8,6 +9,15 @@ import type { ActionResult } from '../microsoft/asp-net-core/mvc/models';
 })
 export class CustomerService {
   apiName = 'Default';
+  
+
+  activateDeactivateCustomer = (customerId: string, config?: Partial<Rest.Config>) =>
+    this.restService.request<any, void>({
+      method: 'PUT',
+      url: '/api/customer/activate-deactive-customer',
+      params: { customerId },
+    },
+    { apiName: this.apiName,...config });
   
 
   deleteCustomer = (customerId: string, config?: Partial<Rest.Config>) =>
@@ -33,6 +43,15 @@ export class CustomerService {
       method: 'GET',
       url: '/api/customer/get-customer-by-id',
       params: { customerId },
+    },
+    { apiName: this.apiName,...config });
+  
+
+  getCustomerListAdmin = (input: GetCustomerListDto, config?: Partial<Rest.Config>) =>
+    this.restService.request<any, PagedResultDto<CustomerDto>>({
+      method: 'GET',
+      url: '/api/customer/get-customer-admin-list',
+      params: { filter: input.filter, startDate: input.startDate, endDate: input.endDate, customerName: input.customerName, email: input.email, address: input.address, isActive: input.isActive, isDeleted: input.isDeleted, sorting: input.sorting, skipCount: input.skipCount, maxResultCount: input.maxResultCount },
     },
     { apiName: this.apiName,...config });
   
