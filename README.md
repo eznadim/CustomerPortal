@@ -47,8 +47,9 @@ dotnet run
    - Set CustomerPortal.HttpApi.Host as startup project
    - Press F5 to run in debug mode
    - API will be available at `https://localhost:44338`
-   - This should be the interface 
-     <img width="959" alt="image" src="https://github.com/user-attachments/assets/de7e3e17-ba53-4562-bc5a-572c1efaf816">
+   - This should be the interface
+     <img width="959" alt="image" src="https://github.com/user-attachments/assets/6de71f48-e9af-4ff0-b8c6-ed335990c636">
+
 
 ### Frontend Setup
 1. Navigate to the Angular directory:
