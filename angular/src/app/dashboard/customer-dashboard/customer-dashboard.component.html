@@ -1,0 +1,121 @@
+<abp-page [title]="'Customer Dashboard' | abpLocalization">
+  <div class="container-fluid">
+    <!-- Loading Spinner -->
+    <div *ngIf="loading" class="d-flex justify-content-center my-4">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
+    <!-- Dashboard Content -->
+    <div id="CustomerDashboardWidgetsArea" *ngIf="isAuthenticated && !loading">
+      <div class="row g-4">
+        <!-- Customer Info Card -->
+        <div class="col-12">
+          <div class="card shadow-sm">
+            <div class="card-header bg-light">
+              <h5 class="card-title mb-0">{{ '::CustomerInformation' | abpLocalization }}</h5>
+            </div>
+            <div class="card-body">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <div class="d-flex flex-column">
+                    <span class="text-muted">{{ '::Name' | abpLocalization }}</span>
+                    <span class="fw-medium">{{ currentCustomer?.customerName || 'N/A' }}</span>
+                  </div>
+                  <div class="d-flex flex-column mt-3">
+                    <span class="text-muted">{{ '::Email' | abpLocalization }}</span>
+                    <span class="fw-medium">{{ currentCustomer?.email || 'N/A' }}</span>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="d-flex flex-column">
+                    <span class="text-muted">{{ '::Address' | abpLocalization }}</span>
+                    <span class="fw-medium">{{ currentCustomer?.address || 'Not provided' }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Order Statistics Card -->
+        <div class="col-md-12 col-lg-6">
+          <div class="card shadow-sm" style="height: 250px;">
+            <div class="card-header bg-light">
+              <h5 class="card-title mb-0">{{ '::OrderStatistics' | abpLocalization }}</h5>
+            </div>
+            <div class="card-body py-4">
+              <div class="row g-4">
+                <div class="col-4">
+                  <div class="text-center">
+                    <h6 class="text-muted mb-2">{{ '::TotalOrders' | abpLocalization }}</h6>
+                    <h3 class="mb-0 fw-bold">{{ totalOrders || 0 }}</h3>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="text-center">
+                    <h6 class="text-muted mb-2">{{ '::PendingOrders' | abpLocalization }}</h6>
+                    <h3 class="mb-0 fw-bold text-warning">{{ pendingOrders || 0 }}</h3>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="text-center">
+                    <h6 class="text-muted mb-2">{{ '::CompletedOrders' | abpLocalization }}</h6>
+                    <h3 class="mb-0 fw-bold text-success">{{ completedOrders || 0 }}</h3>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Orders Card -->
+        <div class="col-md-12 col-lg-6">
+          <div class="card shadow-sm" style="height: 250px;">
+            <div class="card-header bg-light d-flex justify-content-between align-items-center">
+              <h5 class="card-title mb-0">{{ '::RecentOrders' | abpLocalization }}</h5>
+              <button class="btn btn-sm btn-primary" (click)="viewAllOrders()">
+                {{ '::ViewAll' | abpLocalization }}
+              </button>
+            </div>
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                  <thead>
+                    <tr>
+                      <th>{{ '::OrderNumber' | abpLocalization }}</th>
+                      <th>{{ '::Date' | abpLocalization }}</th>
+                      <th>{{ '::Status' | abpLocalization }}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let order of customerOrders">
+                      <td>{{ order.orderNumber }}</td>
+                      <td>{{ order.orderDate | date:'mediumDate' }}</td>
+                      <td>
+                        <span [class]="getStatusBadgeClass(order.status)">
+                          {{ OrderStatus[order.status] }}
+                        </span>
+                      </td>
+                    </tr>
+                    <tr *ngIf="customerOrders?.length === 0">
+                      <td colspan="4" class="text-center py-4">
+                        {{ '::NoOrdersFound' | abpLocalization }}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Not Authenticated Message -->
+    <div *ngIf="!isAuthenticated && !loading" class="alert alert-warning">
+      <p class="mb-0">{{ '::PleaseLoginToViewDashboard' | abpLocalization }}</p>
+    </div>
+  </div>
+</abp-page>

@@ -1,0 +1,14 @@
+<div class="navbar-custom">
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+
+      <!-- User Menu -->
+      <div class="navbar-nav ms-auto d-flex align-items-center">
+        <span class="me-3">Welcome, {{ currentUser?.customerName ?? 'Admin' }}</span>
+        <button class="btn btn-outline-light" (click)="onLogout()">
+          <i class="fas fa-sign-out-alt me-1"></i> Logout
+        </button>
+      </div>
+    </div>
+  </nav>
+</div>

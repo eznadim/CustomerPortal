@@ -1,17 +1,16 @@
-import { authGuard, permissionGuard } from '@abp/ng.core';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { RegisterCustomerComponent } from './login/register-customer/register-customer.component';
 
 const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    loadChildren: () => import('./home/home.module').then(m => m.HomeModule),
+    redirectTo: 'account/login'
   },
   {
     path: 'dashboard',
     loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule),
-    canActivate: [authGuard, permissionGuard],
   },
   {
     path: 'account',
@@ -63,6 +62,26 @@ const routes: Routes = [
       import('./gdpr-cookie-consent/gdpr-cookie-consent.module').then(
         m => m.GdprCookieConsentModule
       ),
+  },
+  {
+    path: 'account/register-customer',
+    component: RegisterCustomerComponent
+  },
+  {
+    path: 'customer-management',
+    loadChildren: () => import('./customer-management/customer/customer.module').then(m => m.CustomerModule),
+  },
+  {
+    path: 'order-management',
+    loadChildren: () => import('./order-management/customer/order.module').then(m => m.OrderModule),
+  },
+  {
+    path: 'admin-customer',
+    loadChildren: () => import('./customer-management/admin/admin-customer.module').then(m => m.AdminCustomerModule),
+  },
+  {
+    path: 'admin-order',
+    loadChildren: () => import('./order-management/admin/admin-order.module').then(m => m.AdminOrderModule),
   },
 ];
 

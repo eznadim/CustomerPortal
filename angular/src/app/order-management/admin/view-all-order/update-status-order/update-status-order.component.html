@@ -1,0 +1,84 @@
+<style>
+  ::ng-deep .ant-select-dropdown {
+    z-index: 9999 !important; 
+  }
+
+  ::ng-deep .cdk-overlay-container {
+    z-index: 10000 !important;
+  }
+
+  /* Add styles for the select itself */
+  ::ng-deep .ant-select {
+    width: 100%;
+  }
+
+  /* Ensure the overlay appears above modal */
+  ::ng-deep .cdk-global-overlay-wrapper, 
+  ::ng-deep .cdk-overlay-pane {
+    z-index: 9999 !important;
+  }
+</style>
+
+<div class="modal-header">
+    <h5 class="modal-title">{{ '::UpdateStatusOrder' | abpLocalization }}</h5>
+    <button type="button" class="close" (click)="onCancel()">
+      <span>&times;</span>
+    </button>
+  </div>
+  
+  <div>
+    <div class="customer-details">
+        <div class="mb-4">
+          <h6 class="mb-3">Order Details:</h6>
+          <div class="row mb-2">
+            <div class="col-4"><strong>Customer Name:</strong></div>
+            <div class="col-8">{{ orderDetails.customerName }}</div>
+          </div>
+          <div class="row mb-2">
+            <div class="col-4"><strong>Email:</strong></div>
+            <div class="col-8">{{ orderDetails.customerEmail }}</div>
+          </div>
+          <div class="row mb-2">
+            <div class="col-4"><strong>Description:</strong></div>
+            <div class="col-8">{{ orderDetails.description }}</div>
+          </div>
+          <div class="row mb-2">
+            <div class="col-4"><strong>Order Number:</strong></div>
+            <div class="col-8">{{ orderDetails.orderNumber }}</div>
+          </div>
+          <div class="row mb-2">
+            <div class="col-4"><strong>Status:</strong></div>
+            <div class="col-8">{{ orderDetails.statusString }}</div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="Status">
+              {{ '::OrderStatus' | abpLocalization }}
+            </label>
+            <nz-select
+            class="form-select"
+            name="orderStatus"
+            nzPlaceHolder="{{ '::PleaseChoose' | abpLocalization }}"
+            [(ngModel)]="statusToChange"
+            nzShowSearch
+            nzAllowClear>
+            <nz-option 
+                *ngFor="let status of orderStatusToChange" 
+                [nzValue]="status.id" 
+                nzLabel="{{status.name}}">
+            </nz-option>
+          </nz-select>
+        </div>
+
+        
+  
+        <div class="alert alert-warning">
+          <i class="fas fa-exclamation-triangle me-2"></i>
+          Are you sure you want to update status for this order?
+        </div>
+      </div>
+  
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="updateStatusOrder()">Update Status</button>
+    </div>
+</div>
+  

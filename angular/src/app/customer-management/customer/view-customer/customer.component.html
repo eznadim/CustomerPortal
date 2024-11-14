@@ -1,0 +1,112 @@
+<abp-page [title]="'My Profile' | abpLocalization">
+  <div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h5 class="card-title mb-0">Personal Information</h5>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <!-- Customer Details -->
+        <div class="col-md-6">
+          <div class="mb-4">
+            <h6 class="text-muted mb-2">Basic Information</h6>
+            <div class="row mb-3">
+              <div class="col-4">
+                <strong>Name:</strong>
+              </div>
+              <div class="col-8">
+                {{ customerDto?.customerName ?? '-' }}
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-4">
+                <strong>Email:</strong>
+              </div>
+              <div class="col-8">
+                {{ customerDto?.email ?? '-' }}
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-4">
+                <strong>Address:</strong>
+              </div>
+              <div class="col-8">
+                {{ customerDto?.address ?? '-' }}
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <h6 class="text-muted mb-2">Account Information</h6>
+            <div class="row mb-3">
+              <div class="col-4">
+                <strong>Member Since:</strong>
+              </div>
+              <div class="col-8">
+                {{ customerDto?.creationTime | date : 'dd/MM/yyyy' }}
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-4">
+                <strong>Last Modified:</strong>
+              </div>
+              <div class="col-8">
+                {{ customerDto?.lastModificationTime | date : 'dd/MM/yyyy HH:mm' }}
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-4">
+                <strong>Status:</strong>
+              </div>
+              <div class="col-8">
+                <span class="badge bg-success">Active</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Account Actions -->
+        <div class="col-md-6">
+          <div class="card bg-light">
+            <div class="card-body">
+              <h6 class="card-title mb-3">Account Management</h6>
+              
+              <div class="d-grid gap-2">
+                <button class="btn btn-outline-primary mb-2" (click)="changePassword()">
+                  <i class="fas fa-key"></i> Change Password
+                </button>
+                
+                <button class="btn btn-outline-info mb-2" (click)="editProfile()">
+                  <i class="fas fa-address-card"></i> Edit Profile
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</abp-page>
+
+<!-- Edit Profile Modal -->
+<abp-modal [(visible)]="isEditModalVisible">
+  <ng-template #abpBody>
+    <app-edit-profile
+      *ngIf="isEditModalVisible"
+      [customerId]="customerData?.id"
+      (save)="onProfileSaved()"
+      (cancel)="onEditCancelled()">
+    </app-edit-profile>
+  </ng-template>
+</abp-modal>
+
+<!-- Edit Password Modal -->
+<abp-modal [(visible)]="isPasswordModalVisible">
+  <ng-template #abpBody>
+    <app-edit-password
+      *ngIf="isPasswordModalVisible"
+      [customerId]="customerData?.id"
+      (save)="onPasswordChanged()"
+      (cancel)="onPasswordChangeCancel()">
+    </app-edit-password>
+  </ng-template>
+</abp-modal>
