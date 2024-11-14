@@ -7,6 +7,7 @@ public static class CustomerPortalPermissions
     public static class Orders
     {
         public const string Default = GroupName + ".Orders";
+        public const string Admin = Default + ".Admin";
         public const string UpdateStatus = Default + ".UpdateStatus";
     }
 
@@ -36,6 +37,7 @@ public static class CustomerPortalPermissions
         public const string Create = Default + ".Create";
         public const string Delete = Default + ".Delete";
         public const string ManageCustomers = Default + ".Manage";
+        public const string Admin = Default + ".Admin";
     }
 
     //Add your own permission names. Example:
